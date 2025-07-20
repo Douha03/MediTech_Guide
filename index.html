@@ -1,644 +1,343 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services Biomédicaux</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<li>Formation utilisateur nécessaire</li>
+                           <li>Investissement initial important</li>
+                           <li>Mise à jour périodique requise</li>
+                       </ul>
+                   </div>
+               </div>
+               
+               <div style="text-align: center; margin: 40px 0;">
+                   <button class="btn-primary" onclick="showGallery()" style="margin-right: 20px;">🖼️ Voir la galerie</button>
+                   <button class="btn-primary" onclick="document.getElementById('brands-section').scrollIntoView()">🏢 Voir les marques</button>
+               </div>
+               
+               <div id="brands-section">
+                   <h3 style="text-align: center; margin: 40px 0; color: white;">Marques disponibles</h3>
+                   <div class="brands-grid">
+                       ${device.brands.map(brand => `
+                           <div class="brand-card" onclick="showBrandDetails('${brand.name}')">
+                               <div class="card-icon">🏢</div>
+                               <div class="card-content">
+                                   <h3 class="card-title">${brand.name}</h3>
+                                   <p class="card-description">${brand.description}</p>
+                               </div>
+                           </div>
+                       `).join('')}
+                   </div>
+               </div>
+           `;
+       }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
+       function createBrandDetailsHTML(brand) {
+           return `
+               <h2 style="text-align: center; margin-bottom: 30px;">${brand.name}</h2>
+               
+               <div class="brand-image">🏢</div>
+               
+               <div class="device-info">
+                   <h3>À propos de ${brand.name}</h3>
+                   <p>${brand.description}</p>
+               </div>
+               
+               <div class="device-info">
+                   <h3>Notre partenariat</h3>
+                   <p>Nous travaillons en étroite collaboration avec ${brand.name} pour vous offrir les meilleures solutions technologiques du marché. Cette partnership nous permet de garantir un support technique de qualité et un accès privilégié aux dernières innovations.</p>
+               </div>
+               
+               <div class="pros-cons">
+                   <div class="pros">
+                       <h4>Points forts</h4>
+                       <ul>
+                           <li>Leader reconnu sur le marché</li>
+                           <li>Innovation technologique constante</li>
+                           <li>Support technique de qualité</li>
+                           <li>Formation complète incluse</li>
+                           <li>Garantie constructeur étendue</li>
+                       </ul>
+                   </div>
+                   <div class="cons">
+                       <h4>Engagement requis</h4>
+                       <ul>
+                           <li>Formation du personnel nécessaire</li>
+                           <li>Mise à jour régulière des protocoles</li>
+                           <li>Investissement en maintenance préventive</li>
+                       </ul>
+                   </div>
+               </div>
+               
+               <div style="text-align: center; margin: 40px 0;">
+                   <button class="btn-primary">📞 Demander un devis</button>
+               </div>
+           `;
+       }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+       function updateBreadcrumb(items) {
+           const breadcrumb = document.getElementById('breadcrumb');
+           if (items.length === 0) {
+               breadcrumb.innerHTML = '';
+               return;
+           }
+           
+           let html = '<button onclick="showHome()">🏠 Accueil</button>';
+           items.forEach((item, index) => {
+               html += ` > <button onclick="${item.action}">${item.name}</button>`;
+           });
+           
+           breadcrumb.innerHTML = html;
+       }
 
-        header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            text-align: center;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-        }
+       // View toggle functions
+       function setView(view) {
+           currentView = view;
+           const container = document.querySelector('.container');
+           
+           if (view === 'list') {
+               container.classList.add('list-view');
+               document.getElementById('gridBtn').classList.remove('active');
+               document.getElementById('listBtn').classList.add('active');
+           } else {
+               container.classList.remove('list-view');
+               document.getElementById('listBtn').classList.remove('active');
+               document.getElementById('gridBtn').classList.add('active');
+           }
+       }
 
-        h1 {
-            color: white;
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+       // Modal functions
+       function openModal(imageSrc) {
+           document.getElementById('imageModal').style.display = 'block';
+           document.getElementById('modalImage').src = imageSrc;
+       }
 
-        .subtitle {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.2rem;
-            font-weight: 300;
-        }
+       function closeModal() {
+           document.getElementById('imageModal').style.display = 'none';
+       }
 
-        .nav-buttons {
-            margin: 20px 0;
-            text-align: center;
-        }
+       // Search functionality
+       function setupSearch() {
+           const searchBox = document.getElementById('searchBox');
+           searchBox.addEventListener('input', function(e) {   
+	    const query = e.target.value.toLowerCase();
+            filterDevices(query);
+           });
+       }
 
-        .nav-btn, .back-btn {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            margin: 5px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
+       function filterDevices(query) {
+           if (!currentService || query === '') {
+               return;
+           }
+           
+           const devicesGrid = document.getElementById('devices-grid');
+           const filteredDevices = devices[currentService].filter(device =>
+               device.name.toLowerCase().includes(query) ||
+               device.description.toLowerCase().includes(query) ||
+               device.features.some(feature => feature.toLowerCase().includes(query))
+           );
+           
+           devicesGrid.innerHTML = '';
+           filteredDevices.forEach(device => {
+               const deviceCard = createDeviceCard(device);
+               devicesGrid.appendChild(deviceCard);
+           });
+           
+           if (filteredDevices.length === 0) {
+               devicesGrid.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.7); padding: 40px;">Aucun équipement trouvé pour cette recherche.</div>';
+           }
+       }
 
-        .nav-btn:hover, .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
+       // Contact form functions
+       function toggleContactForm() {
+           const overlay = document.getElementById('contactOverlay');
+           overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+       }
 
-        .page {
-            display: none;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-            animation: fadeIn 0.5s ease-in;
-        }
+       function submitContactForm() {
+           const form = document.getElementById('contactForm');
+           const formData = new FormData(form);
+           
+           // Simulation d'envoi
+           alert('Merci pour votre demande ! Nous vous contacterons sous 24h.');
+           toggleContactForm();
+           form.reset();
+       }
 
-        .page.active {
-            display: block;
-        }
+       // Statistics counter animation
+       function animateCounters() {
+           const counters = document.querySelectorAll('.stat-number');
+           counters.forEach(counter => {
+               const target = parseInt(counter.textContent);
+               const increment = target / 50;
+               let current = 0;
+               
+               const timer = setInterval(() => {
+                   current += increment;
+                   if (current >= target) {
+                       counter.textContent = target;
+                       clearInterval(timer);
+                   } else {
+                       counter.textContent = Math.floor(current);
+                   }
+               }, 30);
+           });
+       }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+       // Smooth scrolling for internal links
+       function smoothScroll(targetId) {
+           document.getElementById(targetId).scrollIntoView({
+               behavior: 'smooth'
+           });
+       }
 
-        .services-grid, .equipment-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
+       // Initialize tooltips
+       function initializeTooltips() {
+           const tooltips = document.querySelectorAll('[data-tooltip]');
+           tooltips.forEach(element => {
+               element.addEventListener('mouseenter', showTooltip);
+               element.addEventListener('mouseleave', hideTooltip);
+           });
+       }
 
-        .service-card, .equipment-card {
-            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
+       function showTooltip(e) {
+           const tooltip = document.createElement('div');
+           tooltip.className = 'tooltip';
+           tooltip.textContent = e.target.getAttribute('data-tooltip');
+           tooltip.style.cssText = `
+               position: absolute;
+               background: rgba(0,0,0,0.8);
+               color: white;
+               padding: 8px 12px;
+               border-radius: 5px;
+               font-size: 12px;
+               z-index: 1000;
+               pointer-events: none;
+           `;
+           document.body.appendChild(tooltip);
+           
+           const rect = e.target.getBoundingClientRect();
+           tooltip.style.left = rect.left + 'px';
+           tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
+       }
 
-        .service-card:hover, .equipment-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            border-color: #667eea;
-        }
+       function hideTooltip() {
+           const tooltip = document.querySelector('.tooltip');
+           if (tooltip) {
+               tooltip.remove();
+           }
+       }
 
-        .service-card h3, .equipment-card h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-        }
+       // Keyboard navigation
+       document.addEventListener('keydown', function(e) {
+           switch(e.key) {
+               case 'Escape':
+                   closeModal();
+                   const overlay = document.getElementById('contactOverlay');
+                   if (overlay.style.display === 'block') {
+                       toggleContactForm();
+                   }
+                   break;
+               case 'Home':
+                   if (e.ctrlKey) {
+                       e.preventDefault();
+                       showHome();
+                   }
+                   break;
+               case 'f':
+                   if (e.ctrlKey) {
+                       e.preventDefault();
+                       document.getElementById('searchBox').focus();
+                   }
+                   break;
+           }
+       });
 
-        .service-card p, .equipment-card p {
-            color: #666;
-            margin-bottom: 15px;
-        }
+       // Performance optimization - Lazy loading for images
+       function lazyLoadImages() {
+           const imageObserver = new IntersectionObserver((entries, observer) => {
+               entries.forEach(entry => {
+                   if (entry.isIntersecting) {
+                       const img = entry.target;
+                       img.src = img.dataset.src;
+                       img.classList.remove('lazy');
+                       observer.unobserve(img);
+                   }
+               });
+           });
 
-        .equipment-details {
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 20px;
-        }
+           document.querySelectorAll('img[data-src]').forEach(img => {
+               imageObserver.observe(img);
+           });
+       }
 
-        .detail-section {
-            margin-bottom: 25px;
-        }
+       // Local storage for user preferences
+       function saveUserPreferences() {
+           const preferences = {
+               view: currentView,
+               lastVisited: Date.now()
+           };
+           // Note: localStorage not available in Claude artifacts
+           // localStorage.setItem('meditech_preferences', JSON.stringify(preferences));
+       }
 
-        .detail-section h4 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 1.3rem;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 5px;
-        }
+       function loadUserPreferences() {
+           // Note: localStorage not available in Claude artifacts
+           // const saved = localStorage.getItem('meditech_preferences');
+           // if (saved) {
+           //     const preferences = JSON.parse(saved);
+           //     setView(preferences.view);
+           // }
+       }
 
-        .specs-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
+       // Error handling
+       window.addEventListener('error', function(e) {
+           console.error('Application error:', e.error);
+           // In a real app, you might want to send this to a logging service
+       });
 
-        .specs-table th, .specs-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
+       // Responsive design helpers
+       function checkMobile() {
+           return window.innerWidth <= 768;
+       }
 
-        .specs-table th {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            font-weight: 600;
-        }
+       function adaptToScreenSize() {
+           const container = document.querySelector('.container');
+           if (checkMobile()) {
+               container.classList.add('mobile-view');
+           } else {
+               container.classList.remove('mobile-view');
+           }
+       }
 
-        .specs-table tr:last-child td {
-            border-bottom: none;
-        }
+       // Initialize everything when page loads
+       document.addEventListener('DOMContentLoaded', function() {
+           setupSearch();
+           loadUserPreferences();
+           initializeTooltips();
+           adaptToScreenSize();
+           
+           // Animate counters when they come into view
+           setTimeout(animateCounters, 1000);
+           
+           console.log('MediTech Solutions - Catalogue initialisé avec succès');
+       });
 
-        .specs-table tr:hover {
-            background-color: #f8f9fa;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Services Biomédicaux</h1>
-            <p class="subtitle">Équipements médicaux de pointe pour des soins de qualité</p>
-        </header>
+       // Handle window resize
+       window.addEventListener('resize', adaptToScreenSize);
 
-        <!-- Page d'accueil -->
-        <div id="home" class="page active">
-            <h2>Bienvenue dans notre centre de services biomédicaux</h2>
-            <p>Découvrez notre gamme complète de services et d'équipements médicaux de dernière génération. Nous proposons des solutions innovantes pour répondre à tous vos besoins en matière de soins de santé.</p>
-            
-            <div class="nav-buttons">
-                <button class="nav-btn" onclick="showServices()">Voir nos Services</button>
-            </div>
+       // Save preferences before page unload
+       window.addEventListener('beforeunload', saveUserPreferences);
 
-            <div class="services-grid">
-                <div class="service-card">
-                    <h3>Excellence Médicale</h3>
-                    <p>Équipements certifiés et technologies de pointe pour des diagnostics précis</p>
-                </div>
-                <div class="service-card">
-                    <h3>Innovation Continue</h3>
-                    <p>Mise à jour constante de nos équipements avec les dernières avancées technologiques</p>
-                </div>
-                <div class="service-card">
-                    <h3>Sécurité Garantie</h3>
-                    <p>Conformité aux normes internationales et maintenance préventive régulière</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Page des services -->
-        <div id="services" class="page">
-            <button class="back-btn" onclick="showHome()">Retour à l'accueil</button>
-            <h2>Nos Services Biomédicaux</h2>
-            <p>Sélectionnez un service pour découvrir nos équipements spécialisés</p>
-
-            <div class="services-grid">
-                <div class="service-card" onclick="showEquipment('imagerie')">
-                    <h3>Imagerie Médicale</h3>
-                    <p>Technologies d'imagerie avancées pour des diagnostics précis</p>
-                </div>
-                <div class="service-card" onclick="showEquipment('laboratoire')">
-                    <h3>Laboratoire</h3>
-                    <p>Analyses biologiques et tests diagnostiques complets</p>
-                </div>
-                <div class="service-card" onclick="showEquipment('chirurgie')">
-                    <h3>Équipements Chirurgicaux</h3>
-                    <p>Instruments chirurgicaux de haute précision</p>
-                </div>
-                <div class="service-card" onclick="showEquipment('monitoring')">
-                    <h3>Surveillance Patient</h3>
-                    <p>Systèmes de monitoring et surveillance continue</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pages d'équipements -->
-        <div id="equipment-imagerie" class="page">
-            <button class="back-btn" onclick="showServices()">Retour aux services</button>
-            <h2>Équipements d'Imagerie Médicale</h2>
-            
-            <div class="equipment-grid">
-                <div class="equipment-card" onclick="showEquipmentDetails('irm')">
-                    <h3>IRM 3 Tesla</h3>
-                    <p>Imagerie par résonance magnétique haute résolution</p>
-                </div>
-                <div class="equipment-card" onclick="showEquipmentDetails('scanner')">
-                    <h3>Scanner CT 128 Barrettes</h3>
-                    <p>Tomodensitométrie multicoupes rapide</p>
-                </div>
-                <div class="equipment-card" onclick="showEquipmentDetails('echographe')">
-                    <h3>Échographe 4D</h3>
-                    <p>Échographie Doppler couleur avancée</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="equipment-laboratoire" class="page">
-            <button class="back-btn" onclick="showServices()">Retour aux services</button>
-            <h2>Équipements de Laboratoire</h2>
-            
-            <div class="equipment-grid">
-                <div class="equipment-card" onclick="showEquipmentDetails('automate')">
-                    <h3>Automate de Biochimie</h3>
-                    <p>Analyses automatisées haute cadence</p>
-                </div>
-                <div class="equipment-card" onclick="showEquipmentDetails('microscope')">
-                    <h3>Microscope Confocal</h3>
-                    <p>Microscopie à fluorescence haute résolution</p>
-                </div>
-                <div class="equipment-card" onclick="showEquipmentDetails('centrifugeuse')">
-                    <h3>Centrifugeuse Réfrigérée</h3>
-                    <p>Séparation d'échantillons à température contrôlée</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="equipment-chirurgie" class="page">
-            <button class="back-btn" onclick="showServices()">Retour aux services</button>
-            <h2>Équipements Chirurgicaux</h2>
-            
-            <div class="equipment-grid">
-                <div class="equipment-card" onclick="showEquipmentDetails('robot')">
-                    <h3>Robot Chirurgical</h3>
-                    <p>Chirurgie mini-invasive assistée par robot</p>
-                </div>
-                <div class="equipment-card" onclick="showEquipmentDetails('laser')">
-                    <h3>Laser Chirurgical</h3>
-                    <p>Précision et cicatrisation optimale</p>
-                </div>
-                <div class="equipment-card" onclick="showEquipmentDetails('table')">
-                    <h3>Table d'Opération</h3>
-                    <p>Positionnement optimal du patient</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="equipment-monitoring" class="page">
-            <button class="back-btn" onclick="showServices()">Retour aux services</button>
-            <h2>Équipements de Surveillance</h2>
-            
-            <div class="equipment-grid">
-                <div class="equipment-card" onclick="showEquipmentDetails('moniteur')">
-                    <h3>Moniteur Multiparamétrique</h3>
-                    <p>Surveillance continue des signes vitaux</p>
-                </div>
-                <div class="equipment-card" onclick="showEquipmentDetails('respirateur')">
-                    <h3>Respirateur Artificiel</h3>
-                    <p>Assistance respiratoire intelligente</p>
-                </div>
-                <div class="equipment-card" onclick="showEquipmentDetails('defibrillateur')">
-                    <h3>Défibrillateur</h3>
-                    <p>Réanimation cardiaque d'urgence</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Détails des équipements -->
-        <div id="equipment-details" class="page">
-            <button class="back-btn" onclick="goBackToEquipment()">Retour</button>
-            <div id="details-content"></div>
-        </div>
-    </div>
-
-    <script>
-        let currentService = '';
-
-        // Données détaillées des équipements
-        const equipmentData = {
-            'irm': {
-                name: 'IRM 3 Tesla',
-                description: 'Système d\'imagerie par résonance magnétique haute résolution offrant des images anatomiques et fonctionnelles exceptionnelles.',
-                role: 'L\'IRM 3 Tesla permet d\'obtenir des images détaillées des structures internes du corps humain sans utiliser de rayonnements ionisants. Il utilise un champ magnétique puissant et des ondes radio pour créer des images précises des organes, tissus mous, os et autres structures internes.',
-                specifications: {
-                    'Champ magnétique': '3 Tesla',
-                    'Gradient': '80 mT/m',
-                    'Diamètre tunnel': '70 cm',
-                    'Longueur tunnel': '173 cm',
-                    'Poids patient max': '250 kg',
-                    'Temps d\'examen': '15-45 minutes'
-                },
-                brands: [
-                    'Siemens Healthineers - MAGNETOM Vida',
-                    'GE Healthcare - SIGNA Premier',
-                    'Philips - Ingenia Elition X',
-                    'Canon Medical - Vantage Galan 3T'
-                ]
-            },
-            'scanner': {
-                name: 'Scanner CT 128 Barrettes',
-                description: 'Tomodensitomètre multicoupes ultra-rapide pour des examens de haute qualité avec dose réduite.',
-                role: 'Le scanner CT permet d\'obtenir des images en coupes transversales du corps grâce aux rayons X. Il est particulièrement efficace pour diagnostiquer rapidement les traumatismes, les urgences médicales et pour planifier des interventions chirurgicales.',
-                specifications: {
-                    'Nombre de barrettes': '128',
-                    'Vitesse rotation': '0.28 secondes',
-                    'Ouverture': '78 cm',
-                    'Charge patient max': '200 kg',
-                    'Épaisseur coupe min': '0.5 mm',
-                    'Longueur examen max': '200 cm'
-                },
-                brands: [
-                    'GE Healthcare - Revolution CT',
-                    'Siemens Healthineers - SOMATOM Drive',
-                    'Philips - Incisive CT',
-                    'Canon Medical - Aquilion ONE'
-                ]
-            },
-            'echographe': {
-                name: 'Échographe 4D',
-                description: 'Système d\'échographie Doppler couleur avec imagerie 4D temps réel pour tous types d\'examens.',
-                role: 'L\'échographe utilise les ultrasons pour créer des images en temps réel des structures internes du corps. Il est essentiel pour le suivi de grossesse, l\'examen cardiaque, et de nombreux diagnostics sans radiation.',
-                specifications: {
-                    'Fréquences': '2-15 MHz',
-                    'Sondes': 'Linéaire, convexe, endocavitaire',
-                    'Écran': '23 pouces HD',
-                    'Mémoire': '1 TB',
-                    'Modes': '2D, 3D, 4D, Doppler',
-                    'Batterie': '2 heures autonomie'
-                },
-                brands: [
-                    'GE Healthcare - Voluson E10',
-                    'Philips - EPIQ Elite',
-                    'Samsung Medison - RS85',
-                    'Mindray - Resona 7'
-                ]
-            },
-            'automate': {
-                name: 'Automate de Biochimie',
-                description: 'Système d\'analyse automatisée haute performance pour la biochimie clinique.',
-                role: 'L\'automate de biochimie effectue automatiquement des analyses sur les échantillons de sang, urine et autres fluides biologiques. Il permet de mesurer rapidement et précisément divers paramètres biochimiques pour le diagnostic médical.',
-                specifications: {
-                    'Débit': '800 tests/heure',
-                    'Volume échantillon': '2-35 μL',
-                    'Positions échantillons': '180',
-                    'Réactifs simultanés': '25',
-                    'Calibration': 'Automatique',
-                    'Contrôle qualité': 'Intégré'
-                },
-                brands: [
-                    'Roche Diagnostics - cobas 8000',
-                    'Abbott - Alinity c',
-                    'Siemens Healthineers - Atellica CH',
-                    'Beckman Coulter - AU5800'
-                ]
-            },
-            'microscope': {
-                name: 'Microscope Confocal',
-                description: 'Microscope confocal à balayage laser pour l\'imagerie cellulaire haute résolution.',
-                role: 'Le microscope confocal permet d\'observer les structures cellulaires et tissulaires avec une résolution exceptionnelle. Il est utilisé pour la recherche biomédicale, l\'anatomopathologie et les études de biologie cellulaire.',
-                specifications: {
-                    'Résolution XY': '120 nm',
-                    'Résolution Z': '350 nm',
-                    'Lasers': '405, 488, 561, 633 nm',
-                    'Objectifs': '10x à 100x',
-                    'Détecteurs': 'PMT + HyD',
-                    'Vitesse': '28 fps max'
-                },
-                brands: [
-                    'Zeiss - LSM 980',
-                    'Leica Microsystems - STELLARIS 8',
-                    'Nikon - A1R HD25',
-                    'Olympus - FV3000'
-                ]
-            },
-            'centrifugeuse': {
-                name: 'Centrifugeuse Réfrigérée',
-                description: 'Centrifugeuse haute performance avec contrôle de température pour échantillons sensibles.',
-                role: 'La centrifugeuse sépare les composants des échantillons biologiques par force centrifuge. Elle est essentielle pour préparer le plasma, séparer les cellules et purifier les échantillons pour analyses.',
-                specifications: {
-                    'Vitesse max': '30 000 rpm',
-                    'Force max': '65 000 x g',
-                    'Température': '-20°C à +40°C',
-                    'Capacité': '6 x 1000 mL',
-                    'Bruit': '< 58 dB(A)',
-                    'Sécurité': 'Verrouillage automatique'
-                },
-                brands: [
-                    'Thermo Fisher Scientific - Sorvall LYNX',
-                    'Eppendorf - Centrifuge 5910 R',
-                    'Beckman Coulter - Avanti J-15R',
-                    'Hettich - ROTINA 380 R'
-                ]
-            },
-            'robot': {
-                name: 'Robot Chirurgical',
-                description: 'Système robotique pour chirurgie mini-invasive avec vision 3D haute définition.',
-                role: 'Le robot chirurgical assiste les chirurgiens dans les interventions mini-invasives en offrant une précision extrême et une vision 3D magnifiée. Il permet de réduire les complications, les cicatrices et le temps de récupération.',
-                specifications: {
-                    'Bras articulés': '4 bras',
-                    'Degrés liberté': '7 par bras',
-                    'Vision': '3D 10x HD',
-                    'Tremblements': 'Éliminés',
-                    'Précision': '< 1 mm',
-                    'Instruments': '> 60 types'
-                },
-                brands: [
-                    'Intuitive Surgical - da Vinci Xi',
-                    'CMR Surgical - Versius',
-                    'Medtronic - Hugo RAS',
-                    'Johnson & Johnson - Ottava'
-                ]
-            },
-            'laser': {
-                name: 'Laser Chirurgical',
-                description: 'Laser multi-longueurs d\'onde pour diverses applications chirurgicales.',
-                role: 'Le laser chirurgical permet de couper, coaguler et vaporiser les tissus avec une précision millimétrique. Il minimise les saignements, réduit les risques d\'infection et accélère la cicatrisation.',
-                specifications: {
-                    'Type': 'Diode + CO2',
-                    'Puissance': '1-100 W',
-                    'Longueurs onde': '980, 1470, 10600 nm',
-                    'Modes': 'Continu, pulsé',
-                    'Fibres': 'Multiples diamètres',
-                    'Refroidissement': 'Air forcé'
-                },
-                brands: [
-                    'Lumenis - UltraPulse CO2',
-                    'Cynosure - SmartSkin+ CO2',
-                    'Fotona - LightWalker',
-                    'Alma Lasers - Soprano ICE'
-                ]
-            },
-            'table': {
-                name: 'Table d\'Opération',
-                description: 'Table d\'opération électro-hydraulique universelle pour tous types de chirurgies.',
-                role: 'La table d\'opération permet de positionner le patient de manière optimale pour tous types d\'interventions chirurgicales. Elle offre stabilité, sécurité et accessibilité pour l\'équipe chirurgicale.',
-                specifications: {
-                    'Charge max': '400 kg',
-                    'Hauteur': '650-1000 mm',
-                    'Trendelenburg': '+/- 30°',
-                    'Flexion dorsale': '85°',
-                    'Flexion jambes': '90°',
-                    'Largeur plateau': '530 mm'
-                },
-                brands: [
-                    'Maquet - Magnus',
-                    'Steris - 5085 SRT',
-                    'Mizuho OSI - 7900',
-                    'Schaerer Medical - OPERON'
-                ]
-            },
-            'moniteur': {
-                name: 'Moniteur Multiparamétrique',
-                description: 'Système de surveillance continue des paramètres vitaux avec alarmes intelligentes.',
-                role: 'Le moniteur surveille en continu les signes vitaux des patients (rythme cardiaque, pression artérielle, saturation en oxygène, température). Il alerte l\'équipe médicale en cas d\'anomalie.',
-                specifications: {
-                    'Paramètres': 'ECG, SpO2, PNI, Temp, CO2',
-                    'Écran': '15" tactile couleur',
-                    'Mémoire': '72h tendances',
-                    'Alarmes': 'Priorité configurable',
-                    'Batterie': '4h autonomie',
-                    'Connectivité': 'WiFi, Bluetooth'
-                },
-                brands: [
-                    'Philips - IntelliVue MX850',
-                    'GE Healthcare - B850',
-                    'Mindray - BeneVision N22',
-                    'Dräger - Infinity Acute Care'
-                ]
-            },
-            'respirateur': {
-                name: 'Respirateur Artificiel',
-                description: 'Respirateur de réanimation avec modes ventilatoires avancés et monitoring intégré.',
-                role: 'Le respirateur artificiel assure la ventilation mécanique des patients qui ne peuvent pas respirer spontanément ou suffisamment. Il est vital en réanimation et durant les interventions sous anesthésie générale.',
-                specifications: {
-                    'Modes': 'VCV, PCV, SIMV, PSV',
-                    'Volume tidal': '2-2000 mL',
-                    'Fréquence': '1-150/min',
-                    'PEEP': '0-50 cmH2O',
-                    'FiO2': '21-100%',
-                    'Écran': '15" couleur tactile'
-                },
-                brands: [
-                    'Dräger - Evita V800',
-                    'Hamilton Medical - HAMILTON-C6',
-                    'Medtronic - Puritan Bennett 980',
-                    'Getinge - Servo-i'
-                ]
-            },
-            'defibrillateur': {
-                name: 'Défibrillateur',
-                description: 'Défibrillateur biphasique automatisé externe avec assistance RCP temps réel.',
-                role: 'Le défibrillateur délivre un choc électrique pour restaurer un rythme cardiaque normal en cas d\'arrêt cardiaque. Il guide également les secouristes dans la réanimation cardio-pulmonaire.',
-                specifications: {
-                    'Énergie': '1-200 J biphasique',
-                    'Analyse': 'Automatique',
-                    'ECG': '3 dérivations',
-                    'Métronome RCP': 'Intégré',
-                    'Batterie': '300 chocs',
-                    'Enregistrement': '4h continue'
-                },
-                brands: [
-                    'Zoll Medical - AED 3',
-                    'Philips - HeartStart FRx',
-                    'Physio-Control - LIFEPAK CR2',
-                    'Cardiac Science - Powerheart G5'
-                ]
-            }
-        };
-
-        function showHome() {
-            hideAllPages();
-            document.getElementById('home').classList.add('active');
-        }
-
-        function showServices() {
-            hideAllPages();
-            document.getElementById('services').classList.add('active');
-        }
-
-        function showEquipment(service) {
-            hideAllPages();
-            currentService = service;
-            document.getElementById(`equipment-${service}`).classList.add('active');
-        }
-
-        function showEquipmentDetails(equipmentId) {
-            const equipment = equipmentData[equipmentId];
-            if (!equipment) return;
-
-            hideAllPages();
-            
-            let detailsHTML = `
-                <div class="equipment-details">
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <h2>${equipment.name}</h2>
-                        <p style="font-size: 1.2rem; color: #666; margin-top: 15px;">${equipment.description}</p>
-                    </div>
-
-                    <div class="detail-section">
-                        <h4>Rôle et Description</h4>
-                        <div style="background: rgba(102, 126, 234, 0.1); border-left: 4px solid #667eea; padding: 20px; border-radius: 0 10px 10px 0; margin-top: 15px;">
-                            <p style="font-size: 1.1rem; line-height: 1.7; color: #333;">${equipment.role}</p>
-                        </div>
-                    </div>
-
-                    <div class="detail-section">
-                        <h4>Spécifications Techniques</h4>
-                        <table class="specs-table">
-                            <thead>
-                                <tr>
-                                    <th>Caractéristique</th>
-                                    <th>Valeur</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${Object.entries(equipment.specifications).map(([key, value]) => `
-                                    <tr>
-                                        <td><strong>${key}</strong></td>
-                                        <td>${value}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="detail-section">
-                        <h4>Marques Disponibles</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 15px;">
-                            ${equipment.brands.map(brand => `
-                                <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center;">
-                                    <strong>${brand}</strong>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('details-content').innerHTML = detailsHTML;
-            document.getElementById('equipment-details').classList.add('active');
-        }
-
-        function goBackToEquipment() {
-            hideAllPages();
-            document.getElementById(`equipment-${currentService}`).classList.add('active');
-        }
-
-        function hideAllPages() {
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
-        }
-    </script>
+       // Export functions for global access
+       window.MediTech = {
+           showHome,
+           showServices,
+           showDevices,
+           showDeviceDetails,
+           showBrandDetails,
+           showGallery,
+           toggleContactForm,
+           submitContactForm,
+           setView,
+           openModal,
+           closeModal
+       };
+   </script>
 </body>
 </html>
