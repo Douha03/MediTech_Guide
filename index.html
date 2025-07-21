@@ -3,628 +3,619 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MediTech - Découvrez les technologies médicales avancées pour toutes les spécialités médicales.">
+    <meta name="keywords" content="technologies médicales, équipements médicaux, santé, diagnostic, thérapie">
+    <meta name="author" content="MediTech">
     <title>MediTech - Votre Guide Biomédical</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Poppins', sans-serif;
-        line-height: 1.6;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
-
-    .container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 20px 15px;
-        min-height: 100vh;
-        position: relative;
-    }
-
-    .header {
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(20px);
-        padding: 20px 25px;
-        border-radius: 20px;
-        margin-bottom: 30px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        position: sticky;
-        top: 20px;
-        z-index: 100;
-        text-align: center;
-    }
-
-    .header-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .logo {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .logo-icon {
-        font-size: 2.5rem;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .logo-text {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: #2d3748;
-        text-shadow: none;
-    }
-
-    .search-container {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .search-box {
-        background: #f7fafc;
-        border: 2px solid #e2e8f0;
-        padding: 12px 20px;
-        border-radius: 12px;
-        width: 300px;
-        font-size: 14px;
-        font-family: 'Poppins', sans-serif;
-        transition: all 0.3s ease;
-    }
-
-    .search-box:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    .view-toggle {
-        display: flex;
-        background: #f7fafc;
-        border-radius: 12px;
-        padding: 4px;
-        border: 2px solid #e2e8f0;
-    }
-
-    .view-btn {
-        background: none;
-        border: none;
-        color: #4a5568;
-        padding: 8px 15px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: 'Poppins', sans-serif;
-        font-weight: 500;
-    }
-
-    .view-btn.active {
-        background: #667eea;
-        color: white;
-    }
-
-    .nav-breadcrumb {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-top: 15px;
-        font-size: 14px;
-        color: #718096;
-    }
-
-    .nav-breadcrumb button {
-        background: none;
-        border: none;
-        color: #667eea;
-        cursor: pointer;
-        text-decoration: none;
-        font-size: 14px;
-        font-family: 'Poppins', sans-serif;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-
-    .nav-breadcrumb button:hover {
-        color: #764ba2;
-    }
-
-    .content-section {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        padding: 40px;
-        border-radius: 25px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        min-height: 600px;
-    }
-
-    .page-title {
-        font-size: 3rem;
-        color: #2d3748;
-        margin-bottom: 20px;
-        text-align: center;
-        font-weight: 600;
-    }
-
-    .hero-section {
-        text-align: center;
-        margin-bottom: 50px;
-    }
-
-    .hero-section h2 {
-        font-size: 2rem;
-        color: #4a5568;
-        margin-bottom: 25px;
-        font-weight: 500;
-    }
-
-    .hero-section p {
-        font-size: 1.2rem;
-        color: #718096;
-        margin-bottom: 35px;
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
-        line-height: 1.8;
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        padding: 18px 35px;
-        border: none;
-        border-radius: 12px;
-        font-size: 1.1rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        font-family: 'Poppins', sans-serif;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
-    }
-
-    .services-grid, .devices-grid, .brands-grid {
-        display: grid;
-        gap: 30px;
-        margin-top: 40px;
-    }
-
-    .services-grid {
-        justify-content: center;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-
-    .devices-grid {
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    }
-
-    .brands-grid {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
-
-    .list-view .services-grid,
-    .list-view .devices-grid,
-    .list-view .brands-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .service-card, .device-card, .brand-card {
-        background: white;
-        backdrop-filter: blur(15px);
-        padding: 35px;
-        border-radius: 16px;
-        cursor: pointer;
-        transition: all 0.4s ease;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e2e8f0;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .service-card:hover, .device-card:hover, .brand-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15);
-        border-color: #667eea;
-    }
-
-    .service-card::before, .device-card::before, .brand-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.05), transparent);
-        transition: all 0.6s ease;
-    }
-
-    .service-card:hover::before, .device-card:hover::before, .brand-card:hover::before {
-        left: 100%;
-    }
-
-    .card-icon {
-        font-size: 3.5rem;
-        margin-bottom: 25px;
-        text-align: center;
-        color: #667eea;
-    }
-
-    .card-image {
-        width: 100%;
-        height: 150px;
-        background: #f7fafc;
-        border-radius: 10px;
-        margin-bottom: 25px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3rem;
-        color: #cbd5e0;
-        border: 2px solid #e2e8f0;
-        object-fit: cover;
-    }
-
-    .card-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 20px;
-    }
-
-    .card-description {
-        color: #718096;
-        line-height: 1.7;
-        font-size: 1rem;
-    }
-
-    .list-view .service-card,
-    .list-view .device-card,
-    .list-view .brand-card {
-        display: flex;
-        align-items: center;
-        gap: 30px;
-        padding: 25px;
-    }
-
-    .list-view .card-icon {
-        font-size: 2.5rem;
-        margin-bottom: 0;
-        flex-shrink: 0;
-    }
-
-    .list-view .card-image {
-        width: 100px;
-        height: 100px;
-        margin-bottom: 0;
-    }
-
-    .list-view .card-content {
-        flex: 1;
-    }
-
-    .list-view .card-title {
-        margin-bottom: 10px;
-        font-size: 1.3rem;
-    }
-
-    .device-details, .brand-details {
-        max-width: 1000px;
-        margin: 0 auto;
-        color: #2d3748;
-    }
-
-    .device-image, .brand-image {
-        width: 100%;
-        max-width: 400px;
-        height: 250px;
-        background: #f7fafc;
-        border-radius: 15px;
-        margin: 30px auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 4rem;
-        color: #cbd5e0;
-        border: 2px solid #e2e8f0;
-    }
-
-    .device-info {
-        background: #f7fafc;
-        padding: 30px;
-        border-radius: 15px;
-        margin: 25px 0;
-        border: 2px solid #e2e8f0;
-    }
-
-    .device-info h3 {
-        color: #2d3748;
-        margin-bottom: 20px;
-        font-size: 1.4rem;
-        font-weight: 600;
-    }
-
-    .device-info p, .device-info ul {
-        color: #4a5568;
-        line-height: 1.8;
-    }
-
-    .back-btn {
-        background: #f7fafc;
-        color: #4a5568;
-        padding: 12px 25px;
-        border: 2px solid #e2e8f0;
-        border-radius: 12px;
-        cursor: pointer;
-        margin-bottom: 25px;
-        transition: all 0.3s ease;
-        font-family: 'Poppins', sans-serif;
-        font-weight: 500;
-    }
-
-    .back-btn:hover {
-        background: #667eea;
-        color: white;
-        border-color: #667eea;
-        transform: translateX(-5px);
-    }
-
-    .specs-section {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 25px;
-        margin: 40px 0;
-    }
-
-    .specs-card {
-        background: #f7fafc;
-        padding: 25px;
-        border-radius: 15px;
-        border-left: 5px solid #667eea;
-        border: 2px solid #e2e8f0;
-        border-left-color: #667eea;
-    }
-
-    .specs-card h4 {
-        color: #2d3748;
-        margin-bottom: 15px;
-        font-size: 1.2rem;
-        font-weight: 600;
-    }
-
-    .specs-card p {
-        color: #4a5568;
-    }
-
-    .pros-cons {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 35px;
-        margin: 40px 0;
-    }
-
-    .pros, .cons {
-        padding: 30px;
-        border-radius: 15px;
-    }
-
-    .pros {
-        background: #f0fff4;
-        border-left: 5px solid #48bb78;
-        border: 2px solid #c6f6d5;
-    }
-
-    .cons {
-        background: #fffaf0;
-        border-left: 5px solid #ed8936;
-        border: 2px solid #fbd38d;
-    }
-
-    .pros h4, .cons h4 {
-        margin-bottom: 20px;
-        font-size: 1.3rem;
-        color: #2d3748;
-        font-weight: 600;
-    }
-
-    .pros ul, .cons ul {
-        list-style: none;
-    }
-
-    .pros li, .cons li {
-        margin-bottom: 12px;
-        color: #4a5568;
-        padding-left: 25px;
-        position: relative;
-    }
-
-    .pros li::before {
-        content: "✓";
-        color: #48bb78;
-        font-weight: bold;
-        position: absolute;
-        left: 0;
-    }
-
-    .cons li::before {
-        content: "⚠";
-        color: #ed8936;
-        font-weight: bold;
-        position: absolute;
-        left: 0;
-    }
-
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-    }
 
-    @keyframes slideInRight {
-        from {
-            opacity: 0;
-            transform: translateX(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    .content-section {
-        animation: slideInUp 0.6s ease-out;
-    }
-
-    .service-card, .device-card, .brand-card {
-        animation: slideInRight 0.6s ease-out;
-        animation-fill-mode: both;
-    }
-
-    .service-card:nth-child(1) { animation-delay: 0.1s; }
-    .service-card:nth-child(2) { animation-delay: 0.2s; }
-    .service-card:nth-child(3) { animation-delay: 0.3s; }
-    .service-card:nth-child(4) { animation-delay: 0.4s; }
-    .service-card:nth-child(5) { animation-delay: 0.5s; }
-    .service-card:nth-child(6) { animation-delay: 0.6s; }
-
-    .hidden {
-        display: none;
-    }
-
-    .stats-section {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 25px;
-        margin: 40px 0;
-    }
-
-    .stat-card {
-        background: white;
-        padding: 25px;
-        border-radius: 15px;
-        text-align: center;
-        border: 2px solid #e2e8f0;
-    }
-
-    .stat-number {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #667eea;
-        margin-bottom: 10px;
-    }
-
-    .stat-label {
-        color: #718096;
-        font-size: 1rem;
-    }
-
-    @media (max-width: 768px) {
-        .pros-cons {
-            grid-template-columns: 1fr;
-        }
-        
         .container {
-            padding: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 15px;
+            min-height: 100vh;
+            position: relative;
         }
-        
-        .content-section {
-            padding: 25px;
-        }
-        
-        .page-title {
-            font-size: 2rem;
+
+        .header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 20px 25px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            text-align: center;
         }
 
         .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-box {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            padding: 12px 20px;
+            border-radius: 12px;
+            width: 300px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .view-toggle {
+            display: flex;
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 4px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .view-btn {
+            background: none;
+            border: none;
+            color: #4a5568;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+
+        .view-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .nav-breadcrumb button {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-breadcrumb button:hover {
+            color: #764ba2;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 600px;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero-section h2 {
+            font-size: 2rem;
+            color: #4a5568;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 35px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 18px 35px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .services-grid, .devices-grid, .brands-grid {
+            display: grid;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .services-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .devices-grid {
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        }
+
+        .brands-grid {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .list-view .services-grid,
+        .list-view .devices-grid,
+        .list-view .brands-grid {
+            display: flex;
             flex-direction: column;
             gap: 20px;
         }
 
-        .search-box {
+        .service-card, .device-card, .brand-card {
+            background: white;
+            backdrop-filter: blur(15px);
+            padding: 35px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover, .device-card:hover, .brand-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15);
+            border-color: #667eea;
+        }
+
+        .service-card::before, .device-card::before, .brand-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.05), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .service-card:hover::before, .device-card:hover::before, .brand-card:hover::before {
+            left: 100%;
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #667eea;
+        }
+
+        .card-image, .device-image, .brand-image {
+            width: 100%;
+            height: 150px;
+            background: #f7fafc;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #cbd5e0;
+            border: 2px solid #e2e8f0;
+            object-fit: cover;
+        }
+
+        .device-image {
+            height: 250px;
+            max-width: 400px;
+            margin: 30px auto;
+        }
+
+        .brand-image {
+            font-size: 4rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .card-description {
+            color: #718096;
+            line-height: 1.7;
+            font-size: 1rem;
         }
 
         .list-view .service-card,
         .list-view .device-card,
         .list-view .brand-card {
-            flex-direction: column;
-            text-align: center;
-        }
-    }
-
-    .particles {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: -1;
-    }
-
-    .particle {
-        position: absolute;
-        width: 4px;
-        height: 4px;
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        animation: float 6s ease-in-out infinite;
-    }
-
-    @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-20px) rotate(180deg); }
-    }
-
-    @media (max-width: 768px) {
-        .header {
-            padding: 15px;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 25px;
         }
 
-        .header h1 {
-            font-size: 20px;
+        .list-view .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0;
+            flex-shrink: 0;
         }
 
-        .container {
-            padding: 10px;
+        .list-view .card-image {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 0;
         }
 
-        .device-card {
-            flex: 1 1 100%;
+        .list-view .card-content {
+            flex: 1;
+        }
+
+        .list-view .card-title {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .device-details, .brand-details {
+            max-width: 1000px;
+            margin: 0 auto;
+            color: #2d3748;
+        }
+
+        .device-info {
+            background: #f7fafc;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 2px solid #e2e8f0;
+        }
+
+        .device-info h3 {
+            color: #2d3748;
             margin-bottom: 20px;
+            font-size: 1.4rem;
+            font-weight: 600;
         }
 
-        .search-bar, .filter-section {
-            flex-direction: column;
-            align-items: stretch;
+        .device-info p, .device-info ul {
+            color: #4a5568;
+            line-height: 1.8;
         }
-    }
+
+        .back-btn {
+            background: #f7fafc;
+            color: #4a5568;
+            padding: 12px 25px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateX(-5px);
+        }
+
+        .specs-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .specs-card {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            border: 2px solid #e2e8f0;
+        }
+
+        .specs-card h4 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .specs-card p {
+            color: #4a5568;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            margin: 40px 0;
+        }
+
+        .pros, .cons {
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .pros {
+            background: #f0fff4;
+            border-left: 5px solid #48bb78;
+            border: 2px solid #c6f6d5;
+        }
+
+        .cons {
+            background: #fffaf0;
+            border-left: 5px solid #ed8936;
+            border: 2px solid #fbd38d;
+        }
+
+        .pros h4, .cons h4 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .pros ul, .cons ul {
+            list-style: none;
+        }
+
+        .pros li, .cons li {
+            margin-bottom: 12px;
+            color: #4a5568;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .pros li::before {
+            content: "✓";
+            color: #48bb78;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .cons li::before {
+            content: "⚠";
+            color: #ed8936;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .service-card, .device-card, .brand-card {
+            animation: slideInRight 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        .service-card:nth-child(4) { animation-delay: 0.4s; }
+        .service-card:nth-child(5) { animation-delay: 0.5s; }
+        .service-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .hidden {
+            display: none;
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-size: 1rem;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .error-message {
+            color: #ff4444;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff5f5;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .image-error {
+            background: #f7fafc;
+            color: #718096;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .content-section {
+                padding: 25px;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .list-view .service-card,
+            .list-view .device-card,
+            .list-view .brand-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -634,142 +625,147 @@
         <header class="header">
             <div class="header-content">
                 <div class="logo">
-                    <div class="logo-icon">🏥</div>
+                    <div class="logo-icon" aria-label="MediTech Logo">🏥</div>
                     <div class="logo-text">MediTech</div>
                 </div>
                 <div class="search-container">
-                    <input type="text" class="search-box" placeholder="Rechercher des dispositifs médicaux..." id="searchBox">
+                    <input type="text" class="search-box" placeholder="Rechercher des dispositifs médicaux..." id="searchBox" aria-label="Recherche de dispositifs médicaux">
                     <div class="view-toggle">
-                        <button class="view-btn active" onclick="setView('grid')" id="gridBtn">⚏</button>
-                        <button class="view-btn" onclick="setView('list')" id="listBtn">☰</button>
+                        <button class="view-btn active" id="gridBtn" aria-label="Vue en grille">⚏</button>
+                        <button class="view-btn" id="listBtn" aria-label="Vue en liste">☰</button>
                     </div>
                 </div>
             </div>
-            <div class="nav-breadcrumb" id="breadcrumb"></div>
+            <nav class="nav-breadcrumb" id="breadcrumb" aria-label="Fil d'ariane"></nav>
         </header>
 
-        <div id="home-page" class="content-section">
-            <h1 class="page-title">Technologies Médicales Avancées</h1>
-            <div class="hero-section">
-                <h2>L'Innovation au Service de la Médecine</h2>
-                <p>Découvrez notre écosystème complet de technologies médicales de pointe. Des équipements diagnostiques aux systèmes thérapeutiques les plus avancés, nous proposons des solutions innovantes pour tous les secteurs de la médecine moderne.</p>
-                <button class="btn-primary" onclick="showServices()">Explorer nos Services</button>
-            </div>
+        <main>
+            <div class="error-message" id="errorMessage"></div>
 
-            <div class="stats-section">
-                <div class="stat-card">
-                    <div class="stat-number" id="deviceCount">150+</div>
-                    <div class="stat-label">Dispositifs</div>
+            <section id="home-page" class="content-section">
+                <h1 class="page-title">Technologies Médicales Avancées</h1>
+                <div class="hero-section">
+                    <h2>L'Innovation au Service de la Médecine</h2>
+                    <p>Découvrez notre écosystème complet de technologies médicales de pointe. Des équipements diagnostiques aux systèmes thérapeutiques les plus avancés, nous proposons des solutions innovantes pour tous les secteurs de la médecine moderne.</p>
+                    <button class="btn-primary" id="exploreServicesBtn" aria-label="Explorer les services">Explorer nos Services</button>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number">25+</div>
-                    <div class="stat-label">Marques</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">6</div>
-                    <div class="stat-label">Spécialités</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">98%</div>
-                    <div class="stat-label">Satisfaction</div>
-                </div>
-            </div>
-        </div>
 
-        <div id="services-page" class="content-section hidden">
-            <button class="back-btn" onclick="showHome()">← Retour à l'accueil</button>
-            <h1 class="page-title">Spécialités Médicales</h1>
-            <div class="services-grid" id="servicesGrid">
-                <div class="service-card" onclick="showDevices('pediatrie')">
-                    <div class="card-icon">👶</div>
-                    <div class="card-content">
-                        <h3 class="card-title">Pédiatrie</h3>
-                        <p class="card-description">Équipements spécialisés pour le diagnostic et le traitement des enfants et nourrissons. Technologies adaptées aux besoins spécifiques de la médecine pédiatrique.</p>
-                        <ul style="margin-top: 15px; color: rgba(255, 255, 255, 0.7);">
-                            <li>• Échographes pédiatriques</li>
-                            <li>• Moniteurs néonataux</li>
-                            <li>• Ventilateurs adaptés</li>
-                        </ul>
+                <div class="stats-section">
+                    <div class="stat-card">
+                        <div class="stat-number" id="deviceCount">150+</div>
+                        <div class="stat-label">Dispositifs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">25+</div>
+                        <div class="stat-label">Marques</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">Spécialités</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Satisfaction</div>
                     </div>
                 </div>
-                <div class="service-card" onclick="showDevices('cardiologie')">
-                    <div class="card-icon">❤️</div>
-                    <div class="card-content">
-                        <h3 class="card-title">Cardiologie</h3>
-                        <p class="card-description">Dispositifs avancés pour l'exploration et le traitement des pathologies cardiovasculaires. Technologies de pointe pour un diagnostic précis.</p>
-                        <ul style="margin-top: 15px; color: rgba(255, 255, 255, 0.7);">
-                            <li>• Électrocardiographes</li>
-                            <li>• Échocardiographes</li>
-                            <li>• Holters et défibrillateurs</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="service-card" onclick="showDevices('radiologie')">
-                    <div class="card-icon">📡</div>
-                    <div class="card-content">
-                        <h3 class="card-title">Radiologie</h3>
-                        <p class="card-description">Technologies d'imagerie médicale pour un diagnostic précis et non invasif. Solutions complètes d'imagerie diagnostique.</p>
-                        <ul style="margin-top: 15px; color: rgba(255, 255, 255, 0.7);">
-                            <li>• Scanners haute résolution</li>
-                            <li>• IRM 3 Tesla</li>
-                            <li>• Mammographie numérique</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="service-card" onclick="showDevices('neurologie')">
-                    <div class="card-icon">🧠</div>
-                    <div class="card-content">
-                        <h3 class="card-title">Neurologie</h3>
-                        <p class="card-description">Équipements spécialisés pour l'étude du système nerveux central et périphérique. Diagnostic neurologique avancé.</p>
-                        <ul style="margin-top: 15px; color: rgba(255, 255, 255, 0.7);">
-                            <li>• Électroencéphalographes</li>
-                            <li>• Scanner cérébral</li>
-                            <li>• Doppler transcrânien</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="service-card" onclick="showDevices('orthopédie')">
-                    <div class="card-icon">🦴</div>
-                    <div class="card-content">
-                        <h3 class="card-title">Orthopédie</h3>
-                        <p class="card-description">Dispositifs pour le diagnostic et le traitement des troubles musculo-squelettiques. Imagerie et thérapie osseuse.</p>
-                        <ul style="margin-top: 15px; color: rgba(255, 255, 255, 0.7);">
-                            <li>• Radiographie osseuse</li>
-                            <li>• Arthroscopes</li>
-                            <li>• Densitométrie osseuse</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="service-card" onclick="showDevices('gastroentérologie')">
-                    <div class="card-icon">🔬</div>
-                    <div class="card-content">
-                        <h3 class="card-title">Gastro-entérologie</h3>
-                        <p class="card-description">Équipements pour l'exploration du système digestif et des organes associés. Endoscopie et imagerie digestive.</p>
-                        <ul style="margin-top: 15px; color: rgba(255, 255, 255, 0.7);">
-                            <li>• Endoscopie avancée</li>
-                            <li>• Coloscopie haute définition</li>
-                            <li>• pH-métrie 24h</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+            </section>
 
-        <div id="devices-page" class="content-section hidden">
-            <button class="back-btn" onclick="showServices()">← Retour aux services</button>
-            <h1 class="page-title" id="devices-title">Dispositifs Médicaux</h1>
-            <div class="devices-grid" id="devices-grid"></div>
-        </div>
+            <section id="services-page" class="content-section hidden">
+                <button class="back-btn" id="homeBackBtn" aria-label="Retour à l'accueil">← Retour à l'accueil</button>
+                <h1 class="page-title">Spécialités Médicales</h1>
+                <div class="services-grid" id="servicesGrid">
+                    <div class="service-card" data-service="pediatrie">
+                        <div class="card-icon" aria-hidden="true">👶</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Pédiatrie</h3>
+                            <p class="card-description">Équipements spécialisés pour le diagnostic et le traitement des enfants et nourrissons. Technologies adaptées aux besoins spécifiques de la médecine pédiatrique.</p>
+                            <ul style="margin-top: 15px; color: #718096;">
+                                <li>Échographes pédiatriques</li>
+                                <li>Moniteurs néonataux</li>
+                                <li>Ventilateurs adaptés</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-card" data-service="cardiologie">
+                        <div class="card-icon" aria-hidden="true">❤️</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Cardiologie</h3>
+                            <p class="card-description">Dispositifs avancés pour l'exploration et le traitement des pathologies cardiovasculaires. Technologies de pointe pour un diagnostic précis.</p>
+                            <ul style="margin-top: 15px; color: #718096;">
+                                <li>Électrocardiographes</li>
+                                <li>Échocardiographes</li>
+                                <li>Holters et défibrillateurs</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-card" data-service="radiologie">
+                        <div class="card-icon" aria-hidden="true">📡</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Radiologie</h3>
+                            <p class="card-description">Technologies d'imagerie médicale pour un diagnostic précis et non invasif. Solutions complètes d'imagerie diagnostique.</p>
+                            <ul style="margin-top: 15px; color: #718096;">
+                                <li>Scanners haute résolution</li>
+                                <li>IRM 3 Tesla</li>
+                                <li>Mammographie numérique</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-card" data-service="neurologie">
+                        <div class="card-icon" aria-hidden="true">🧠</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Neurologie</h3>
+                            <p class="card-description">Équipements spécialisés pour l'étude du système nerveux central et périphérique. Diagnostic neurologique avancé.</p>
+                            <ul style="margin-top: 15px; color: #718096;">
+                                <li>Électroencéphalographes</li>
+                                <li>Scanner cérébral</li>
+                                <li>Doppler transcrânien</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-card" data-service="orthopédie">
+                        <div class="card-icon" aria-hidden="true">🦴</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Orthopédie</h3>
+                            <p class="card-description">Dispositifs pour le diagnostic et le traitement des troubles musculo-squelettiques. Imagerie et thérapie osseuse.</p>
+                            <ul style="margin-top: 15px; color: #718096;">
+                                <li>Radiographie osseuse</li>
+                                <li>Arthroscopes</li>
+                                <li>Densitométrie osseuse</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-card" data-service="gastroentérologie">
+                        <div class="card-icon" aria-hidden="true">🔬</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Gastro-entérologie</h3>
+                            <p class="card-description">Équipements pour l'exploration du système digestif et des organes associés. Endoscopie et imagerie digestive.</p>
+                            <ul style="margin-top: 15px; color: #718096;">
+                                <li>Endoscopie avancée</li>
+                                <li>Coloscopie haute définition</li>
+                                <li>pH-métrie 24h</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-        <div id="device-details-page" class="content-section hidden">
-            <button class="back-btn" onclick="goBackToDevices()">← Retour aux dispositifs</button>
-            <div class="device-details" id="device-details-content"></div>
-        </div>
+            <section id="devices-page" class="content-section hidden">
+                <button class="back-btn" id="servicesBackBtn" aria-label="Retour aux services">← Retour aux services</button>
+                <h1 class="page-title" id="devicesTitle">Dispositifs Médicaux</h1>
+                <div class="devices-grid" id="devicesGrid"></div>
+            </section>
 
-        <div id="brand-details-page" class="content-section hidden">
-            <button class="back-btn" onclick="goBackToDevice()">← Retour au dispositif</button>
-            <div class="brand-details" id="brand-details-content"></div>
-        </div>
+            <section id="device-details-page" class="content-section hidden">
+                <button class="back-btn" id="devicesBackBtn" aria-label="Retour aux dispositifs">← Retour aux dispositifs</button>
+                <div class="device-details" id="deviceDetailsContent"></div>
+            </section>
+
+            <section id="brand-details-page" class="content-section hidden">
+                <button class="back-btn" id="deviceBackBtn" aria-label="Retour au dispositif">← Retour au dispositif</button>
+                <div class="brand-details" id="brandDetailsContent"></div>
+            </section>
+        </main>
+    </div>
 
     <script>
         let currentService = '';
@@ -781,7 +777,7 @@
             pediatrie: [
                 { 
                     name: 'Échographe Pédiatrique', 
-                    image: 'D:\MediTech\images\ecoped.png', 
+                    image: 'https://sl.bing.net/gv3QoCsWV8C', 
                     description: 'Échographie spécialisée pour enfants avec sondes adaptées',
                     features: ['Sondes haute fréquence', 'Mode pédiatrique', 'Interface colorée'],
                     brand: 'Philips Healthcare',
@@ -798,7 +794,7 @@
                 },
                 { 
                     name: 'Moniteur Néonatal', 
-                    image: 'monitor1.jpg', 
+                    image: 'https://via.placeholder.com/400x250?text=Moniteur+Néonatal', 
                     description: 'Surveillance continue des paramètres vitaux néonataux',
                     features: ['Alarmes intelligentes', 'Monitoring multi-paramètres', 'Interface tactile'],
                     brand: 'GE Healthcare',
@@ -817,7 +813,7 @@
             cardiologie: [
                 { 
                     name: 'Électrocardiographe 12 dérivations', 
-                    image: 'ecg1.jpg', 
+                    image: 'https://via.placeholder.com/400x250?text=ECG', 
                     description: 'ECG haute précision pour diagnostic cardiaque',
                     features: ['Analyse automatique', 'Impression thermique', 'Stockage cloud'],
                     brand: 'Mortara Instruments',
@@ -834,7 +830,7 @@
                 },
                 { 
                     name: 'Échocardiographe Doppler', 
-                    image: 'echo_cardio1.jpg', 
+                    image: 'https://via.placeholder.com/400x250?text=Échocardiographe', 
                     description: 'Imagerie cardiaque haute résolution avec Doppler couleur',
                     features: ['4D temps réel', 'Analyse strain', 'TEE compatible'],
                     brand: 'Siemens Healthineers',
@@ -853,7 +849,7 @@
             radiologie: [
                 { 
                     name: 'Scanner 64 barrettes', 
-                    image: 'scanner1.jpg', 
+                    image: 'https://via.placeholder.com/400x250?text=Scanner', 
                     description: 'Tomodensitométrie haute résolution et vitesse',
                     features: ['Acquisition ultra-rapide', 'Reconstruction 3D', 'Faible dose'],
                     brand: 'Canon Medical',
@@ -870,7 +866,7 @@
                 },
                 { 
                     name: 'IRM 3 Tesla', 
-                    image: 'irm1.jpg', 
+                    image: 'https://via.placeholder.com/400x250?text=IRM', 
                     description: 'Imagerie par résonance magnétique très haut champ',
                     features: ['Champ magnétique 3T', 'Antennes spécialisées', 'Séquences avancées'],
                     brand: 'Philips Healthcare',
@@ -889,7 +885,7 @@
             neurologie: [
                 { 
                     name: 'Électroencéphalographe 32 voies', 
-                    image: 'eeg1.jpg', 
+                    image: 'https://via.placeholder.com/400x250?text=EEG', 
                     description: 'EEG numérique pour exploration neurologique',
                     features: ['32 électrodes', 'Analyse spectrale', 'Vidéo-EEG'],
                     brand: 'Nihon Kohden',
@@ -908,7 +904,7 @@
             orthopédie: [
                 { 
                     name: 'Densitomètre DEXA', 
-                    image: 'dexa1.jpg', 
+                    image: 'https://via.placeholder.com/400x250?text=DEXA', 
                     description: 'Mesure de la densité minérale osseuse',
                     features: ['Double énergie', 'Corps entier', 'Composition corporelle'],
                     brand: 'Hologic Inc',
@@ -927,7 +923,7 @@
             gastroentérologie: [
                 { 
                     name: 'Coloscope Haute Définition', 
-                    image: 'coloscope1.jpg', 
+                    image: 'https://via.placeholder.com/400x250?text=Coloscope', 
                     description: 'Endoscopie digestive haute résolution',
                     features: ['Full HD', 'NBI avancé', 'Chromoendoscopie'],
                     brand: 'Olympus Medical',
@@ -956,7 +952,7 @@
                 revenue: '€17.3 milliards',
                 certifications: ['ISO 13485', 'FDA', 'CE Mark'],
                 innovations: ['HealthSuite', 'Azurion', 'MR 7700'],
-                image: 'philips_hq.jpg'
+                image: 'https://via.placeholder.com/400x250?text=Philips+HQ'
             },
             'GE Healthcare': {
                 logo: '⚡',
@@ -968,7 +964,7 @@
                 revenue: '€16.7 milliards',
                 certifications: ['ISO 14001', 'OHSAS 18001', 'ISO 13485'],
                 innovations: ['Revolution CT', 'SIGNA MR', 'Vscan'],
-                image: 'ge_facility.jpg'
+                image: 'https://via.placeholder.com/400x250?text=GE+Facility'
             },
             'Siemens Healthineers': {
                 logo: '⚙️',
@@ -980,7 +976,7 @@
                 revenue: '€18.0 milliards',
                 certifications: ['ISO 9001', 'ISO 14001', 'OHSAS 18001'],
                 innovations: ['SOMATOM', 'MAGNETOM', 'Atellica'],
-                image: 'siemens_lab.jpg'
+                image: 'https://via.placeholder.com/400x250?text=Siemens+Lab'
             },
             'Canon Medical': {
                 logo: '📷',
@@ -992,7 +988,7 @@
                 revenue: '€3.2 milliards',
                 certifications: ['JIS Q 9001', 'ISO 14001', 'FDA'],
                 innovations: ['Aquilion', 'Vantage', 'Aplio'],
-                image: 'canon_research.jpg'
+                image: 'https://via.placeholder.com/400x250?text=Canon+Research'
             },
             'Mortara Instruments': {
                 logo: '📈',
@@ -1004,7 +1000,7 @@
                 revenue: '€120 millions',
                 certifications: ['ISO 13485', 'FDA 510(k)', 'Health Canada'],
                 innovations: ['VERITAS', 'X-SCRIBE', 'H-SCRIBE'],
-                image: 'mortara_hq.jpg'
+                image: 'https://via.placeholder.com/400x250?text=Mortara+HQ'
             },
             'Nihon Kohden': {
                 logo: '🇯🇵',
@@ -1016,7 +1012,7 @@
                 revenue: '€1.8 milliards',
                 certifications: ['ISO 9001', 'ISO 14001', 'JQA'],
                 innovations: ['Neurofax', 'Life Scope', 'Cardiolife'],
-                image: 'nihon_facility.jpg'
+                image: 'https://via.placeholder.com/400x250?text=Nihon+Facility'
             },
             'Hologic Inc': {
                 logo: '🔬',
@@ -1028,7 +1024,7 @@
                 revenue: '€3.8 milliards',
                 certifications: ['ISO 13485', 'FDA', 'CE'],
                 innovations: ['3D Mammography', 'Discovery', 'Panther'],
-                image: 'hologic_lab.jpg'
+                image: 'https://via.placeholder.com/400x250?text=Hologic+Lab'
             },
             'Olympus Medical': {
                 logo: '🔍',
@@ -1040,84 +1036,138 @@
                 revenue: '€6.8 milliards',
                 certifications: ['ISO 9001', 'ISO 14001', 'ISO 13485'],
                 innovations: ['EVIS X1', 'THUNDERBEAT', 'VISERA ELITE'],
-                image: 'olympus_center.jpg'
+                image: 'https://via.placeholder.com/400x250?text=Olympus+Center'
             }
         };
 
         function showHome() {
-            hideAllPages();
-            document.getElementById('home-page').classList.remove('hidden');
-            updateBreadcrumb([]);
+            try {
+                hideAllPages();
+                const homePage = document.getElementById('home-page');
+                if (homePage) {
+                    homePage.classList.remove('hidden');
+                    updateBreadcrumb([]);
+                    showError('');
+                } else {
+                    showError('Page d\'accueil non trouvée.');
+                }
+            } catch (error) {
+                showError('Erreur lors du chargement de la page d\'accueil : ' + error.message);
+            }
         }
 
         function showServices() {
-            hideAllPages();
-            document.getElementById('services-page').classList.remove('hidden');
-            updateBreadcrumb([{ text: 'Services', action: 'showServices()' }]);
+            try {
+                hideAllPages();
+                const servicesPage = document.getElementById('services-page');
+                if (servicesPage) {
+                    servicesPage.classList.remove('hidden');
+                    updateBreadcrumb([{ text: 'Services', action: 'showServices()' }]);
+                    showError('');
+                } else {
+                    showError('Page des services non trouvée.');
+                }
+            } catch (error) {
+                showError('Erreur lors du chargement des services : ' + error.message);
+            }
         }
 
         function showDevices(service) {
-            currentService = service;
-            hideAllPages();
-            const page = document.getElementById('devices-page');
-            page.classList.remove('hidden');
-            
-            const title = document.getElementById('devices-title');
-            title.textContent = `Dispositifs - ${service.charAt(0).toUpperCase() + service.slice(1)}`;
-            
-            const grid = document.getElementById('devices-grid');
-            grid.innerHTML = '';
-            
-            if (devices[service]) {
-                devices[service].forEach(device => {
-                    const card = createDeviceCard(device);
-                    grid.appendChild(card);
-                });
+            try {
+                currentService = service;
+                hideAllPages();
+                const devicesPage = document.getElementById('devices-page');
+                const devicesTitle = document.getElementById('devicesTitle');
+                const devicesGrid = document.getElementById('devicesGrid');
+                
+                if (!devicesPage || !devicesTitle || !devicesGrid) {
+                    showError('Éléments de la page des dispositifs non trouvés.');
+                    return;
+                }
+                
+                devicesPage.classList.remove('hidden');
+                devicesTitle.textContent = `Dispositifs - ${service.charAt(0).toUpperCase() + service.slice(1)}`;
+                devicesGrid.innerHTML = '';
+                
+                if (devices[service]) {
+                    devices[service].forEach(device => {
+                        const card = createDeviceCard(device);
+                        devicesGrid.appendChild(card);
+                    });
+                } else {
+                    devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour ce service.</p>';
+                }
+                
+                updateBreadcrumb([
+                    { text: 'Services', action: 'showServices()' },
+                    { text: service.charAt(0).toUpperCase() + service.slice(1), action: `showDevices('${service}')` }
+                ]);
+            } catch (error) {
+                showError('Erreur lors du chargement des dispositifs : ' + error.message);
             }
-            
-            updateBreadcrumb([
-                { text: 'Services', action: 'showServices()' },
-                { text: service.charAt(0).toUpperCase() + service.slice(1), action: `showDevices('${service}')` }
-            ]);
         }
 
         function showDeviceDetails(deviceName) {
-            const device = findDeviceByName(deviceName);
-            if (!device) return;
-            
-            currentDevice = deviceName;
-            hideAllPages();
-            const page = document.getElementById('device-details-page');
-            page.classList.remove('hidden');
-            
-            const content = document.getElementById('device-details-content');
-            content.innerHTML = createDeviceDetailsHTML(device);
-            
-            updateBreadcrumb([
-                { text: 'Services', action: 'showServices()' },
-                { text: currentService.charAt(0).toUpperCase() + currentService.slice(1), action: `showDevices('${currentService}')` },
-                { text: deviceName, action: `showDeviceDetails('${deviceName}')` }
-            ]);
+            try {
+                const device = findDeviceByName(deviceName);
+                if (!device) {
+                    showError('Dispositif non trouvé.');
+                    return;
+                }
+                
+                currentDevice = deviceName;
+                hideAllPages();
+                const deviceDetailsPage = document.getElementById('device-details-page');
+                const deviceDetailsContent = document.getElementById('deviceDetailsContent');
+                
+                if (!deviceDetailsPage || !deviceDetailsContent) {
+                    showError('Éléments de la page des détails du dispositif non trouvés.');
+                    return;
+                }
+                
+                deviceDetailsPage.classList.remove('hidden');
+                deviceDetailsContent.innerHTML = createDeviceDetailsHTML(device);
+                
+                updateBreadcrumb([
+                    { text: 'Services', action: 'showServices()' },
+                    { text: currentService.charAt(0).toUpperCase() + currentService.slice(1), action: `showDevices('${currentService}')` },
+                    { text: deviceName, action: `showDeviceDetails('${deviceName}')` }
+                ]);
+            } catch (error) {
+                showError('Erreur lors du chargement des détails du dispositif : ' + error.message);
+            }
         }
 
         function showBrandDetails(brandName) {
-            const brand = brands[brandName];
-            if (!brand) return;
-            
-            currentBrand = brandName;
-            hideAllPages();
-            const page = document.getElementById('brand-details-page');
-            page.classList.remove('hidden');
-            
-            const content = document.getElementById('brand-details-content');
-            content.innerHTML = createBrandDetailsHTML(brandName, brand);
-            
-            updateBreadcrumb([
-                { text: 'Services', action: 'showServices()' },
-                { text: currentService.charAt(0).toUpperCase() + currentService.slice(1), action: `showDevices('${currentService}')` },
-                { text: currentDevice, action: `showDeviceDetails('${currentDevice}')` },
-                { text: brandName, action: `showBrandDetails('${brandName}')` }
-            ]);
+            try {
+                const brand = brands[brandName];
+                if (!brand) {
+                    showError('Marque non trouvée.');
+                    return;
+                }
+                
+                currentBrand = brandName;
+                hideAllPages();
+                const brandDetailsPage = document.getElementById('brand-details-page');
+                const brandDetailsContent = document.getElementById('brandDetailsContent');
+                
+                if (!brandDetailsPage || !brandDetailsContent) {
+                    showError('Éléments de la page des détails de la marque non trouvés.');
+                    return;
+                }
+                
+                brandDetailsPage.classList.remove('hidden');
+                brandDetailsContent.innerHTML = createBrandDetailsHTML(brandName, brand);
+                
+                updateBreadcrumb([
+                    { text: 'Services', action: 'showServices()' },
+                    { text: currentService.charAt(0).toUpperCase() + currentService.slice(1), action: `showDevices('${currentService}')` },
+                    { text: currentDevice, action: `showDeviceDetails('${currentDevice}')` },
+                    { text: brandName, action: `showBrandDetails('${brandName}')` }
+                ]);
+            } catch (error) {
+                showError('Erreur lors du chargement des détails de la marque : ' + error.message);
+            }
         }
 
         function findDeviceByName(name) {
@@ -1127,13 +1177,12 @@
             }
             return null;
         }
+
         function createDeviceCard(device) {
             const card = document.createElement('div');
             card.className = 'device-card';
-            card.onclick = () => showDeviceDetails(device.name);
-            
             card.innerHTML = `
-                <img src="${device.image}" alt="${device.name}" class="card-image">
+                <img src="${device.image}" alt="${device.name}" class="card-image" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=Image+Indisponible'; this.className='card-image image-error';">
                 <div class="card-content">
                     <h3 class="card-title">${device.name}</h3>
                     <p class="card-description">${device.description}</p>
@@ -1143,14 +1192,14 @@
                     </div>
                 </div>
             `;
-            
+            card.addEventListener('click', () => showDeviceDetails(device.name));
             return card;
         }
 
         function createDeviceDetailsHTML(device) {
             return `
                 <h1 class="page-title">${device.name}</h1>
-                <img src="${device.image}" alt="${device.name}" class="device-image">
+                <img src="${device.image}" alt="${device.name}" class="device-image" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=Image+Indisponible'; this.className='device-image image-error';">
                 
                 <div class="device-info">
                     <h3>Description</h3>
@@ -1159,7 +1208,7 @@
 
                 <div class="device-info">
                     <h3>Informations Générales</h3>
-                    <p><strong>Marque:</strong> <a href="#" onclick="showBrandDetails('${device.brand}')" style="color: #4c63d2; text-decoration: underline;">${device.brand}</a></p>
+                    <p><strong>Marque:</strong> <a href="#" data-brand="${device.brand}" class="brand-link" style="color: #4c63d2; text-decoration: underline;">${device.brand}</a></p>
                     <p><strong>Prix:</strong> ${device.price}</p>
                     <p><strong>Applications:</strong> ${device.applications.join(', ')}</p>
                 </div>
@@ -1252,22 +1301,44 @@
         function hideAllPages() {
             const pages = ['home-page', 'services-page', 'devices-page', 'device-details-page', 'brand-details-page'];
             pages.forEach(page => {
-                document.getElementById(page).classList.add('hidden');
+                const element = document.getElementById(page);
+                if (element) {
+                    element.classList.add('hidden');
+                }
             });
         }
 
         function updateBreadcrumb(items) {
-            const breadcrumb = document.getElementById('breadcrumb');
-            if (items.length === 0) {
-                breadcrumb.innerHTML = '';
-                return;
+            try {
+                const breadcrumb = document.getElementById('breadcrumb');
+                if (!breadcrumb) {
+                    showError('Élément de fil d\'ariane non trouvé.');
+                    return;
+                }
+                
+                if (items.length === 0) {
+                    breadcrumb.innerHTML = '';
+                    return;
+                }
+                
+                const breadcrumbHTML = ['<button class="breadcrumb-btn" data-action="showHome()" aria-label="Retour à l\'accueil">Accueil</button>']
+                    .concat(items.map(item => `<span>></span><button class="breadcrumb-btn" data-action="${item.action}" aria-label="Aller à ${item.text}">${item.text}</button>`))
+                    .join(' ');
+                
+                breadcrumb.innerHTML = breadcrumbHTML;
+                
+                document.querySelectorAll('.breadcrumb-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        try {
+                            eval(btn.dataset.action);
+                        } catch (error) {
+                            showError('Erreur de navigation : ' + error.message);
+                        }
+                    });
+                });
+            } catch (error) {
+                showError('Erreur lors de la mise à jour du fil d\'ariane : ' + error.message);
             }
-            
-            const breadcrumbHTML = ['<button onclick="showHome()">Accueil</button>']
-                .concat(items.map(item => `<span>></span><button onclick="${item.action}">${item.text}</button>`))
-                .join(' ');
-            
-            breadcrumb.innerHTML = breadcrumbHTML;
         }
 
         function goBackToDevices() {
@@ -1279,70 +1350,162 @@
         }
 
         function setView(viewType) {
-            currentView = viewType;
-            const container = document.querySelector('.container');
-            
-            if (viewType === 'list') {
-                container.classList.add('list-view');
-                document.getElementById('gridBtn').classList.remove('active');
-                document.getElementById('listBtn').classList.add('active');
-            } else {
-                container.classList.remove('list-view');
-                document.getElementById('listBtn').classList.remove('active');
-                document.getElementById('gridBtn').classList.add('active');
+            try {
+                currentView = viewType;
+                const container = document.querySelector('.container');
+                const gridBtn = document.getElementById('gridBtn');
+                const listBtn = document.getElementById('listBtn');
+                
+                if (!container || !gridBtn || !listBtn) {
+                    showError('Éléments de la vue non trouvés.');
+                    return;
+                }
+                
+                if (viewType === 'list') {
+                    container.classList.add('list-view');
+                    gridBtn.classList.remove('active');
+                    listBtn.classList.add('active');
+                } else {
+                    container.classList.remove('list-view');
+                    listBtn.classList.remove('active');
+                    gridBtn.classList.add('active');
+                }
+            } catch (error) {
+                showError('Erreur lors du changement de vue : ' + error.message);
             }
         }
 
-        document.getElementById('searchBox').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const cards = document.querySelectorAll('.service-card, .device-card');
-            
-            cards.forEach(card => {
-                const title = card.querySelector('.card-title').textContent.toLowerCase();
-                const description = card.querySelector('.card-description').textContent.toLowerCase();
-                
-                if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    card.style.display = 'block';
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            if (errorDiv) {
+                if (message) {
+                    errorDiv.textContent = message;
+                    errorDiv.style.display = 'block';
                 } else {
-                    card.style.display = 'none';
+                    errorDiv.style.display = 'none';
                 }
-            });
-        });
+            }
+        }
 
         function createParticles() {
-            const particlesContainer = document.querySelector('.particles');
-            const particleCount = 50;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 6 + 's';
-                particle.style.animationDuration = (3 + Math.random() * 6) + 's';
-                particlesContainer.appendChild(particle);
+            try {
+                const particlesContainer = document.querySelector('.particles');
+                if (!particlesContainer) return;
+                
+                const particleCount = 30; // Reduced for performance
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 6 + 's';
+                    particle.style.animationDuration = (3 + Math.random() * 6) + 's';
+                    particlesContainer.appendChild(particle);
+                }
+            } catch (error) {
+                showError('Erreur lors de la création des particules : ' + error.message);
             }
         }
 
         function animateCounters() {
-            const counter = document.getElementById('deviceCount');
-            let current = 0;
-            const target = 150;
-            const increment = target / 100;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
+            try {
+                const counter = document.getElementById('deviceCount');
+                if (!counter) {
+                    showError('Compteur de dispositifs non trouvé.');
+                    return;
                 }
-                counter.textContent = Math.floor(current) + '+';
-            }, 20);
+                
+                let current = 0;
+                const target = 150;
+                const increment = target / 100;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    counter.textContent = Math.floor(current) + '+';
+                }, 20);
+            } catch (error) {
+                showError('Erreur lors de l\'animation des compteurs : ' + error.message);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            createParticles();
-            setTimeout(animateCounters, 1000);
+            try {
+                createParticles();
+                setTimeout(animateCounters, 1000);
+
+                // Add event listeners
+                const exploreServicesBtn = document.getElementById('exploreServicesBtn');
+                const homeBackBtn = document.getElementById('homeBackBtn');
+                const servicesBackBtn = document.getElementById('servicesBackBtn');
+                const devicesBackBtn = document.getElementById('devicesBackBtn');
+                const deviceBackBtn = document.getElementById('deviceBackBtn');
+                const gridBtn = document.getElementById('gridBtn');
+                const listBtn = document.getElementById('listBtn');
+                const searchBox = document.getElementById('searchBox');
+
+                if (exploreServicesBtn) exploreServicesBtn.addEventListener('click', showServices);
+                if (homeBackBtn) homeBackBtn.addEventListener('click', showHome);
+                if (servicesBackBtn) servicesBackBtn.addEventListener('click', showServices);
+                if (devicesBackBtn) devicesBackBtn.addEventListener('click', goBackToDevices);
+                if (deviceBackBtn) deviceBackBtn.addEventListener('click', goBackToDevice);
+                if (gridBtn) gridBtn.addEventListener('click', () => setView('grid'));
+                if (listBtn) listBtn.addEventListener('click', () => setView('list'));
+
+                // Event delegation for dynamic elements
+                document.addEventListener('click', (e) => {
+                    const serviceCard = e.target.closest('.service-card');
+                    const brandLink = e.target.closest('.brand-link');
+                    
+                    if (serviceCard) {
+                        const service = serviceCard.dataset.service;
+                        if (service) showDevices(service);
+                    }
+                    if (brandLink) {
+                        e.preventDefault();
+                        const brand = brandLink.dataset.brand;
+                        if (brand) showBrandDetails(brand);
+                    }
+                });
+
+                // Search functionality
+                if (searchBox) {
+                    searchBox.addEventListener('input', function(e) {
+                        try {
+                            const searchTerm = e.target.value.toLowerCase();
+                            const cards = document.querySelectorAll('.service-card, .device-card');
+                            
+                            cards.forEach(card => {
+                                const title = card.querySelector('.card-title')?.textContent.toLowerCase() || '';
+                                const description = card.querySelector('.card-description')?.textContent.toLowerCase() || '';
+                                
+                                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                                    card.style.display = 'block';
+                                } else {
+                                    card.style.display = 'none';
+                                }
+                            });
+                        } catch (error) {
+                            showError('Erreur lors de la recherche : ' + error.message);
+                        }
+                    });
+                }
+
+                // Keyboard navigation
+                document.querySelectorAll('button, input, a').forEach(element => {
+                    element.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            element.click();
+                        }
+                    });
+                });
+            } catch (error) {
+                showError('Erreur lors de l\'initialisation : ' + error.message);
+            }
         });
     </script>
 </body>
