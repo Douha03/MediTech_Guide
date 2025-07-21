@@ -1127,14 +1127,13 @@
             }
             return null;
         }
-
         function createDeviceCard(device) {
             const card = document.createElement('div');
             card.className = 'device-card';
             card.onclick = () => showDeviceDetails(device.name);
             
             card.innerHTML = `
-                <div class="card-image">${device.image}</div>
+                <img src="${device.image}" alt="${device.name}" class="card-image">
                 <div class="card-content">
                     <h3 class="card-title">${device.name}</h3>
                     <p class="card-description">${device.description}</p>
@@ -1151,7 +1150,7 @@
         function createDeviceDetailsHTML(device) {
             return `
                 <h1 class="page-title">${device.name}</h1>
-                <div class="device-image">${device.image}</div>
+                <img src="${device.image}" alt="${device.name}" class="device-image">
                 
                 <div class="device-info">
                     <h3>Description</h3>
