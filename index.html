@@ -1262,7 +1262,7 @@
                     </div>
                     ${device.otherBrands ? `
                         <div style="margin-top: 10px;">
-                            <strong style="color: #4c63d2;">Autres Marques :</strong>
+                            <strong style="color: #4c63d2;">Autre marques disponibles :</strong>
                             <ul style="margin-left: 15px; margin-top: 5px;">
                                 ${device.otherBrands.map(brand => `<li>${brand}</li>`).join('')}
                             </ul>
@@ -1277,7 +1277,7 @@
         function createDeviceDetailsHTML(device) {
             return `
                 <h1 class="page-title">${device.name}</h1>
-                <div class="device-image">${device.icon}</div>
+                <div class="device-image">${device.otherBrands}</div>
                 
                 <div class="device-info">
                     <h3>Description</h3>
