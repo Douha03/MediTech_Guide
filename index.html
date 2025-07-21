@@ -862,7 +862,7 @@
             pediatrie: [
                 { 
                     name: 'Échographe Pédiatrique', 
-                    icon: '🔍', 
+                    otherBrands: ['GE Healthcare', 'Siemens Healthineers', 'Mindray'], 
                     description: 'Échographie spécialisée pour enfants avec sondes adaptées',
                     features: ['Sondes haute fréquence', 'Mode pédiatrique', 'Interface colorée'],
                     images: ['echo1.jpg', 'echo2.jpg', 'echo3.jpg'],
@@ -1253,7 +1253,6 @@
             const isListView = currentView === 'list';
             
             card.innerHTML = `
-                <div class="card-icon">${device.icon}</div>
                 <div class="card-content">
                     <h3 class="card-title">${device.name}</h3>
                     <p class="card-description">${device.description}</p>
@@ -1261,6 +1260,14 @@
                         <strong style="color: #4c63d2;">Marque:</strong> ${device.brand}<br>
                         <strong style="color: #4c63d2;">Prix:</strong> ${device.price}
                     </div>
+                    ${device.otherBrands ? `
+                        <div style="margin-top: 10px;">
+                            <strong style="color: #4c63d2;">Autres Marques :</strong>
+                            <ul style="margin-left: 15px; margin-top: 5px;">
+                                ${device.otherBrands.map(brand => `<li>${brand}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
                 </div>
             `;
             
