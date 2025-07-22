@@ -97,31 +97,6 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .view-toggle {
-            display: flex;
-            background: #f7fafc;
-            border-radius: 12px;
-            padding: 4px;
-            border: 2px solid #e2e8f0;
-        }
-
-        .view-btn {
-            background: none;
-            border: none;
-            color: #4a5568;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 500;
-        }
-
-        .view-btn.active {
-            background: #667eea;
-            color: white;
-        }
-
         .nav-breadcrumb {
             display: flex;
             align-items: center;
@@ -230,13 +205,6 @@
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         }
 
-        .list-view .services-grid,
-        .list-view .devices-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
         .service-card, .device-card {
             background: white;
             backdrop-filter: blur(15px);
@@ -313,36 +281,7 @@
             font-size: 1rem;
         }
 
-        .list-view .service-card,
-        .list-view .device-card {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            padding: 25px;
-        }
-
-        .list-view .card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0;
-            flex-shrink: 0;
-        }
-
-        .list-view .card-image {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 0;
-        }
-
-        .list-view .card-content {
-            flex: 1;
-        }
-
-        .list-view .card-title {
-            margin-bottom: 10px;
-            font-size: 1.3rem;
-        }
-
-        .device-details, .brand-details {
+        .device-details {
             max-width: 1000px;
             margin: 0 auto;
             color: #2d3748;
@@ -637,12 +576,6 @@
             font-size: 0.9rem;
         }
 
-        .brand-actions {
-            display: flex;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -665,17 +598,7 @@
                 width: 100%;
             }
 
-            .list-view .service-card,
-            .list-view .device-card {
-                flex-direction: column;
-                text-align: center;
-            }
-
             .sort-section {
-                flex-direction: column;
-            }
-
-            .brand-actions {
                 flex-direction: column;
             }
 
@@ -696,10 +619,6 @@
                 </div>
                 <div class="search-container">
                     <input type="text" class="search-box" placeholder="Rechercher des dispositifs médicaux..." id="searchBox" aria-label="Recherche de dispositifs médicaux">
-                    <div class="view-toggle">
-                        <button class="view-btn active" id="gridBtn" aria-label="Vue en grille" role="button">⚏</button>
-                        <button class="view-btn" id="listBtn" aria-label="Vue en liste" role="button">☰</button>
-                    </div>
                 </div>
             </div>
             <nav class="nav-breadcrumb" id="breadcrumb" aria-label="Fil d'ariane"></nav>
@@ -762,12 +681,13 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="service-card" data-service="radiologie">
+                    <div class="service-card" data-service="imagerie">
                         <div class="card-icon" aria-hidden="true">📡</div>
                         <div class="card-content">
-                            <h3 class="card-title">Radiologie</h3>
+                            <h3 class="card-title">Imagerie</h3>
                             <p class="card-description">Technologies d'imagerie médicale pour un diagnostic précis et non invasif. Solutions complètes d'imagerie diagnostique.</p>
                             <ul style="margin-top: 15px; color: #718096;">
+                                <li>Échographe</li>
                                 <li>Scanners haute résolution</li>
                                 <li>IRM 3 Tesla</li>
                                 <li>Mammographie numérique</li>
@@ -832,11 +752,6 @@
                 <div class="device-details" id="deviceDetailsContent"></div>
             </section>
 
-            <section id="brand-details-page" class="content-section hidden">
-                <button class="back-btn" id="deviceBackBtn" aria-label="Retour au dispositif" role="button">← Retour au dispositif</button>
-                <div class="brand-details" id="brandDetailsContent"></div>
-            </section>
-
             <button class="chatbot-toggle" id="chatbotToggle" aria-label="Ouvrir le chatbot" role="button">💬</button>
             <div class="chatbot-container" id="chatbotContainer">
                 <div class="chatbot-header">
@@ -865,8 +780,6 @@
     <script>
         let currentService = '';
         let currentDevice = '';
-        let currentBrand = '';
-        let currentView = 'grid';
 
         const devices = {
             pediatrie: [
@@ -909,7 +822,16 @@
                     brands: ['Siemens Healthineers', 'Philips Healthcare']
                 }
             ],
-            radiologie: [
+            imagerie: [
+                { 
+                    name: 'Échographe', 
+                    image: 'https://via.placeholder.com/400x250?text=Échographe', 
+                    role: 'Imagerie par ultrasons pour diagnostics variés.',
+                    principle: 'Utilise des ondes sonores à haute fréquence pour créer des images des organes internes.',
+                    components: ['Sonde à ultrasons', 'Écran haute résolution', 'Système de traitement d\'image', 'Clavier de commande'],
+                    maintenance: ['Vérifier l\'état de la sonde', 'Nettoyer l\'écran', 'Calibrer le système', 'Mettre à jour le logiciel'],
+                    brands: ['GE Healthcare', 'Philips Healthcare']
+                },
                 { 
                     name: 'Scanner', 
                     image: 'https://via.placeholder.com/400x250?text=Scanner', 
@@ -1078,10 +1000,10 @@
                 description: 'Dispositifs avancés pour l\'exploration et le traitement des pathologies cardiovasculaires. Technologies de pointe pour un diagnostic précis.',
                 examples: ['Électrocardiographes', 'Échocardiographes', 'Holters et défibrillateurs']
             },
-            radiologie: {
-                name: 'Radiologie',
+            imagerie: {
+                name: 'Imagerie',
                 description: 'Technologies d\'imagerie médicale pour un diagnostic précis et non invasif. Solutions complètes d\'imagerie diagnostique.',
-                examples: ['Scanners haute résolution', 'IRM 3 Tesla', 'Mammographie numérique']
+                examples: ['Échographe', 'Scanners haute résolution', 'IRM 3 Tesla', 'Mammographie numérique']
             },
             neurologie: {
                 name: 'Neurologie',
@@ -1109,7 +1031,10 @@
 
         function updateBreadcrumb(items) {
             const breadcrumb = document.getElementById('breadcrumb');
-            if (!breadcrumb) return;
+            if (!breadcrumb) {
+                console.error('Breadcrumb element not found');
+                return;
+            }
             breadcrumb.innerHTML = '';
             items.forEach((item, index) => {
                 const button = document.createElement('button');
@@ -1126,13 +1051,13 @@
         function showHome() {
             hideAllPages();
             const homePage = document.getElementById('home-page');
-            if (homePage) {
-                homePage.classList.remove('hidden');
-                homePage.style.display = 'block';
-                homePage.style.opacity = '1';
-            } else {
+            if (!homePage) {
                 console.error('home-page element not found');
+                return;
             }
+            homePage.classList.remove('hidden');
+            homePage.style.display = 'block';
+            homePage.style.opacity = '1';
             updateBreadcrumb([]);
             updateStats();
         }
@@ -1140,14 +1065,13 @@
         function showServices() {
             hideAllPages();
             const servicesPage = document.getElementById('services-page');
-            if (servicesPage) {
-                servicesPage.classList.remove('hidden');
-                servicesPage.style.display = 'block';
-                servicesPage.style.opacity = '1';
-            } else {
+            if (!servicesPage) {
                 console.error('services-page element not found');
                 return;
             }
+            servicesPage.classList.remove('hidden');
+            servicesPage.style.display = 'block';
+            servicesPage.style.opacity = '1';
             updateBreadcrumb([{ text: 'Spécialités Médicales', action: showServices }]);
         }
 
@@ -1174,7 +1098,7 @@
             devicesPage.classList.remove('hidden');
             devicesPage.style.display = 'block';
             devicesPage.style.opacity = '1';
-            devicesTitle.textContent = `Dispositifs Médicaux - ${service.charAt(0).toUpperCase() + service.slice(1)}`;
+            devicesTitle.textContent = `Dispositifs Médicaux - ${services[service].name}`;
             devicesGrid.innerHTML = '';
             
             const fragment = document.createDocumentFragment();
@@ -1186,7 +1110,7 @@
             
             updateBreadcrumb([
                 { text: 'Spécialités Médicales', action: showServices },
-                { text: service.charAt(0).toUpperCase() + service.slice(1), action: () => showDevices(service) }
+                { text: services[service].name, action: () => showDevices(service) }
             ]);
         }
 
@@ -1214,7 +1138,7 @@
             
             updateBreadcrumb([
                 { text: 'Spécialités Médicales', action: showServices },
-                { text: currentService.charAt(0).toUpperCase() + currentService.slice(1), action: () => showDevices(currentService) },
+                { text: services[currentService].name, action: () => showDevices(currentService) },
                 { text: device.name, action: () => showDeviceDetails(deviceName) }
             ]);
 
@@ -1222,41 +1146,6 @@
                 link.removeEventListener('click', brandLinkHandler);
                 link.addEventListener('click', brandLinkHandler);
             });
-        }
-
-        function showBrandDetails(brandName) {
-            const brand = brands[brandName];
-            if (!brand) {
-                console.error(`Brand ${brandName} not found`);
-                return;
-            }
-
-            currentBrand = brandName;
-            hideAllPages();
-            const brandDetailsPage = document.getElementById('brand-details-page');
-            const brandDetailsContent = document.getElementById('brandDetailsContent');
-            
-            if (!brandDetailsPage || !brandDetailsContent) {
-                console.error('brand-details-page or related elements not found');
-                return;
-            }
-
-            brandDetailsPage.classList.remove('hidden');
-            brandDetailsPage.style.display = 'block';
-            brandDetailsPage.style.opacity = '1';
-            brandDetailsContent.innerHTML = createBrandDetailsHTML(brand);
-            
-            updateBreadcrumb([
-                { text: 'Spécialités Médicales', action: showServices },
-                { text: currentService.charAt(0).toUpperCase() + currentService.slice(1), action: () => showDevices(currentService) },
-                { text: currentDevice, action: () => showDeviceDetails(currentDevice) },
-                { text: brand.name, action: () => showBrandDetails(brandName) }
-            ]);
-
-            const downloadBtn = document.getElementById('downloadBrandBtn');
-            if (downloadBtn) {
-                downloadBtn.addEventListener('click', () => downloadBrandDatasheet(brandName));
-            }
         }
 
         function findDeviceByName(name) {
@@ -1269,7 +1158,7 @@
 
         function createDeviceCard(device) {
             const card = document.createElement('div');
-            card.className = `device-card ${currentView}-view`;
+            card.className = 'device-card';
             card.innerHTML = `
                 <img src="${device.image}" alt="${device.name}" class="card-image" loading="lazy">
                 <div class="card-content">
@@ -1312,61 +1201,22 @@
                 <div class="device-info">
                     <h3>Marques</h3>
                     <div class="brands-section">
-                        ${device.brands.map(brand => `<a href="#" class="brand-link" data-brand="${brand}" aria-label="Voir les détails de ${brand}">${brand}</a>`).join('')}
+                        ${device.brands.map(brand => `<a href="#" class="brand-link" data-brand="${brand}" data-device="${device.name}" aria-label="Télécharger la fiche technique de ${brand} pour ${device.name}">${brand}</a>`).join('')}
                     </div>
                 </div>
             `;
         }
 
-        function createBrandDetailsHTML(brand) {
-            return `
-                <h1 class="page-title">${brand.name}</h1>
-                <div class="brand-actions">
-                    <button class="btn-primary" id="downloadBrandBtn" aria-label="Télécharger la fiche technique de ${brand.name}" role="button">Télécharger la fiche technique</button>
-                </div>
-                <div class="device-info">
-                    <h3>Description</h3>
-                    <p>${brand.description}</p>
-                </div>
-                <div class="device-info">
-                    <h3>Fondée</h3>
-                    <p>${brand.founded}</p>
-                </div>
-                <div class="device-info">
-                    <h3>Siège</h3>
-                    <p>${brand.headquarters}</p>
-                </div>
-                <div class="device-info">
-                    <h3>Employés</h3>
-                    <p>${brand.employees}</p>
-                </div>
-                <div class="device-info">
-                    <h3>Revenus</h3>
-                    <p>${brand.revenue}</p>
-                </div>
-                <div class="device-info">
-                    <h3>Certifications</h3>
-                    <ul>
-                        ${brand.certifications.map(cert => `<li>${cert}</li>`).join('')}
-                    </ul>
-                </div>
-                <div class="device-info">
-                    <h3>Innovations</h3>
-                    <ul>
-                        ${brand.innovations.map(innovation => `<li>${innovation}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
-        }
-
-        function downloadBrandDatasheet(brandName) {
+        function downloadBrandDatasheet(brandName, deviceName) {
             const brand = brands[brandName];
             if (!brand) return;
             
             const content = `
-                Fiche technique - ${brand.name}
+                Fiche technique - ${deviceName} par ${brand.name}
                 --------------------------------
-                Description: ${brand.description}
+                Dispositif: ${deviceName}
+                Marque: ${brand.name}
+                Description de la marque: ${brand.description}
                 Fondée: ${brand.founded}
                 Siège: ${brand.headquarters}
                 Employés: ${brand.employees}
@@ -1379,7 +1229,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${brandName}_datasheet.txt`;
+            a.download = `${deviceName}_${brandName}_datasheet.txt`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1389,8 +1239,9 @@
         function brandLinkHandler(e) {
             e.preventDefault();
             const brandName = e.target.getAttribute('data-brand');
-            if (brandName) {
-                showBrandDetails(brandName);
+            const deviceName = e.target.getAttribute('data-device');
+            if (brandName && deviceName) {
+                downloadBrandDatasheet(brandName, deviceName);
             }
         }
 
@@ -1399,6 +1250,8 @@
             const deviceCountElement = document.getElementById('deviceCount');
             if (deviceCountElement) {
                 deviceCountElement.textContent = deviceCount;
+            } else {
+                console.error('deviceCount element not found');
             }
         }
 
@@ -1421,10 +1274,47 @@
             });
         }
 
-        // Chatbot Functionality
+        function searchDevices(searchTerm) {
+            const normalizedSearch = searchTerm.toLowerCase().trim();
+            const devicesGrid = document.getElementById('devicesGrid');
+            if (!devicesGrid) {
+                console.error('devicesGrid element not found');
+                return;
+            }
+
+            devicesGrid.innerHTML = '';
+            let results = [];
+
+            for (const service in devices) {
+                const filteredDevices = devices[service].filter(device =>
+                    device.name.toLowerCase().includes(normalizedSearch) ||
+                    device.role.toLowerCase().includes(normalizedSearch) ||
+                    services[service].name.toLowerCase().includes(normalizedSearch)
+                );
+                results.push(...filteredDevices.map(device => ({ ...device, service })));
+            }
+
+            if (results.length > 0) {
+                const fragment = document.createDocumentFragment();
+                sortDevices(results).forEach(device => {
+                    const card = createDeviceCard(device);
+                    fragment.appendChild(card);
+                });
+                devicesGrid.appendChild(fragment);
+                currentService = ''; // Reset currentService for global search
+                updateBreadcrumb([{ text: 'Résultats de recherche', action: () => searchDevices(searchTerm) }]);
+            } else {
+                devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé.</p>';
+                updateBreadcrumb([{ text: 'Résultats de recherche', action: () => searchDevices(searchTerm) }]);
+            }
+        }
+
         function addChatMessage(message, isUser = false) {
             const chatbotBody = document.getElementById('chatbotBody');
-            if (!chatbotBody) return;
+            if (!chatbotBody) {
+                console.error('chatbotBody element not found');
+                return;
+            }
 
             const messageDiv = document.createElement('div');
             messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
@@ -1437,7 +1327,6 @@
             const normalizedQuery = query.toLowerCase().trim();
             let response = "Désolé, je n'ai pas compris votre question. Pouvez-vous reformuler ou demander quelque chose sur les dispositifs, les marques ou les spécialités médicales ?";
 
-            // Check for service-related questions
             for (const serviceKey in services) {
                 const service = services[serviceKey];
                 if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
@@ -1446,12 +1335,11 @@
                 }
             }
 
-            // Check for device-related questions
             for (const serviceKey in devices) {
                 const deviceList = devices[serviceKey];
                 for (const device of deviceList) {
                     if (normalizedQuery.includes(device.name.toLowerCase())) {
-                        response = `**${device.name}** (${serviceKey.charAt(0).toUpperCase() + serviceKey.slice(1)}) : \n- **Rôle** : ${device.role}\n- **Principe** : ${device.principle}\n- **Composants** : ${device.components.join(', ')}\n- **Maintenance** : ${device.maintenance.join(', ')}\n- **Marques** : ${device.brands.join(', ')}`;
+                        response = `**${device.name}** (${services[serviceKey].name}) : \n- **Rôle** : ${device.role}\n- **Principe** : ${device.principle}\n- **Composants** : ${device.components.join(', ')}\n- **Maintenance** : ${device.maintenance.join(', ')}\n- **Marques** : ${device.brands.join(', ')}`;
                         return response;
                     }
                     if (normalizedQuery.includes('rôle') && normalizedQuery.includes(device.name.toLowerCase())) {
@@ -1477,7 +1365,6 @@
                 }
             }
 
-            // Check for brand-related questions
             for (const brandKey in brands) {
                 const brand = brands[brandKey];
                 if (normalizedQuery.includes(brand.name.toLowerCase())) {
@@ -1510,7 +1397,6 @@
                 }
             }
 
-            // General site information
             if (normalizedQuery.includes('spécialités')) {
                 response = `MediTech propose des équipements pour les spécialités suivantes : ${Object.values(services).map(s => s.name).join(', ')}.`;
             } else if (normalizedQuery.includes('dispositifs')) {
@@ -1524,50 +1410,43 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const gridBtn = document.getElementById('gridBtn');
-            const listBtn = document.getElementById('listBtn');
-            if (gridBtn && listBtn) {
-                gridBtn.addEventListener('click', () => {
-                    currentView = 'grid';
-                    gridBtn.classList.add('active');
-                    listBtn.classList.remove('active');
-                    document.querySelectorAll('.devices-grid, .services-grid').forEach(grid => {
-                        grid.classList.remove('list-view');
-                    });
-                });
-                listBtn.addEventListener('click', () => {
-                    currentView = 'list';
-                    listBtn.classList.add('active');
-                    gridBtn.classList.remove('active');
-                    document.querySelectorAll('.devices-grid, .services-grid').forEach(grid => {
-                        grid.classList.add('list-view');
-                    });
-                });
+            if (!document.getElementById('home-page')) {
+                console.error('home-page element is missing in the DOM');
+                return;
             }
 
             const exploreServicesBtn = document.getElementById('exploreServicesBtn');
             if (exploreServicesBtn) {
                 exploreServicesBtn.addEventListener('click', showServices);
+            } else {
+                console.error('exploreServicesBtn element not found');
             }
 
             const homeBackBtn = document.getElementById('homeBackBtn');
             if (homeBackBtn) {
                 homeBackBtn.addEventListener('click', showHome);
+            } else {
+                console.error('homeBackBtn element not found');
             }
 
             const servicesBackBtn = document.getElementById('servicesBackBtn');
             if (servicesBackBtn) {
                 servicesBackBtn.addEventListener('click', showServices);
+            } else {
+                console.error('servicesBackBtn element not found');
             }
 
             const devicesBackBtn = document.getElementById('devicesBackBtn');
             if (devicesBackBtn) {
-                devicesBackBtn.addEventListener('click', () => showDevices(currentService));
-            }
-
-            const deviceBackBtn = document.getElementById('deviceBackBtn');
-            if (deviceBackBtn) {
-                deviceBackBtn.addEventListener('click', () => showDeviceDetails(currentDevice));
+                devicesBackBtn.addEventListener('click', () => {
+                    if (currentService) {
+                        showDevices(currentService);
+                    } else {
+                        showServices();
+                    }
+                });
+            } else {
+                console.error('devicesBackBtn element not found');
             }
 
             document.querySelectorAll('.service-card').forEach(card => {
@@ -1582,28 +1461,19 @@
             const searchBox = document.getElementById('searchBox');
             if (searchBox) {
                 searchBox.addEventListener('input', (e) => {
-                    const searchTerm = e.target.value.toLowerCase();
-                    const devicesGrid = document.getElementById('devicesGrid');
-                    if (!devicesGrid) return;
-                    devicesGrid.innerHTML = '';
-
-                    if (currentService && devices[currentService]) {
-                        const filteredDevices = devices[currentService].filter(device =>
-                            device.name.toLowerCase().includes(searchTerm) ||
-                            device.role.toLowerCase().includes(searchTerm)
-                        );
-                        if (filteredDevices.length > 0) {
-                            const fragment = document.createDocumentFragment();
-                            sortDevices(filteredDevices).forEach(device => {
-                                const card = createDeviceCard(device);
-                                fragment.appendChild(card);
-                            });
-                            devicesGrid.appendChild(fragment);
+                    const searchTerm = e.target.value;
+                    if (searchTerm.trim() === '') {
+                        if (currentService) {
+                            showDevices(currentService);
                         } else {
-                            devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour cette spécialité.</p>';
+                            showServices();
                         }
+                    } else {
+                        searchDevices(searchTerm);
                     }
                 });
+            } else {
+                console.error('searchBox element not found');
             }
 
             const sortSelect = document.getElementById('sortSelect');
@@ -1613,6 +1483,8 @@
                         showDevices(currentService);
                     }
                 });
+            } else {
+                console.error('sortSelect element not found');
             }
 
             const backToTop = document.getElementById('backToTop');
@@ -1623,9 +1495,10 @@
                 backToTop.addEventListener('click', () => {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
+            } else {
+                console.error('backToTop element not found');
             }
 
-            // Chatbot Event Listeners
             const chatbotToggle = document.getElementById('chatbotToggle');
             const chatbotContainer = document.getElementById('chatbotContainer');
             const chatbotClose = document.getElementById('chatbotClose');
@@ -1660,6 +1533,8 @@
                         chatbotSend.click();
                     }
                 });
+            } else {
+                console.error('One or more chatbot elements not found');
             }
 
             showHome();
