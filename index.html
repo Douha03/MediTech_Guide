@@ -6,9 +6,6 @@
     <meta name="description" content="MediTech - Découvrez les technologies médicales avancées pour toutes les spécialités médicales.">
     <meta name="keywords" content="technologies médicales, équipements médicaux, santé, diagnostic, thérapie">
     <meta name="author" content="MediTech">
-    <meta property="og:title" content="MediTech - Votre Guide Biomédical">
-    <meta property="og:description" content="Découvrez notre écosystème complet de technologies médicales de pointe.">
-    <meta property="og:type" content="website">
     <title>MediTech - Votre Guide Biomédical</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -271,7 +268,7 @@
             color: #667eea;
         }
 
-        .card-image, .device-image {
+        .card-image {
             width: 100%;
             height: 150px;
             background: #f7fafc;
@@ -703,8 +700,8 @@
                 <div class="search-container">
                     <input type="text" class="search-box" placeholder="Rechercher des dispositifs médicaux..." id="searchBox" aria-label="Recherche de dispositifs médicaux">
                     <div class="view-toggle">
-                        <button class="view-btn active" id="gridBtn" aria-label="Vue en grille" role="button">⚏</button>
-                        <button class="view-btn" id="listBtn" aria-label="Vue en liste" role="button">☰</button>
+                        <button class="view-btn active" id="gridBtn" aria-label="Vue en grille">⚏</button>
+                        <button class="view-btn" id="listBtn" aria-label="Vue en liste">☰</button>
                     </div>
                 </div>
             </div>
@@ -717,7 +714,7 @@
                 <div class="hero-section">
                     <h2 data-lang-key="hero-title">L'Innovation au Service de la Médecine</h2>
                     <p data-lang-key="hero-text">Découvrez notre écosystème complet de technologies médicales de pointe. Des équipements diagnostiques aux systèmes thérapeutiques les plus avancés, nous proposons des solutions innovantes pour tous les secteurs de la médecine moderne.</p>
-                    <button class="btn-primary" id="exploreServicesBtn" aria-label="Explorer les services" data-lang-key="explore-btn" role="button">Explorer nos Services</button>
+                    <button class="btn-primary" id="exploreServicesBtn" aria-label="Explorer les services" data-lang-key="explore-btn">Explorer nos Services</button>
                 </div>
 
                 <div class="stats-section">
@@ -741,7 +738,7 @@
             </section>
 
             <section id="services-page" class="content-section hidden">
-                <button class="back-btn" id="homeBackBtn" aria-label="Retour à l'accueil" data-lang-key="back-home" role="button">← Retour à l'accueil</button>
+                <button class="back-btn" id="homeBackBtn" aria-label="Retour à l'accueil" data-lang-key="back-home">← Retour à l'accueil</button>
                 <h1 class="page-title" data-lang-key="services-title">Spécialités Médicales</h1>
                 <div class="services-grid" id="servicesGrid">
                     <div class="service-card" data-service="pediatrie">
@@ -820,7 +817,7 @@
             </section>
 
             <section id="devices-page" class="content-section hidden">
-                <button class="back-btn" id="servicesBackBtn" aria-label="Retour aux services" data-lang-key="back-services" role="button">← Retour aux services</button>
+                <button class="back-btn" id="servicesBackBtn" aria-label="Retour aux services" data-lang-key="back-services">← Retour aux services</button>
                 <h1 class="page-title" id="devicesTitle" data-lang-key="devices-title">Dispositifs Médicaux</h1>
                 <div class="sort-section">
                     <select class="sort-select" id="sortSelect" aria-label="Trier les dispositifs">
@@ -829,26 +826,26 @@
                         <option value="brands-asc" data-lang-key="sort-brands-asc">Nombre de marques (Croissant)</option>
                         <option value="brands-desc" data-lang-key="sort-brands-desc">Nombre de marques (Décroissant)</option>
                     </select>
-                    <button class="compare-btn" id="compareBtn" disabled aria-label="Comparer les dispositifs sélectionnés" data-lang-key="compare-btn" role="button">Comparer</button>
+                    <button class="compare-btn" id="compareBtn" disabled aria-label="Comparer les dispositifs sélectionnés" data-lang-key="compare-btn">Comparer</button>
                 </div>
                 <div class="featured-banner" id="featuredBanner" style="display: none;"></div>
-                <div class="devices-grid" id="devicesGrid" aria-live="polite"></div>
+                <div class="devices-grid" id="devicesGrid"></div>
             </section>
 
             <section id="device-details-page" class="content-section hidden">
-                <button class="back-btn" id="devicesBackBtn" aria-label="Retour aux dispositifs" data-lang-key="back-devices" role="button">← Retour aux dispositifs</button>
+                <button class="back-btn" id="devicesBackBtn" aria-label="Retour aux dispositifs" data-lang-key="back-devices">← Retour aux dispositifs</button>
                 <div class="device-details" id="deviceDetailsContent"></div>
             </section>
 
-            <div class="modal" id="modal" role="dialog" aria-modal="true">
+            <div class="modal" id="modal">
                 <div class="modal-content">
-                    <span class="close-modal" aria-label="Fermer la modale" role="button">×</span>
+                    <span class="close-modal" aria-label="Fermer la modale">×</span>
                     <div id="modalContent"></div>
                 </div>
             </div>
 
-            <div class="chat-widget" id="chatWidget" aria-label="Ouvrir le chat" data-lang-key="chat-label" role="button">💬</div>
-            <button class="back-to-top" id="backToTop" aria-label="Retour en haut" data-lang-key="back-to-top" role="button">↑ Haut</button>
+            <div class="chat-widget" id="chatWidget" aria-label="Ouvrir le chat" data-lang-key="chat-label">💬</div>
+            <button class="back-to-top" id="backToTop" aria-label="Retour en haut" data-lang-key="back-to-top">↑ Haut</button>
 
             <footer class="footer">
                 <p>© 2025 MediTech. <span data-lang-key="footer Rights">Tous droits réservés.</span></p>
@@ -948,8 +945,7 @@
                 'revenue': 'Revenus',
                 'certifications': 'Certifications',
                 'innovations': 'Innovations',
-                'datasheet-title': 'Fiche technique',
-                'error-compare-min': 'Veuillez sélectionner au moins deux dispositifs pour comparer.'
+                'datasheet-title': 'Fiche technique'
             },
             en: {
                 'home-title': 'Advanced Medical Technologies',
@@ -1030,8 +1026,7 @@
                 'revenue': 'Revenue',
                 'certifications': 'Certifications',
                 'innovations': 'Innovations',
-                'datasheet-title': 'Datasheet',
-                'error-compare-min': 'Please select at least two devices to compare.'
+                'datasheet-title': 'Datasheet'
             }
         };
 
@@ -1310,9 +1305,6 @@
         };
 
         function getTranslation(key) {
-            if (!translations[currentLanguage][key]) {
-                console.warn(`Translation missing for key: ${key} in language: ${currentLanguage}`);
-            }
             return translations[currentLanguage][key] || key;
         }
 
@@ -1325,10 +1317,10 @@
                 showDevices(currentService);
             } else if (currentDevice) {
                 showDeviceDetails(currentDevice);
-            } else if (!document.getElementById('services-page').classList.contains('hidden')) {
-                showServices();
-            } else {
+            } else if (document.getElementById('services-page').classList.contains('hidden')) {
                 showHome();
+            } else {
+                showServices();
             }
         }
 
@@ -1338,13 +1330,12 @@
 
         function updateBreadcrumb(items) {
             const breadcrumb = document.getElementById('breadcrumb');
-            if (!breadcrumb) return;
             breadcrumb.innerHTML = '';
             items.forEach((item, index) => {
                 const button = document.createElement('button');
                 button.textContent = item.text;
                 button.setAttribute('aria-label', item.text);
-                button.onclick = item.action;
+                button.onclick = () => eval(item.action);
                 breadcrumb.appendChild(button);
                 if (index < items.length - 1) {
                     breadcrumb.appendChild(document.createTextNode(' > '));
@@ -1354,28 +1345,17 @@
 
         function showHome() {
             hideAllPages();
-            const homePage = document.getElementById('home-page');
-            if (homePage) homePage.classList.remove('hidden');
+            document.getElementById('home-page').classList.remove('hidden');
             updateBreadcrumb([]);
-            updateStats();
         }
 
         function showServices() {
             hideAllPages();
-            const servicesPage = document.getElementById('services-page');
-            if (servicesPage) servicesPage.classList.remove('hidden');
-            updateBreadcrumb([{ text: getTranslation('services-title'), action: showServices }]);
+            document.getElementById('services-page').classList.remove('hidden');
+            updateBreadcrumb([{ text: getTranslation('services-title'), action: 'showServices()' }]);
         }
 
         function showDevices(service) {
-            if (!devices[service]) {
-                const devicesGrid = document.getElementById('devicesGrid');
-                if (devicesGrid) {
-                    devicesGrid.innerHTML = `<p class="image-error">${getTranslation('no-devices-found')}</p>`;
-                }
-                return;
-            }
-
             currentService = service;
             hideAllPages();
             const devicesPage = document.getElementById('devices-page');
@@ -1383,36 +1363,31 @@
             const devicesGrid = document.getElementById('devicesGrid');
             const featuredBanner = document.getElementById('featuredBanner');
             
-            if (!devicesPage || !devicesTitle || !devicesGrid || !featuredBanner) return;
-
             devicesPage.classList.remove('hidden');
             devicesTitle.textContent = `${getTranslation('devices-title')} - ${service.charAt(0).toUpperCase() + service.slice(1)}`;
             devicesGrid.innerHTML = '';
             
-            const randomDevice = devices[service][Math.floor(Math.random() * devices[service].length)];
-            featuredBanner.style.display = 'block';
-            featuredBanner.innerHTML = `
-                <h3>${getTranslation('featured-device')}: ${currentLanguage === 'fr' ? randomDevice.name : randomDevice.name_en}</h3>
-                <p>${currentLanguage === 'fr' ? randomDevice.role : randomDevice.role_en}</p>
-                <button class="btn-primary" onclick="showDeviceDetails('${randomDevice.name}')" aria-label="${getTranslation('view-details')} ${currentLanguage === 'fr' ? randomDevice.name : randomDevice.name_en}" role="button">${getTranslation('view-details')}</button>
-            `;
-            
-            const fragment = document.createDocumentFragment();
-            sortDevices(devices[service]).forEach(device => {
-                const card = createDeviceCard(device);
-                fragment.appendChild(card);
-            });
-            devicesGrid.appendChild(fragment);
+            if (devices[service]) {
+                const randomDevice = devices[service][Math.floor(Math.random() * devices[service].length)];
+                featuredBanner.style.display = 'block';
+                featuredBanner.innerHTML = `
+                    <h3>${getTranslation('featured-device')}: ${currentLanguage === 'fr' ? randomDevice.name : randomDevice.name_en}</h3>
+                    <p>${currentLanguage === 'fr' ? randomDevice.role : randomDevice.role_en}</p>
+                    <button class="btn-primary" onclick="showDeviceDetails('${randomDevice.name}')" aria-label="${getTranslation('view-details')} ${currentLanguage === 'fr' ? randomDevice.name : randomDevice.name_en}">${getTranslation('view-details')}</button>
+                `;
+                
+                sortDevices(devices[service]).forEach(device => {
+                    const card = createDeviceCard(device);
+                    devicesGrid.appendChild(card);
+                });
+            } else {
+                devicesGrid.innerHTML = `<p class="image-error">${getTranslation('no-devices-found')}</p>`;
+            }
             
             updateBreadcrumb([
-                { text: getTranslation('services-title'), action: showServices },
-                { text: service.charAt(0).toUpperCase() + service.slice(1), action: () => showDevices(service) }
+                { text: getTranslation('services-title'), action: 'showServices()' },
+                { text: service.charAt(0).toUpperCase() + service.slice(1), action: `showDevices('${service}')` }
             ]);
-
-            document.querySelectorAll('.compare-select-btn').forEach(btn => {
-                btn.removeEventListener('click', toggleDeviceSelectionHandler);
-                btn.addEventListener('click', toggleDeviceSelectionHandler);
-            });
         }
 
         function showDeviceDetails(deviceName) {
@@ -1424,26 +1399,22 @@
             const deviceDetailsPage = document.getElementById('device-details-page');
             const deviceDetailsContent = document.getElementById('deviceDetailsContent');
             
-            if (!deviceDetailsPage || !deviceDetailsContent) return;
-
             deviceDetailsPage.classList.remove('hidden');
             deviceDetailsContent.innerHTML = createDeviceDetailsHTML(device);
             
             updateBreadcrumb([
-                { text: getTranslation('services-title'), action: showServices },
-                { text: currentService.charAt(0).toUpperCase() + currentService.slice(1), action: () => showDevices(currentService) },
-                { text: currentLanguage === 'fr' ? device.name : device.name_en, action: () => showDeviceDetails(deviceName) }
+                { text: getTranslation('services-title'), action: 'showServices()' },
+                { text: currentService.charAt(0).toUpperCase() + currentService.slice(1), action: `showDevices('${currentService}')` },
+                { text: currentLanguage === 'fr' ? device.name : device.name_en, action: `showDeviceDetails('${deviceName}')` }
             ]);
 
-            const quoteBtn = document.getElementById('quoteBtn');
-            if (quoteBtn) {
-                quoteBtn.removeEventListener('click', quoteHandler);
-                quoteBtn.addEventListener('click', quoteHandler);
-            }
-
+            // Re-attach event listeners for quote button and brand links
+            document.getElementById('quoteBtn').addEventListener('click', () => showQuoteModal(deviceName));
             document.querySelectorAll('.brand-link').forEach(link => {
-                link.removeEventListener('click', brandLinkHandler);
-                link.addEventListener('click', brandLinkHandler);
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    downloadBrandDatasheet(e.target.dataset.brand);
+                });
             });
         }
 
@@ -1460,10 +1431,10 @@
             card.className = `device-card ${currentView}-view`;
             const isSelected = selectedDevices.includes(device.name);
             card.innerHTML = `
-                <img src="${device.image}" alt="${currentLanguage === 'fr' ? device.name : device.name_en}" class="card-image" loading="lazy">
+                <img src="${device.image}" alt="${currentLanguage === 'fr' ? device.name : device.name_en}" class="card-image" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=Image+Indisponible'; this.className='card-image image-error';">
                 <div class="card-content">
                     <h3 class="card-title">${currentLanguage === 'fr' ? device.name : device.name_en}</h3>
-                    <button class="btn-primary compare-select-btn" data-device="${device.name}" aria-label="${isSelected ? getTranslation('remove-from-compare') : getTranslation('add-to-compare')} ${currentLanguage === 'fr' ? device.name : device.name_en}" role="button">${isSelected ? getTranslation('remove-from-compare') : getTranslation('add-to-compare')}</button>
+                    <button class="btn-primary compare-select-btn" data-device="${device.name}" aria-label="${isSelected ? getTranslation('remove-from-compare') : getTranslation('add-to-compare')} ${currentLanguage === 'fr' ? device.name : device.name_en}">${isSelected ? getTranslation('remove-from-compare') : getTranslation('add-to-compare')}</button>
                 </div>
             `;
             card.addEventListener('click', (e) => {
@@ -1477,7 +1448,7 @@
         function createDeviceDetailsHTML(device) {
             return `
                 <h1 class="page-title">${currentLanguage === 'fr' ? device.name : device.name_en}</h1>
-                <img src="${device.image}" alt="${currentLanguage === 'fr' ? device.name : device.name_en}" class="device-image" loading="lazy">
+                <img src="${device.image}" alt="${currentLanguage === 'fr' ? device.name : device.name_en}" class="device-image" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=Image+Indisponible'; this.className='device-image image-error';">
                 
                 <div class="device-info">
                     <h3 data-lang-key="role-title">${getTranslation('role-title')}</h3>
@@ -1511,7 +1482,7 @@
                 </div>
 
                 <div class="device-info">
-                    <button class="btn-primary" id="quoteBtn" aria-label="${getTranslation('request-quote')} ${currentLanguage === 'fr' ? device.name : device.name_en}" data-device="${device.name}" role="button">${getTranslation('request-quote')}</button>
+                    <button class="btn-primary" id="quoteBtn" aria-label="${getTranslation('request-quote')} ${currentLanguage === 'fr' ? device.name : device.name_en}" data-device="${device.name}">${getTranslation('request-quote')}</button>
                 </div>
             `;
         }
@@ -1543,34 +1514,11 @@
             URL.revokeObjectURL(url);
         }
 
-        async function submitQuote(deviceName) {
-            const name = document.getElementById('name')?.value;
-            const email = document.getElementById('email')?.value;
-            const message = document.getElementById('message')?.value;
-            const modal = document.getElementById('modal');
-            if (!name || !email || !message || !modal) return;
-
-            try {
-                // Placeholder for backend API call
-                // const response = await fetch('/api/quote', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify({ name, email, message, device: deviceName })
-                // });
-                // if (!response.ok) throw new Error('Submission failed');
-                alert(getTranslation('quote-submitted'));
-            } catch (error) {
-                alert('Error submitting quote');
-            }
-            modal.style.display = 'none';
-        }
-
         function showQuoteModal(deviceName) {
             const modal = document.getElementById('modal');
             const modalContent = document.getElementById('modalContent');
             const device = findDeviceByName(deviceName);
-            if (!modal || !modalContent || !device) return;
-
+            
             modalContent.innerHTML = `
                 <h2>${getTranslation('request-quote-title')} ${currentLanguage === 'fr' ? device.name : device.name_en}</h2>
                 <form>
@@ -1580,25 +1528,17 @@
                     <input type="email" id="email" class="sort-select" required><br>
                     <label for="message">${getTranslation('message-label')}:</label><br>
                     <textarea id="message" class="sort-select" rows="4" required></textarea><br>
-                    <button type="button" class="btn-primary" id="submitQuoteBtn" aria-label="${getTranslation('submit-quote')}" role="button">${getTranslation('submit-quote')}</button>
+                    <button type="button" class="btn-primary" onclick="alert('${getTranslation('quote-submitted')}'); document.getElementById('modal').style.display='none';" aria-label="${getTranslation('submit-quote')}">${getTranslation('submit-quote')}</button>
                 </form>
             `;
             
             modal.style.display = 'flex';
-            modal.focus();
-
-            const submitQuoteBtn = document.getElementById('submitQuoteBtn');
-            if (submitQuoteBtn) {
-                submitQuoteBtn.removeEventListener('click', () => submitQuote(deviceName));
-                submitQuoteBtn.addEventListener('click', () => submitQuote(deviceName));
-            }
         }
 
         function showChatModal() {
             const modal = document.getElementById('modal');
             const modalContent = document.getElementById('modalContent');
-            if (!modal || !modalContent) return;
-
+            
             modalContent.innerHTML = `
                 <h2>${getTranslation('contact-link')}</h2>
                 <form>
@@ -1608,40 +1548,23 @@
                     <input type="email" id="chatEmail" class="sort-select" required><br>
                     <label for="chatMessage">${getTranslation('message-label')}:</label><br>
                     <textarea id="chatMessage" class="sort-select" rows="4" required></textarea><br>
-                    <button type="button" class="btn-primary" id="submitChatBtn" aria-label="Envoyer le message" role="button">Envoyer</button>
+                    <button type="button" class="btn-primary" onclick="alert('Message envoyé !'); document.getElementById('modal').style.display='none';" aria-label="Envoyer le message">Envoyer</button>
                 </form>
             `;
             
             modal.style.display = 'flex';
-            modal.focus();
-
-            const submitChatBtn = document.getElementById('submitChatBtn');
-            if (submitChatBtn) {
-                submitChatBtn.removeEventListener('click', submitChatHandler);
-                submitChatBtn.addEventListener('click', submitChatHandler);
-            }
-        }
-
-        async function submitChatHandler() {
-            const modal = document.getElementById('modal');
-            if (!modal) return;
-            // Placeholder for backend API call
-            // const response = await fetch('/api/contact', { ... });
-            alert('Message envoyé !');
-            modal.style.display = 'none';
         }
 
         function showComparisonModal() {
             const modal = document.getElementById('modal');
             const modalContent = document.getElementById('modalContent');
-            if (!modal || !modalContent) return;
-
+            
             if (selectedDevices.length < 2) {
                 alert(getTranslation('error-compare-min'));
                 return;
             }
-
-            const selectedDeviceData = selectedDevices.map(name => findDeviceByName(name)).filter(Boolean);
+            
+            const selectedDeviceData = selectedDevices.map(name => findDeviceByName(name));
             modalContent.innerHTML = `
                 <h2>${getTranslation('compare-devices-title')}</h2>
                 <table class="comparison-table">
@@ -1666,246 +1589,19 @@
                         </tr>
                         <tr>
                             <td>${getTranslation('brands-title')}</td>
-                            ${selectedDeviceData.map(device => `<td><ul>${device.brands.map(brand => `<li><a href="#" class="brand-link" data-brand="${brand}" aria-label="${getTranslation('datasheet-title')} ${brand}">${brand}</a></li>`).join('')}</ul></td>`).join('')}
-                        </tr>
-                        <tr>
-                            <td>${getTranslation('maintenance-title')}</td>
-                            ${selectedDeviceData.map(device => `<td><ul>${(currentLanguage === 'fr' ? device.maintenance : device.maintenance_en).map(m => `<li>${m}</li>`).join('')}</ul></td>`).join('')}
+                            ${selectedDeviceData.map(device => `<td>${device.brands.join(', ')}</td>`).join('')}
                         </tr>
                     </tbody>
                 </table>
             `;
             
             modal.style.display = 'flex';
-            modal.setAttribute('aria-modal', 'true');
-            modal.focus();
-
-            // Attach event listeners for brand links, avoiding duplication
-            document.querySelectorAll('.brand-link').forEach(link => {
-                link.removeEventListener('click', brandLinkHandler); // Remove any existing listeners
-                link.addEventListener('click', brandLinkHandler);
-            });
         }
 
-        // Handler for brand link clicks to prevent default and download datasheet
-        function brandLinkHandler(e) {
-            e.preventDefault();
-            const brandName = e.target.getAttribute('data-brand');
-            if (brandName) {
-                downloadBrandDatasheet(brandName);
-            }
-        }
-
-        // Handler for compare select buttons to prevent duplication
-        function toggleDeviceSelectionHandler(e) {
-            const deviceName = e.target.getAttribute('data-device');
-            toggleDeviceSelection(deviceName);
-        }
-
-        // Toggle device selection for comparison
-        function toggleDeviceSelection(deviceName) {
-            const index = selectedDevices.indexOf(deviceName);
-            if (index === -1) {
-                if (selectedDevices.length < 3) { // Limit to 3 devices for comparison
-                    selectedDevices.push(deviceName);
-                } else {
-                    alert('Maximum 3 devices can be compared.');
-                    return;
-                }
-            } else {
-                selectedDevices.splice(index, 1);
-            }
-
-            const compareBtn = document.getElementById('compareBtn');
-            if (compareBtn) {
-                compareBtn.disabled = selectedDevices.length < 2;
-            }
-
-            // Update button text and ARIA labels
-            document.querySelectorAll('.compare-select-btn').forEach(btn => {
-                const btnDevice = btn.getAttribute('data-device');
-                const isSelected = selectedDevices.includes(btnDevice);
-                btn.textContent = isSelected ? getTranslation('remove-from-compare') : getTranslation('add-to-compare');
-                btn.setAttribute('aria-label', `${isSelected ? getTranslation('remove-from-compare') : getTranslation('add-to-compare')} ${currentLanguage === 'fr' ? findDeviceByName(btnDevice)?.name : findDeviceByName(btnDevice)?.name_en}`);
-            });
-        }
-
-        // Update stats dynamically
-        function updateStats() {
-            const deviceCount = Object.values(devices).flat().length;
-            const deviceCountElement = document.getElementById('deviceCount');
-            if (deviceCountElement) {
-                deviceCountElement.textContent = deviceCount;
-            }
-        }
-
-        // Initialize event listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            // Language switcher
-            const languageSelect = document.getElementById('languageSelect');
-            if (languageSelect) {
-                languageSelect.addEventListener('change', (e) => {
-                    currentLanguage = e.target.value;
-                    updateLanguage();
-                });
-            }
-
-            // View toggles
-            const gridBtn = document.getElementById('gridBtn');
-            const listBtn = document.getElementById('listBtn');
-            if (gridBtn && listBtn) {
-                gridBtn.addEventListener('click', () => {
-                    currentView = 'grid';
-                    gridBtn.classList.add('active');
-                    listBtn.classList.remove('active');
-                    document.querySelectorAll('.devices-grid, .services-grid').forEach(grid => {
-                        grid.classList.remove('list-view');
-                    });
-                });
-                listBtn.addEventListener('click', () => {
-                    currentView = 'list';
-                    listBtn.classList.add('active');
-                    gridBtn.classList.remove('active');
-                    document.querySelectorAll('.devices-grid, .services-grid').forEach(grid => {
-                        grid.classList.add('list-view');
-                    });
-                });
-            }
-
-            // Navigation buttons
-            const exploreServicesBtn = document.getElementById('exploreServicesBtn');
-            if (exploreServicesBtn) {
-                exploreServicesBtn.addEventListener('click', showServices);
-            }
-
-            const homeBackBtn = document.getElementById('homeBackBtn');
-            if (homeBackBtn) {
-                homeBackBtn.addEventListener('click', showHome);
-            }
-
-            const servicesBackBtn = document.getElementById('servicesBackBtn');
-            if (servicesBackBtn) {
-                servicesBackBtn.addEventListener('click', showServices);
-            }
-
-            const devicesBackBtn = document.getElementById('devicesBackBtn');
-            if (devicesBackBtn) {
-                devicesBackBtn.addEventListener('click', () => showDevices(currentService));
-            }
-
-            // Service cards
-            document.querySelectorAll('.service-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const service = card.getAttribute('data-service');
-                    if (service) {
-                        showDevices(service);
-                    }
-                });
-            });
-
-            // Search functionality
-            const searchBox = document.getElementById('searchBox');
-            if (searchBox) {
-                searchBox.addEventListener('input', (e) => {
-                    const searchTerm = e.target.value.toLowerCase();
-                    const devicesGrid = document.getElementById('devicesGrid');
-                    if (!devicesGrid) return;
-                    devicesGrid.innerHTML = '';
-
-                    if (currentService && devices[currentService]) {
-                        const filteredDevices = devices[currentService].filter(device =>
-                            (currentLanguage === 'fr' ? device.name : device.name_en).toLowerCase().includes(searchTerm) ||
-                            (currentLanguage === 'fr' ? device.role : device.role_en).toLowerCase().includes(searchTerm)
-                        );
-                        if (filteredDevices.length > 0) {
-                            const fragment = document.createDocumentFragment();
-                            sortDevices(filteredDevices).forEach(device => {
-                                const card = createDeviceCard(device);
-                                fragment.appendChild(card);
-                            });
-                            devicesGrid.appendChild(fragment);
-                        } else {
-                            devicesGrid.innerHTML = `<p class="image-error">${getTranslation('no-devices-found')}</p>`;
-                        }
-                        document.querySelectorAll('.compare-select-btn').forEach(btn => {
-                            btn.removeEventListener('click', toggleDeviceSelectionHandler);
-                            btn.addEventListener('click', toggleDeviceSelectionHandler);
-                        });
-                    }
-                });
-            }
-
-            // Sort functionality
-            const sortSelect = document.getElementById('sortSelect');
-            if (sortSelect) {
-                sortSelect.addEventListener('change', () => {
-                    if (currentService) {
-                        showDevices(currentService);
-                    }
-                });
-            }
-
-            // Compare button
-            const compareBtn = document.getElementById('compareBtn');
-            if (compareBtn) {
-                compareBtn.addEventListener('click', showComparisonModal);
-            }
-
-            // Modal close
-            const closeModal = document.querySelector('.close-modal');
-            if (closeModal) {
-                closeModal.addEventListener('click', () => {
-                    const modal = document.getElementById('modal');
-                    if (modal) {
-                        modal.style.display = 'none';
-                    }
-                });
-            }
-
-            // Chat widget
-            const chatWidget = document.getElementById('chatWidget');
-            if (chatWidget) {
-                chatWidget.addEventListener('click', showChatModal);
-            }
-
-            // Contact link
-            const contactLink = document.getElementById('contactLink');
-            if (contactLink) {
-                contactLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showChatModal();
-                });
-            }
-
-            // Back to top
-            const backToTop = document.getElementById('backToTop');
-            if (backToTop) {
-                window.addEventListener('scroll', () => {
-                    backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
-                });
-                backToTop.addEventListener('click', () => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-            }
-
-            // Quote button handler
-            function quoteHandler(e) {
-                const deviceName = e.target.getAttribute('data-device');
-                if (deviceName) {
-                    showQuoteModal(deviceName);
-                }
-            }
-
-            // Initialize home page and stats
-            showHome();
-        });
-
-        // Sort devices based on selected criteria
         function sortDevices(deviceList) {
             const sortSelect = document.getElementById('sortSelect');
-            if (!sortSelect) return deviceList;
-            const sortValue = sortSelect.value;
-
+            const sortValue = sortSelect ? sortSelect.value : 'name-asc';
+            
             return [...deviceList].sort((a, b) => {
                 if (sortValue === 'name-asc') {
                     return (currentLanguage === 'fr' ? a.name : a.name_en).localeCompare(currentLanguage === 'fr' ? b.name : b.name_en);
@@ -1913,9 +1609,128 @@
                     return (currentLanguage === 'fr' ? b.name : b.name_en).localeCompare(currentLanguage === 'fr' ? a.name : a.name_en);
                 } else if (sortValue === 'brands-asc') {
                     return a.brands.length - b.brands.length;
-                } else if (sortValue === 'brands-desc') {
+                } else {
                     return b.brands.length - a.brands.length;
                 }
-                return 0;
             });
         }
+
+        function updateCompareButton() {
+            const compareBtn = document.getElementById('compareBtn');
+            compareBtn.disabled = selectedDevices.length < 2;
+        }
+
+        function toggleDeviceSelection(deviceName) {
+            const index = selectedDevices.indexOf(deviceName);
+            if (index === -1) {
+                selectedDevices.push(deviceName);
+            } else {
+                selectedDevices.splice(index, 1);
+            }
+            updateCompareButton();
+            showDevices(currentService); // Refresh device grid
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Navigation buttons
+            document.getElementById('exploreServicesBtn').addEventListener('click', showServices);
+            document.getElementById('homeBackBtn').addEventListener('click', showHome);
+            document.getElementById('servicesBackBtn').addEventListener('click', showServices);
+            document.getElementById('devicesBackBtn').addEventListener('click', () => showDevices(currentService));
+            
+            // Service cards
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.addEventListener('click', () => showDevices(card.dataset.service));
+            });
+            
+            // View toggle
+            document.getElementById('gridBtn').addEventListener('click', () => {
+                currentView = 'grid';
+                document.getElementById('gridBtn').classList.add('active');
+                document.getElementById('listBtn').classList.remove('active');
+                document.querySelectorAll('.device-card').forEach(card => card.className = `device-card ${currentView}-view`);
+            });
+            
+            document.getElementById('listBtn').addEventListener('click', () => {
+                currentView = 'list';
+                document.getElementById('listBtn').classList.add('active');
+                document.getElementById('gridBtn').classList.remove('active');
+                document.querySelectorAll('.device-card').forEach(card => card.className = `device-card ${currentView}-view`);
+            });
+            
+            // Search functionality
+// Search functionality
+document.getElementById('searchBox').addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const devicesGrid = document.getElementById('devicesGrid');
+    devicesGrid.innerHTML = '';
+    
+    if (currentService && devices[currentService]) {
+        const filteredDevices = devices[currentService].filter(device => 
+            (currentLanguage === 'fr' ? device.name : device.name_en).toLowerCase().includes(searchTerm) ||
+            (currentLanguage === 'fr' ? device.role : device.role_en).toLowerCase().includes(searchTerm)
+        );
+        
+        if (filteredDevices.length > 0) {
+            sortDevices(filteredDevices).forEach(device => {
+                const card = createDeviceCard(device);
+                devicesGrid.appendChild(card);
+            });
+        } else {
+            devicesGrid.innerHTML = `<p class="image-error">${getTranslation('no-devices-found')}</p>`;
+        }
+        
+        // Re-attach event listeners for compare buttons
+        document.querySelectorAll('.compare-select-btn').forEach(btn => {
+            btn.addEventListener('click', () => toggleDeviceSelection(btn.dataset.device));
+        });
+    }
+});
+
+        // Sort functionality
+        document.getElementById('sortSelect').addEventListener('change', () => {
+            showDevices(currentService);
+        });
+
+        // Compare functionality
+        document.getElementById('compareBtn').addEventListener('click', showComparisonModal);
+
+        // Modal close
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal') || e.target.classList.contains('close-modal')) {
+                document.getElementById('modal').style.display = 'none';
+            }
+        });
+
+        // Chat widget
+        document.getElementById('chatWidget').addEventListener('click', showChatModal);
+
+        // Contact link
+        document.getElementById('contactLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            showChatModal();
+        });
+
+        // Back to top
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Show back to top button on scroll
+        window.addEventListener('scroll', () => {
+            const backToTop = document.getElementById('backToTop');
+            backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
+        });
+
+        // Language switcher
+        document.getElementById('languageSelect').addEventListener('change', (e) => {
+            currentLanguage = e.target.value;
+            updateLanguage();
+        });
+
+        // Initialize
+        showHome();
+        updateLanguage();
+        updateCompareButton();
+        });
