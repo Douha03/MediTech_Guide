@@ -10,7 +10,7 @@
     <meta property="og:description" content="Découvrez notre écosystème complet de technologies médicales de pointe.">
     <meta property="og:type" content="website">
     <title>MediTech - Votre Guide Biomédical</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -29,7 +29,7 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px 15px;
+            padding: 100px 15px 20px 15px;
             min-height: 100vh;
             position: relative;
         }
@@ -39,11 +39,12 @@
             backdrop-filter: blur(20px);
             padding: 20px 25px;
             border-radius: 20px;
-            margin-bottom: 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            position: sticky;
-            top: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             z-index: 100;
             text-align: center;
         }
@@ -128,7 +129,7 @@
             padding: 40px;
             border-radius: 25px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid #d1d5db;
             min-height: 600px;
         }
 
@@ -253,6 +254,11 @@
             color: #cbd5e0;
             border: 2px solid #e2e8f0;
             object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card-image:hover, .device-image:hover {
+            transform: scale(1.1);
         }
 
         .device-image {
@@ -341,67 +347,61 @@
         }
 
         .footer {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(20px);
+            background: #ffffff;
+            color: #2d3748;
             padding: 20px;
             border-radius: 20px;
-            margin-top: 30px;
+            border: 1px solid #e2e8f0;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: sticky;
-            bottom: 0;
-            z-index: 100;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
         }
 
         .footer a {
             color: #667eea;
             text-decoration: none;
             margin: 0 10px;
+            position: relative;
+            transition: all 0.3s ease;
         }
 
         .footer a:hover {
             color: #764ba2;
+            text-decoration: none;
         }
 
-        .back-to-top {
-            position: fixed;
-            bottom: 80px;
-            left: 20px;
-            background: #2d3748;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            display: none;
-            z-index: 150;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 500;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+        .footer a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #764ba2;
+            transition: width 0.3s ease;
         }
 
-        .back-to-top:hover {
-            background: #4a5568;
-            transform: translateY(-3px);
+        .footer a:hover::after {
+            width: 100%;
         }
 
         .chatbot-toggle {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: #48bb78;
+            background: #667eea;
             color: white;
             padding: 15px;
             border-radius: 50%;
             cursor: pointer;
             z-index: 150;
             font-size: 1.5rem;
-            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+            border: 3px solid #667eea;
             transition: all 0.3s ease;
         }
 
         .chatbot-toggle:hover {
-            background: #68d391;
+            background: #764ba2;
+            border-color: #764ba2;
             transform: scale(1.1);
         }
 
@@ -496,18 +496,61 @@
         }
 
         .chatbot-input button {
-            background: #48bb78;
+            background: #667eea;
             color: white;
-            border: none;
+            border: 3px solid #667eea;
             padding: 10px 15px;
             border-radius: 10px;
             margin-left: 10px;
             cursor: pointer;
             font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
         }
 
         .chatbot-input button:hover {
-            background: #68d391;
+            background: #764ba2;
+            border-color: #764ba2;
+        }
+
+        .chatbot-typing {
+            display: none;
+            font-size: 0.9rem;
+            color: #718096;
+            padding: 10px;
+        }
+
+        .chatbot-typing span {
+            animation: blink 0.5s infinite;
+        }
+
+        .chatbot-typing span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .chatbot-typing span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .chatbot-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .suggestion-btn {
+            background: #e2e8f0;
+            color: #2d3748;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-btn:hover {
+            background: #667eea;
+            color: white;
         }
 
         .stats-section {
@@ -553,7 +596,7 @@
 
         @media (max-width: 768px) {
             .container {
-                padding: 15px;
+                padding: 80px 15px 20px 15px;
             }
 
             .content-section {
@@ -593,6 +636,11 @@
                 transform: translateY(0);
             }
         }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -603,7 +651,6 @@
                     <div class="logo-icon" aria-label="MediTech Logo">🏥</div>
                     <div class="logo-text">MediTech</div>
                 </div>
-                <div></div>
                 <div class="search-container">
                     <input type="text" class="search-box" placeholder="Rechercher des dispositifs médicaux..." id="searchBox" aria-label="Recherche de dispositifs médicaux">
                 </div>
@@ -626,7 +673,7 @@
                         <div class="stat-label">Dispositifs</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">6</div>
+                        <div class="stat-number">8</div>
                         <div class="stat-label">Spécialités</div>
                     </div>
                     <div class="stat-card">
@@ -712,6 +759,28 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="service-card" data-service="oncologie">
+                        <div class="card-icon" aria-hidden="true">🎗️</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Oncologie</h3>
+                            <p class="card-description">Technologies pour le diagnostic et le traitement des cancers. Solutions avancées pour l'imagerie et la thérapie oncologique.</p>
+                            <ul style="margin-top: 15px; color: #718096;">
+                                <li>PET Scanner</li>
+                                <li>Radiothérapie Linac</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-card" data-service="urgences">
+                        <div class="card-icon" aria-hidden="true">🚑</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Urgences</h3>
+                            <p class="card-description">Équipements pour les soins d'urgence et la réanimation. Technologies pour une intervention rapide et efficace.</p>
+                            <ul style="margin-top: 15px; color: #718096;">
+                                <li>Défibrillateurs automatiques</li>
+                                <li>Ventilateurs d'urgence</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -738,14 +807,16 @@
                     <span>MediTech Assistant</span>
                     <span class="chatbot-close" id="chatbotClose" aria-label="Fermer le chatbot" role="button">×</span>
                 </div>
-                <div class="chatbot-body" id="chatbotBody"></div>
+                <div class="chatbot-body" id="chatbotBody">
+                    <div class="chatbot-typing" id="chatbotTyping">
+                        <span>.</span><span>.</span><span>.</span>
+                    </div>
+                </div>
                 <div class="chatbot-input">
                     <input type="text" id="chatbotInput" placeholder="Posez une question..." aria-label="Saisir une question pour le chatbot">
                     <button id="chatbotSend" aria-label="Envoyer la question" role="button">➤</button>
                 </div>
             </div>
-
-            <button class="back-to-top" id="backToTop" aria-label="Retour en haut" role="button">Top</button>
 
             <footer class="footer">
                 <p>© 2025 MediTech. Tous droits réservés.</p>
@@ -760,6 +831,7 @@
     <script>
         let currentService = '';
         let currentDevice = '';
+        let chatHistory = [];
 
         const devices = {
             pediatrie: [
@@ -854,6 +926,46 @@
                     maintenance: ['Désinfecter l\'endoscope', 'Vérifier la caméra', 'Tester la source lumineuse', 'Inspecter les canaux'],
                     brands: ['Olympus Medical', 'Fujifilm']
                 }
+            ],
+            oncologie: [
+                { 
+                    name: 'PET Scanner', 
+                    image: 'https://via.placeholder.com/400x250?text=PET+Scanner', 
+                    role: 'Imagerie pour le diagnostic et le suivi des cancers.',
+                    principle: 'Utilise des traceurs radioactifs pour détecter les anomalies métaboliques.',
+                    components: ['Détecteurs de rayonnement', 'Table d\'examen', 'Système d\'injection', 'Console d\'analyse'],
+                    maintenance: ['Vérifier les détecteurs', 'Calibrer le système d\'injection', 'Nettoyer la table', 'Mettre à jour le logiciel'],
+                    brands: ['Siemens Healthineers', 'GE Healthcare']
+                },
+                { 
+                    name: 'Radiothérapie Linac', 
+                    image: 'https://via.placeholder.com/400x250?text=Linac', 
+                    role: 'Traitement ciblé des tumeurs par rayonnement.',
+                    principle: 'Délivre des faisceaux de rayonnement précis pour détruire les cellules cancéreuses.',
+                    components: ['Accélérateur linéaire', 'Collimator', 'Table de traitement', 'Système de planification'],
+                    maintenance: ['Vérifier le collimator', 'Calibrer l\'accélérateur', 'Inspecter la table', 'Tester le logiciel'],
+                    brands: ['Varian Medical', 'Elekta']
+                }
+            ],
+            urgences: [
+                { 
+                    name: 'Défibrillateur Automatique', 
+                    image: 'https://via.placeholder.com/400x250?text=Défibrillateur', 
+                    role: 'Restauration du rythme cardiaque en cas d\'arrêt cardiaque.',
+                    principle: 'Délivre un choc électrique pour rétablir le rythme cardiaque normal.',
+                    components: ['Électrodes', 'Batterie', 'Écran d\'interface', 'Système d\'analyse ECG'],
+                    maintenance: ['Vérifier les électrodes', 'Tester la batterie', 'Calibrer l\'analyseur ECG', 'Mettre à jour le firmware'],
+                    brands: ['Philips Healthcare', 'Zoll Medical']
+                },
+                { 
+                    name: 'Ventilateur d\'Urgence', 
+                    image: 'https://via.placeholder.com/400x250?text=Ventilateur', 
+                    role: 'Support respiratoire pour les patients en détresse.',
+                    principle: 'Fournit une ventilation mécanique pour assister ou remplacer la respiration.',
+                    components: ['Circuit respiratoire', 'Écran de contrôle', 'Capteurs de pression', 'Système d\'alarme'],
+                    maintenance: ['Nettoyer le circuit', 'Vérifier les capteurs', 'Tester les alarmes', 'Calibrer le système'],
+                    brands: ['Dräger', 'Medtronic']
+                }
             ]
         };
 
@@ -887,6 +999,16 @@
                 name: 'Gastro-entérologie',
                 description: 'Équipements pour l\'exploration du système digestif et des organes associés. Endoscopie et imagerie digestive.',
                 examples: ['Endoscopie avancée', 'Coloscopie haute définition', 'pH-métrie 24h']
+            },
+            oncologie: {
+                name: 'Oncologie',
+                description: 'Technologies pour le diagnostic et le traitement des cancers. Solutions avancées pour l\'imagerie et la thérapie oncologique.',
+                examples: ['PET Scanner', 'Radiothérapie Linac']
+            },
+            urgences: {
+                name: 'Urgences',
+                description: 'Équipements pour les soins d\'urgence et la réanimation. Technologies pour une intervention rapide et efficace.',
+                examples: ['Défibrillateurs automatiques', 'Ventilateurs d\'urgence']
             }
         };
 
@@ -1019,7 +1141,7 @@
 
         function createDeviceCard(device) {
             const card = document.createElement('div');
-            card.className = `device-card`;
+            card.className = 'device-card';
             card.innerHTML = `
                 <img src="${device.image}" alt="${device.name}" class="card-image" loading="lazy">
                 <div class="card-content">
@@ -1091,45 +1213,157 @@
             });
         }
 
+        function addChatMessage(message, isUser, suggestions = []) {
+            const chatbotBody = document.getElementById('chatbotBody');
+            if (!chatbotBody) return;
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            if (!isUser && suggestions.length > 0) {
+                const suggestionsDiv = document.createElement('div');
+                suggestionsDiv.className = 'chatbot-suggestions';
+                suggestions.forEach(suggestion => {
+                    const button = document.createElement('button');
+                    button.className = 'suggestion-btn';
+                    button.textContent = suggestion.text;
+                    button.onclick = () => {
+                        document.getElementById('chatbotInput').value = suggestion.query;
+                        document.getElementById('chatbotSend').click();
+                    };
+                    suggestionsDiv.appendChild(button);
+                });
+                messageDiv.appendChild(suggestionsDiv);
+            }
+            chatbotBody.appendChild(messageDiv);
+            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+        }
+
+        function showTypingAnimation(show) {
+            const typing = document.getElementById('chatbotTyping');
+            if (typing) {
+                typing.style.display = show ? 'block' : 'none';
+            }
+        }
+
         function processChatbotQuery(query) {
             const normalizedQuery = query.toLowerCase().trim();
+            chatHistory.push({ query: normalizedQuery, timestamp: Date.now() });
             let response = 'Désolé, je n\'ai pas compris votre question. Pouvez-vous reformuler ou demander quelque chose sur les dispositifs, les marques ou les spécialités médicales ?';
+            let suggestions = [];
+
+            // Synonym mappings
+            const synonyms = {
+                'scanner': ['scanner', 'tomodensitomètre', 'ct'],
+                'irm': ['irm', 'résonance magnétique', 'mri'],
+                'ecg': ['électrocardiographe', 'ecg'],
+                'eeg': ['électroencéphalographe', 'eeg'],
+                'défib': ['défibrillateur', 'defibrillator'],
+                'ventilateur': ['ventilateur', 'respirateur']
+            };
+
+            // Find matching device or service
+            let contextDevice = chatHistory.length > 1 ? findDeviceByName(chatHistory[chatHistory.length - 2].query) : null;
+            let matchedDevice = null;
+            let matchedService = null;
 
             for (const serviceKey in services) {
                 const service = services[serviceKey];
                 if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
+                    matchedService = serviceKey;
                     response = `${service.name} : ${service.description} Exemples de dispositifs : ${service.examples.join(', ')}.`;
-                    return response;
+                    suggestions = [
+                        { text: 'Voir les dispositifs', query: `Dispositifs de ${service.name}` },
+                        { text: 'En savoir plus', query: `Détails sur ${service.name}` }
+                    ];
+                    break;
                 }
             }
 
             for (const serviceKey in devices) {
                 const deviceList = devices[serviceKey];
                 for (const device of deviceList) {
-                    if (normalizedQuery.includes(device.name.toLowerCase())) {
+                    const deviceSynonyms = Object.keys(synonyms).find(key => synonyms[key].includes(device.name.toLowerCase())) || device.name.toLowerCase();
+                    if (normalizedQuery.includes(device.name.toLowerCase()) || (deviceSynonyms && normalizedQuery.includes(deviceSynonyms))) {
+                        matchedDevice = device;
                         response = `${device.name} (${serviceKey.charAt(0).toUpperCase() + serviceKey.slice(1)}) : \n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}`;
-                        return response;
+                        suggestions = [
+                            { text: 'Composants', query: `Composants de ${device.name}` },
+                            { text: 'Maintenance', query: `Maintenance de ${device.name}` },
+                            { text: 'Marques', query: `Marques de ${device.name}` }
+                        ];
+                        break;
                     }
-                    if (normalizedQuery.includes('rôle') && normalizedQuery.includes(device.name.toLowerCase())) {
+                    if (normalizedQuery.includes('rôle') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                        matchedDevice = device;
                         response = `Le rôle de ${device.name} est : ${device.role}`;
-                        return response;
+                        suggestions = [{ text: 'Principe', query: `Principe de ${device.name}` }];
+                        break;
                     }
-                    if (normalizedQuery.includes('principe') && normalizedQuery.includes(device.name.toLowerCase())) {
+                    if (normalizedQuery.includes('principe') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                        matchedDevice = device;
                         response = `Le principe de fonctionnement de ${device.name} est : ${device.principle}`;
-                        return response;
+                        suggestions = [{ text: 'Composants', query: `Composants de ${device.name}` }];
+                        break;
                     }
-                    if (normalizedQuery.includes('composants') && normalizedQuery.includes(device.name.toLowerCase())) {
+                    if (normalizedQuery.includes('composants') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                        matchedDevice = device;
                         response = `Les composants principaux de ${device.name} sont : ${device.components.join(', ')}`;
-                        return response;
+                        suggestions = [{ text: 'Maintenance', query: `Maintenance de ${device.name}` }];
+                        break;
                     }
-                    if (normalizedQuery.includes('maintenance') && normalizedQuery.includes(device.name.toLowerCase())) {
+                    if (normalizedQuery.includes('maintenance') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                        matchedDevice = device;
                         response = `La checklist pour la maintenance préventive de ${device.name} est : ${device.maintenance.join(', ')}`;
-                        return response;
+                        suggestions = [{ text: 'Marques', query: `Marques de ${device.name}` }];
+                        break;
                     }
-                    if (normalizedQuery.includes('marques') && normalizedQuery.includes(device.name.toLowerCase())) {
+                    if (normalizedQuery.includes('marques') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                        matchedDevice = device;
                         response = `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
-                        return response;
+                        suggestions = [{ text: 'Rôle', query: `Rôle de ${device.name}` }];
+                        break;
                     }
+                }
+                if (matchedDevice) break;
+            }
+
+            // Handle comparison queries
+            if (normalizedQuery.includes('comparer') || normalizedQuery.includes('compare')) {
+                const deviceNames = Object.values(devices).flat().map(d => d.name.toLowerCase());
+                const foundDevices = deviceNames.filter(name => normalizedQuery.includes(name));
+                if (foundDevices.length >= 2) {
+                    const device1 = findDeviceByName(foundDevices[0]);
+                    const device2 = findDeviceByName(foundDevices[1]);
+                    if (device1 && device2) {
+                        response = `Comparaison entre ${device1.name} et ${device2.name} :\n` +
+                            `- **Rôle** : ${device1.name} : ${device1.role} | ${device2.name} : ${device2.role}\n` +
+                            `- **Principe** : ${device1.name} : ${device1.principle} | ${device2.name} : ${device2.principle}\n` +
+                            `- **Marques** : ${device1.name} : ${device1.brands.join(', ')} | ${device2.name} : ${device2.brands.join(', ')}`;
+                        suggestions = [
+                            { text: `Composants de ${device1.name}`, query: `Composants de ${device1.name}` },
+                            { text: `Composants de ${device2.name}`, query: `Composants de ${device2.name}` }
+                        ];
+                    }
+                }
+            }
+
+            // Handle English queries
+            if (/^(what is|what's|tell me about)/i.test(normalizedQuery)) {
+                for (const serviceKey in devices) {
+                    const deviceList = devices[serviceKey];
+                    for (const device of deviceList) {
+                        if (normalizedQuery.includes(device.name.toLowerCase()) || (synonyms[device.name.toLowerCase()] && synonyms[device.name.toLowerCase()].some(s => normalizedQuery.includes(s)))) {
+                            matchedDevice = device;
+                            response = `${device.name} (${serviceKey.charAt(0).toUpperCase() + serviceKey.slice(1)}) : \n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}`;
+                            suggestions = [
+                                { text: 'Composants', query: `Composants de ${device.name}` },
+                                { text: 'Maintenance', query: `Maintenance de ${device.name}` },
+                                { text: 'Marques', query: `Marques de ${device.name}` }
+                            ];
+                            break;
+                        }
+                    }
+                    if (matchedDevice) break;
                 }
             }
 
@@ -1139,20 +1373,24 @@
                     const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
                     const deviceNames = devicesWithBrand.map(device => device.name);
                     response = `La marque ${brand} est associée aux dispositifs suivants : ${deviceNames.join(', ')}.`;
-                    return response;
+                    suggestions = deviceNames.slice(0, 2).map(name => ({ text: `Détails sur ${name}`, query: name }));
+                    break;
                 }
             }
 
-            if (normalizedQuery.includes('spécialités')) {
+            if (normalizedQuery.includes('spécialités') || normalizedQuery.includes('specialties')) {
                 response = `MediTech propose des équipements pour les spécialités suivantes : ${Object.values(services).map(s => s.name).join(', ')}.`;
-            } else if (normalizedQuery.includes('dispositifs')) {
+                suggestions = Object.keys(services).slice(0, 3).map(key => ({ text: services[key].name, query: services[key].name }));
+            } else if (normalizedQuery.includes('dispositifs') || normalizedQuery.includes('devices')) {
                 const allDevices = Object.values(devices).flat().map(d => d.name);
                 response = `MediTech propose les dispositifs suivants : ${allDevices.join(', ')}.`;
-            } else if (normalizedQuery.includes('marques')) {
+                suggestions = allDevices.slice(0, 3).map(name => ({ text: `Détails sur ${name}`, query: name }));
+            } else if (normalizedQuery.includes('marques') || normalizedQuery.includes('brands')) {
                 response = `Les marques disponibles sur MediTech incluent : ${allBrands.join(', ')}.`;
+                suggestions = allBrands.slice(0, 3).map(brand => ({ text: `Dispositifs de ${brand}`, query: brand }));
             }
 
-            return response;
+            return { response, suggestions };
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1221,16 +1459,6 @@
                 });
             }
 
-            const backToTop = document.getElementById('backToTop');
-            if (backToTop) {
-                window.addEventListener('scroll', () => {
-                    backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
-                });
-                backToTop.addEventListener('click', () => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-            }
-
             const chatbotToggle = document.getElementById('chatbotToggle');
             const chatbotContainer = document.getElementById('chatbotContainer');
             const chatbotClose = document.getElementById('chatbotClose');
@@ -1242,21 +1470,30 @@
                     chatbotContainer.style.display = chatbotContainer.style.display === 'block' ? 'none' : 'block';
                     if (chatbotContainer.style.display === 'block') {
                         chatbotInput.focus();
-                        addChatMessage('Bonjour ! Je suis MediTech Assistant. Posez-moi une question sur les dispositifs, les marques ou les spécialités médicales.', false);
+                        chatHistory = [];
+                        addChatMessage('Bonjour ! Je suis MediTech Assistant. Posez-moi une question sur les dispositifs, les marques ou les spécialités médicales.', false, [
+                            { text: 'Liste des spécialités', query: 'Spécialités' },
+                            { text: 'Liste des dispositifs', query: 'Dispositifs' }
+                        ]);
                     }
                 });
 
                 chatbotClose.addEventListener('click', () => {
                     chatbotContainer.style.display = 'none';
+                    chatHistory = [];
                 });
 
                 chatbotSend.addEventListener('click', () => {
                     const query = chatbotInput.value.trim();
                     if (query) {
                         addChatMessage(query, true);
-                        const response = processChatbotQuery(query);
-                        setTimeout(() => addChatMessage(response, false), 500);
-                        chatbotInput.value = '';
+                        showTypingAnimation(true);
+                        setTimeout(() => {
+                            const { response, suggestions } = processChatbotQuery(query);
+                            showTypingAnimation(false);
+                            addChatMessage(response, false, suggestions);
+                            chatbotInput.value = '';
+                        }, 1000);
                     }
                 });
 
