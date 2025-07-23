@@ -195,14 +195,7 @@
             display: grid;
             gap: 30px;
             margin-top: 40px;
-        }
-
-        .services-grid {
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        }
-
-        .devices-grid {
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         }
 
         .service-card, .device-card {
@@ -225,7 +218,7 @@
             border-color: #667eea;
         }
 
-        .service-card::before, .device-card::before {
+        .service-card:before, .device-card:before {
             content: '';
             position: absolute;
             top: 0;
@@ -236,7 +229,7 @@
             transition: all 0.6s ease;
         }
 
-        .service-card:hover::before, .device-card:hover::before {
+        .service-card:hover:before, .device-card:hover:before {
             left: 100%;
         }
 
@@ -327,28 +320,6 @@
             transform: translateX(-5px);
         }
 
-        .brands-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 25px 0;
-        }
-
-        .brand-link {
-            background: #667eea;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .brand-link:hover {
-            background: #764ba2;
-            transform: translateY(-3px);
-        }
-
         .sort-section {
             margin-bottom: 30px;
             display: flex;
@@ -395,19 +366,23 @@
         .back-to-top {
             position: fixed;
             bottom: 80px;
-            right: 20px;
-            background: #667eea;
+            left: 20px;
+            background: #2d3748;
             color: white;
-            padding: 10px 15px;
+            padding: 10px 20px;
             border-radius: 10px;
             cursor: pointer;
             display: none;
             z-index: 150;
             font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
 
         .back-to-top:hover {
-            background: #764ba2;
+            background: #4a5568;
+            transform: translateY(-3px);
         }
 
         .chatbot-toggle {
@@ -607,6 +582,17 @@
                 bottom: 70px;
             }
         }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -617,6 +603,7 @@
                     <div class="logo-icon" aria-label="MediTech Logo">🏥</div>
                     <div class="logo-text">MediTech</div>
                 </div>
+                <div></div>
                 <div class="search-container">
                     <input type="text" class="search-box" placeholder="Rechercher des dispositifs médicaux..." id="searchBox" aria-label="Recherche de dispositifs médicaux">
                 </div>
@@ -637,10 +624,6 @@
                     <div class="stat-card">
                         <div class="stat-number" id="deviceCount"></div>
                         <div class="stat-label">Dispositifs</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">25+</div>
-                        <div class="stat-label">Marques</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">6</div>
@@ -681,13 +664,12 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="service-card" data-service="imagerie">
+                    <div class="service-card" data-service="radiologie">
                         <div class="card-icon" aria-hidden="true">📡</div>
                         <div class="card-content">
-                            <h3 class="card-title">Imagerie</h3>
+                            <h3 class="card-title">Radiologie</h3>
                             <p class="card-description">Technologies d'imagerie médicale pour un diagnostic précis et non invasif. Solutions complètes d'imagerie diagnostique.</p>
                             <ul style="margin-top: 15px; color: #718096;">
-                                <li>Échographe</li>
                                 <li>Scanners haute résolution</li>
                                 <li>IRM 3 Tesla</li>
                                 <li>Mammographie numérique</li>
@@ -740,8 +722,6 @@
                     <select class="sort-select" id="sortSelect" aria-label="Trier les dispositifs">
                         <option value="name-asc">Nom (A-Z)</option>
                         <option value="name-desc">Nom (Z-A)</option>
-                        <option value="brands-asc">Nombre de marques (Croissant)</option>
-                        <option value="brands-desc">Nombre de marques (Décroissant)</option>
                     </select>
                 </div>
                 <div class="devices-grid" id="devicesGrid" aria-live="polite"></div>
@@ -765,12 +745,12 @@
                 </div>
             </div>
 
-            <button class="back-to-top" id="backToTop" aria-label="Retour en haut" role="button">↑ Haut</button>
+            <button class="back-to-top" id="backToTop" aria-label="Retour en haut" role="button">Top</button>
 
             <footer class="footer">
                 <p>© 2025 MediTech. Tous droits réservés.</p>
                 <p>
-                    <a href="mailto:info@meditech.com">info@meditech.com</a> |
+                    <a href="mailto:info@meditech.com">info@meditech.com</a> 
                     <a href="tel:+33123456789">+33 1 23 45 67 89</a>
                 </p>
             </footer>
@@ -785,7 +765,7 @@
             pediatrie: [
                 { 
                     name: 'Échographe Pédiatrique', 
-                    image: 'https://via.placeholder.com/400x250?text=Échographe+Pédiatrique', 
+                    image: 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/ecoped.png', 
                     role: 'Diagnostic par imagerie pour enfants et nourrissons.',
                     principle: 'Utilise des ultrasons pour produire des images des organes internes en temps réel.',
                     components: ['Sonde à ultrasons', 'Écran Full HD', 'Système de traitement d\'image', 'Clavier de commande'],
@@ -822,16 +802,7 @@
                     brands: ['Siemens Healthineers', 'Philips Healthcare']
                 }
             ],
-            imagerie: [
-                { 
-                    name: 'Échographe', 
-                    image: 'https://via.placeholder.com/400x250?text=Échographe', 
-                    role: 'Imagerie par ultrasons pour diagnostics variés.',
-                    principle: 'Utilise des ondes sonores à haute fréquence pour créer des images des organes internes.',
-                    components: ['Sonde à ultrasons', 'Écran haute résolution', 'Système de traitement d\'image', 'Clavier de commande'],
-                    maintenance: ['Vérifier l\'état de la sonde', 'Nettoyer l\'écran', 'Calibrer le système', 'Mettre à jour le logiciel'],
-                    brands: ['GE Healthcare', 'Philips Healthcare']
-                },
+            radiologie: [
                 { 
                     name: 'Scanner', 
                     image: 'https://via.placeholder.com/400x250?text=Scanner', 
@@ -886,109 +857,6 @@
             ]
         };
 
-        const brands = {
-            'Philips Healthcare': {
-                name: 'Philips Healthcare',
-                description: 'Leader mondial en technologies de santé.',
-                founded: '1891',
-                headquarters: 'Amsterdam, Pays-Bas',
-                employees: '77,000+',
-                revenue: '€17.3 milliards',
-                certifications: ['ISO 13485', 'FDA', 'CE Mark'],
-                innovations: ['HealthSuite', 'Azurion', 'MR 7700']
-            },
-            'GE Healthcare': {
-                name: 'GE Healthcare',
-                description: 'Innovations médicales depuis plus de 100 ans.',
-                founded: '1892',
-                headquarters: 'Chicago, États-Unis',
-                employees: '50,000+',
-                revenue: '€16.7 milliards',
-                certifications: ['ISO 14001', 'OHSAS 18001', 'ISO 13485'],
-                innovations: ['Revolution CT', 'SIGNA MR', 'Vscan']
-            },
-            'Siemens Healthineers': {
-                name: 'Siemens Healthineers',
-                description: 'Pionniers en technologie médicale.',
-                founded: '1847',
-                headquarters: 'Erlangen, Allemagne',
-                employees: '66,000+',
-                revenue: '€18.0 milliards',
-                certifications: ['ISO 9001', 'ISO 14001', 'OHSAS 18001'],
-                innovations: ['SOMATOM', 'MAGNETOM', 'Atellica']
-            },
-            'Canon Medical': {
-                name: 'Canon Medical',
-                description: 'Excellence en imagerie médicale.',
-                founded: '1930',
-                headquarters: 'Tokyo, Japon',
-                employees: '10,000+',
-                revenue: '€3.2 milliards',
-                certifications: ['JIS Q 9001', 'ISO 14001', 'FDA'],
-                innovations: ['Aquilion', 'Vantage', 'Aplio']
-            },
-            'Mortara Instruments': {
-                name: 'Mortara Instruments',
-                description: 'Spécialiste en cardiologie diagnostique.',
-                founded: '1967',
-                headquarters: 'Milwaukee, États-Unis',
-                employees: '500+',
-                revenue: '€120 millions',
-                certifications: ['ISO 13485', 'FDA 510(k)', 'Health Canada'],
-                innovations: ['VERITAS', 'X-SCRIBE', 'H-SCRIBE']
-            },
-            'Nihon Kohden': {
-                name: 'Nihon Kohden',
-                description: 'Innovation japonaise en monitoring.',
-                founded: '1951',
-                headquarters: 'Tokyo, Japon',
-                employees: '8,500+',
-                revenue: '€1.8 milliards',
-                certifications: ['ISO 9001', 'ISO 14001', 'JQA'],
-                innovations: ['Neurofax', 'Life Scope', 'Cardiolife']
-            },
-            'Hologic Inc': {
-                name: 'Hologic Inc',
-                description: 'Pionnier en santé des femmes.',
-                founded: '1985',
-                headquarters: 'Marlborough, États-Unis',
-                employees: '6,000+',
-                revenue: '€3.8 milliards',
-                certifications: ['ISO 13485', 'FDA', 'CE'],
-                innovations: ['3D Mammography', 'Discovery', 'Panther']
-            },
-            'Olympus Medical': {
-                name: 'Olympus Medical',
-                description: 'Leader mondial en endoscopie.',
-                founded: '1919',
-                headquarters: 'Tokyo, Japon',
-                employees: '31,000+',
-                revenue: '€6.8 milliards',
-                certifications: ['ISO 9001', 'ISO 14001', 'ISO 13485'],
-                innovations: ['EVIS X1', 'THUNDERBEAT', 'VISERA ELITE']
-            },
-            'Dräger': {
-                name: 'Dräger',
-                description: 'Spécialiste en technologies médicales et de sécurité.',
-                founded: '1889',
-                headquarters: 'Lübeck, Allemagne',
-                employees: '14,000+',
-                revenue: '€3.4 milliards',
-                certifications: ['ISO 9001', 'ISO 13485', 'CE'],
-                innovations: ['Evita', 'Babylog', 'Atlan']
-            },
-            'Fujifilm': {
-                name: 'Fujifilm',
-                description: 'Innovateur en imagerie et endoscopie médicale.',
-                founded: '1934',
-                headquarters: 'Tokyo, Japon',
-                employees: '73,000+',
-                revenue: '€18.5 milliards',
-                certifications: ['ISO 9001', 'ISO 13485', 'FDA'],
-                innovations: ['ELUXEO', 'Synapse', 'FDR']
-            }
-        };
-
         const services = {
             pediatrie: {
                 name: 'Pédiatrie',
@@ -1000,10 +868,10 @@
                 description: 'Dispositifs avancés pour l\'exploration et le traitement des pathologies cardiovasculaires. Technologies de pointe pour un diagnostic précis.',
                 examples: ['Électrocardiographes', 'Échocardiographes', 'Holters et défibrillateurs']
             },
-            imagerie: {
-                name: 'Imagerie',
+            radiologie: {
+                name: 'Radiologie',
                 description: 'Technologies d\'imagerie médicale pour un diagnostic précis et non invasif. Solutions complètes d\'imagerie diagnostique.',
-                examples: ['Échographe', 'Scanners haute résolution', 'IRM 3 Tesla', 'Mammographie numérique']
+                examples: ['Scanners haute résolution', 'IRM 3 Tesla', 'Mammographie numérique']
             },
             neurologie: {
                 name: 'Neurologie',
@@ -1015,7 +883,7 @@
                 description: 'Dispositifs pour le diagnostic et le traitement des troubles musculo-squelettiques. Imagerie et thérapie osseuse.',
                 examples: ['Radiographie osseuse', 'Arthroscopes', 'Densitométrie osseuse']
             },
-            'gastroentérologie': {
+            gastroentérologie: {
                 name: 'Gastro-entérologie',
                 description: 'Équipements pour l\'exploration du système digestif et des organes associés. Endoscopie et imagerie digestive.',
                 examples: ['Endoscopie avancée', 'Coloscopie haute définition', 'pH-métrie 24h']
@@ -1031,10 +899,7 @@
 
         function updateBreadcrumb(items) {
             const breadcrumb = document.getElementById('breadcrumb');
-            if (!breadcrumb) {
-                console.error('Breadcrumb element not found');
-                return;
-            }
+            if (!breadcrumb) return;
             breadcrumb.innerHTML = '';
             items.forEach((item, index) => {
                 const button = document.createElement('button');
@@ -1051,13 +916,13 @@
         function showHome() {
             hideAllPages();
             const homePage = document.getElementById('home-page');
-            if (!homePage) {
+            if (homePage) {
+                homePage.classList.remove('hidden');
+                homePage.style.display = 'block';
+                homePage.style.opacity = '1';
+            } else {
                 console.error('home-page element not found');
-                return;
             }
-            homePage.classList.remove('hidden');
-            homePage.style.display = 'block';
-            homePage.style.opacity = '1';
             updateBreadcrumb([]);
             updateStats();
         }
@@ -1065,13 +930,14 @@
         function showServices() {
             hideAllPages();
             const servicesPage = document.getElementById('services-page');
-            if (!servicesPage) {
+            if (servicesPage) {
+                servicesPage.classList.remove('hidden');
+                servicesPage.style.display = 'block';
+                servicesPage.style.opacity = '1';
+            } else {
                 console.error('services-page element not found');
                 return;
             }
-            servicesPage.classList.remove('hidden');
-            servicesPage.style.display = 'block';
-            servicesPage.style.opacity = '1';
             updateBreadcrumb([{ text: 'Spécialités Médicales', action: showServices }]);
         }
 
@@ -1098,7 +964,7 @@
             devicesPage.classList.remove('hidden');
             devicesPage.style.display = 'block';
             devicesPage.style.opacity = '1';
-            devicesTitle.textContent = `Dispositifs Médicaux - ${services[service].name}`;
+            devicesTitle.textContent = `Dispositifs Médicaux - ${service.charAt(0).toUpperCase() + service.slice(1)}`;
             devicesGrid.innerHTML = '';
             
             const fragment = document.createDocumentFragment();
@@ -1110,7 +976,7 @@
             
             updateBreadcrumb([
                 { text: 'Spécialités Médicales', action: showServices },
-                { text: services[service].name, action: () => showDevices(service) }
+                { text: service.charAt(0).toUpperCase() + service.slice(1), action: () => showDevices(service) }
             ]);
         }
 
@@ -1138,14 +1004,9 @@
             
             updateBreadcrumb([
                 { text: 'Spécialités Médicales', action: showServices },
-                { text: services[currentService].name, action: () => showDevices(currentService) },
+                { text: currentService.charAt(0).toUpperCase() + currentService.slice(1), action: () => showDevices(currentService) },
                 { text: device.name, action: () => showDeviceDetails(deviceName) }
             ]);
-
-            document.querySelectorAll('.brand-link').forEach(link => {
-                link.removeEventListener('click', brandLinkHandler);
-                link.addEventListener('click', brandLinkHandler);
-            });
         }
 
         function findDeviceByName(name) {
@@ -1158,7 +1019,7 @@
 
         function createDeviceCard(device) {
             const card = document.createElement('div');
-            card.className = 'device-card';
+            card.className = `device-card`;
             card.innerHTML = `
                 <img src="${device.image}" alt="${device.name}" class="card-image" loading="lazy">
                 <div class="card-content">
@@ -1200,49 +1061,11 @@
 
                 <div class="device-info">
                     <h3>Marques</h3>
-                    <div class="brands-section">
-                        ${device.brands.map(brand => `<a href="#" class="brand-link" data-brand="${brand}" data-device="${device.name}" aria-label="Télécharger la fiche technique de ${brand} pour ${device.name}">${brand}</a>`).join('')}
-                    </div>
+                    <ul>
+                        ${device.brands.map(brand => `<li>${brand}</li>`).join('')}
+                    </ul>
                 </div>
             `;
-        }
-
-        function downloadBrandDatasheet(brandName, deviceName) {
-            const brand = brands[brandName];
-            if (!brand) return;
-            
-            const content = `
-                Fiche technique - ${deviceName} par ${brand.name}
-                --------------------------------
-                Dispositif: ${deviceName}
-                Marque: ${brand.name}
-                Description de la marque: ${brand.description}
-                Fondée: ${brand.founded}
-                Siège: ${brand.headquarters}
-                Employés: ${brand.employees}
-                Revenus: ${brand.revenue}
-                Certifications: ${brand.certifications.join(', ')}
-                Innovations: ${brand.innovations.join(', ')}
-            `;
-            
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${deviceName}_${brandName}_datasheet.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function brandLinkHandler(e) {
-            e.preventDefault();
-            const brandName = e.target.getAttribute('data-brand');
-            const deviceName = e.target.getAttribute('data-device');
-            if (brandName && deviceName) {
-                downloadBrandDatasheet(brandName, deviceName);
-            }
         }
 
         function updateStats() {
@@ -1250,8 +1073,6 @@
             const deviceCountElement = document.getElementById('deviceCount');
             if (deviceCountElement) {
                 deviceCountElement.textContent = deviceCount;
-            } else {
-                console.error('deviceCount element not found');
             }
         }
 
@@ -1265,72 +1086,19 @@
                     return a.name.localeCompare(b.name);
                 } else if (sortValue === 'name-desc') {
                     return b.name.localeCompare(a.name);
-                } else if (sortValue === 'brands-asc') {
-                    return a.brands.length - b.brands.length;
-                } else if (sortValue === 'brands-desc') {
-                    return b.brands.length - a.brands.length;
                 }
                 return 0;
             });
         }
 
-        function searchDevices(searchTerm) {
-            const normalizedSearch = searchTerm.toLowerCase().trim();
-            const devicesGrid = document.getElementById('devicesGrid');
-            if (!devicesGrid) {
-                console.error('devicesGrid element not found');
-                return;
-            }
-
-            devicesGrid.innerHTML = '';
-            let results = [];
-
-            for (const service in devices) {
-                const filteredDevices = devices[service].filter(device =>
-                    device.name.toLowerCase().includes(normalizedSearch) ||
-                    device.role.toLowerCase().includes(normalizedSearch) ||
-                    services[service].name.toLowerCase().includes(normalizedSearch)
-                );
-                results.push(...filteredDevices.map(device => ({ ...device, service })));
-            }
-
-            if (results.length > 0) {
-                const fragment = document.createDocumentFragment();
-                sortDevices(results).forEach(device => {
-                    const card = createDeviceCard(device);
-                    fragment.appendChild(card);
-                });
-                devicesGrid.appendChild(fragment);
-                currentService = ''; // Reset currentService for global search
-                updateBreadcrumb([{ text: 'Résultats de recherche', action: () => searchDevices(searchTerm) }]);
-            } else {
-                devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé.</p>';
-                updateBreadcrumb([{ text: 'Résultats de recherche', action: () => searchDevices(searchTerm) }]);
-            }
-        }
-
-        function addChatMessage(message, isUser = false) {
-            const chatbotBody = document.getElementById('chatbotBody');
-            if (!chatbotBody) {
-                console.error('chatbotBody element not found');
-                return;
-            }
-
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
-            messageDiv.innerHTML = `<p>${message}</p>`;
-            chatbotBody.appendChild(messageDiv);
-            chatbotBody.scrollTop = chatbotBody.scrollHeight;
-        }
-
         function processChatbotQuery(query) {
             const normalizedQuery = query.toLowerCase().trim();
-            let response = "Désolé, je n'ai pas compris votre question. Pouvez-vous reformuler ou demander quelque chose sur les dispositifs, les marques ou les spécialités médicales ?";
+            let response = 'Désolé, je n\'ai pas compris votre question. Pouvez-vous reformuler ou demander quelque chose sur les dispositifs, les marques ou les spécialités médicales ?';
 
             for (const serviceKey in services) {
                 const service = services[serviceKey];
                 if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
-                    response = `**${service.name}** : ${service.description} Exemples de dispositifs : ${service.examples.join(', ')}.`;
+                    response = `${service.name} : ${service.description} Exemples de dispositifs : ${service.examples.join(', ')}.`;
                     return response;
                 }
             }
@@ -1339,60 +1107,38 @@
                 const deviceList = devices[serviceKey];
                 for (const device of deviceList) {
                     if (normalizedQuery.includes(device.name.toLowerCase())) {
-                        response = `**${device.name}** (${services[serviceKey].name}) : \n- **Rôle** : ${device.role}\n- **Principe** : ${device.principle}\n- **Composants** : ${device.components.join(', ')}\n- **Maintenance** : ${device.maintenance.join(', ')}\n- **Marques** : ${device.brands.join(', ')}`;
+                        response = `${device.name} (${serviceKey.charAt(0).toUpperCase() + serviceKey.slice(1)}) : \n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}`;
                         return response;
                     }
                     if (normalizedQuery.includes('rôle') && normalizedQuery.includes(device.name.toLowerCase())) {
-                        response = `Le rôle de **${device.name}** est : ${device.role}`;
+                        response = `Le rôle de ${device.name} est : ${device.role}`;
                         return response;
                     }
                     if (normalizedQuery.includes('principe') && normalizedQuery.includes(device.name.toLowerCase())) {
-                        response = `Le principe de fonctionnement de **${device.name}** est : ${device.principle}`;
+                        response = `Le principe de fonctionnement de ${device.name} est : ${device.principle}`;
                         return response;
                     }
                     if (normalizedQuery.includes('composants') && normalizedQuery.includes(device.name.toLowerCase())) {
-                        response = `Les composants principaux de **${device.name}** sont : ${device.components.join(', ')}`;
+                        response = `Les composants principaux de ${device.name} sont : ${device.components.join(', ')}`;
                         return response;
                     }
                     if (normalizedQuery.includes('maintenance') && normalizedQuery.includes(device.name.toLowerCase())) {
-                        response = `La checklist pour la maintenance préventive de **${device.name}** est : ${device.maintenance.join(', ')}`;
+                        response = `La checklist pour la maintenance préventive de ${device.name} est : ${device.maintenance.join(', ')}`;
                         return response;
                     }
                     if (normalizedQuery.includes('marques') && normalizedQuery.includes(device.name.toLowerCase())) {
-                        response = `Les marques associées à **${device.name}** sont : ${device.brands.join(', ')}`;
+                        response = `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
                         return response;
                     }
                 }
             }
 
-            for (const brandKey in brands) {
-                const brand = brands[brandKey];
-                if (normalizedQuery.includes(brand.name.toLowerCase())) {
-                    response = `**${brand.name}** : \n- **Description** : ${brand.description}\n- **Fondée** : ${brand.founded}\n- **Siège** : ${brand.headquarters}\n- **Employés** : ${brand.employees}\n- **Revenus** : ${brand.revenue}\n- **Certifications** : ${brand.certifications.join(', ')}\n- **Innovations** : ${brand.innovations.join(', ')}`;
-                    return response;
-                }
-                if (normalizedQuery.includes('fondée') && normalizedQuery.includes(brand.name.toLowerCase())) {
-                    response = `**${brand.name}** a été fondée en ${brand.founded}.`;
-                    return response;
-                }
-                if (normalizedQuery.includes('siège') && normalizedQuery.includes(brand.name.toLowerCase())) {
-                    response = `Le siège de **${brand.name}** est à ${brand.headquarters}.`;
-                    return response;
-                }
-                if (normalizedQuery.includes('employés') && normalizedQuery.includes(brand.name.toLowerCase())) {
-                    response = `**${brand.name}** compte ${brand.employees} employés.`;
-                    return response;
-                }
-                if (normalizedQuery.includes('revenus') && normalizedQuery.includes(brand.name.toLowerCase())) {
-                    response = `Les revenus de **${brand.name}** sont de ${brand.revenue}.`;
-                    return response;
-                }
-                if (normalizedQuery.includes('certifications') && normalizedQuery.includes(brand.name.toLowerCase())) {
-                    response = `Les certifications de **${brand.name}** sont : ${brand.certifications.join(', ')}.`;
-                    return response;
-                }
-                if (normalizedQuery.includes('innovations') && normalizedQuery.includes(brand.name.toLowerCase())) {
-                    response = `Les innovations de **${brand.name}** incluent : ${brand.innovations.join(', ')}.`;
+            const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
+            for (const brand of allBrands) {
+                if (normalizedQuery.includes(brand.toLowerCase())) {
+                    const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
+                    const deviceNames = devicesWithBrand.map(device => device.name);
+                    response = `La marque ${brand} est associée aux dispositifs suivants : ${deviceNames.join(', ')}.`;
                     return response;
                 }
             }
@@ -1403,50 +1149,31 @@
                 const allDevices = Object.values(devices).flat().map(d => d.name);
                 response = `MediTech propose les dispositifs suivants : ${allDevices.join(', ')}.`;
             } else if (normalizedQuery.includes('marques')) {
-                response = `Les marques disponibles sur MediTech incluent : ${Object.keys(brands).join(', ')}.`;
+                response = `Les marques disponibles sur MediTech incluent : ${allBrands.join(', ')}.`;
             }
 
             return response;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            if (!document.getElementById('home-page')) {
-                console.error('home-page element is missing in the DOM');
-                return;
-            }
-
             const exploreServicesBtn = document.getElementById('exploreServicesBtn');
             if (exploreServicesBtn) {
                 exploreServicesBtn.addEventListener('click', showServices);
-            } else {
-                console.error('exploreServicesBtn element not found');
             }
 
             const homeBackBtn = document.getElementById('homeBackBtn');
             if (homeBackBtn) {
                 homeBackBtn.addEventListener('click', showHome);
-            } else {
-                console.error('homeBackBtn element not found');
             }
 
             const servicesBackBtn = document.getElementById('servicesBackBtn');
             if (servicesBackBtn) {
                 servicesBackBtn.addEventListener('click', showServices);
-            } else {
-                console.error('servicesBackBtn element not found');
             }
 
             const devicesBackBtn = document.getElementById('devicesBackBtn');
             if (devicesBackBtn) {
-                devicesBackBtn.addEventListener('click', () => {
-                    if (currentService) {
-                        showDevices(currentService);
-                    } else {
-                        showServices();
-                    }
-                });
-            } else {
-                console.error('devicesBackBtn element not found');
+                devicesBackBtn.addEventListener('click', () => showDevices(currentService));
             }
 
             document.querySelectorAll('.service-card').forEach(card => {
@@ -1461,19 +1188,28 @@
             const searchBox = document.getElementById('searchBox');
             if (searchBox) {
                 searchBox.addEventListener('input', (e) => {
-                    const searchTerm = e.target.value;
-                    if (searchTerm.trim() === '') {
-                        if (currentService) {
-                            showDevices(currentService);
+                    const searchTerm = e.target.value.toLowerCase();
+                    const devicesGrid = document.getElementById('devicesGrid');
+                    if (!devicesGrid) return;
+                    devicesGrid.innerHTML = '';
+
+                    if (currentService && devices[currentService]) {
+                        const filteredDevices = devices[currentService].filter(device =>
+                            device.name.toLowerCase().includes(searchTerm) ||
+                            device.role.toLowerCase().includes(searchTerm)
+                        );
+                        if (filteredDevices.length > 0) {
+                            const fragment = document.createDocumentFragment();
+                            sortDevices(filteredDevices).forEach(device => {
+                                const card = createDeviceCard(device);
+                                fragment.appendChild(card);
+                            });
+                            devicesGrid.appendChild(fragment);
                         } else {
-                            showServices();
+                            devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour cette spécialité.</p>';
                         }
-                    } else {
-                        searchDevices(searchTerm);
                     }
                 });
-            } else {
-                console.error('searchBox element not found');
             }
 
             const sortSelect = document.getElementById('sortSelect');
@@ -1483,8 +1219,6 @@
                         showDevices(currentService);
                     }
                 });
-            } else {
-                console.error('sortSelect element not found');
             }
 
             const backToTop = document.getElementById('backToTop');
@@ -1495,8 +1229,6 @@
                 backToTop.addEventListener('click', () => {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
-            } else {
-                console.error('backToTop element not found');
             }
 
             const chatbotToggle = document.getElementById('chatbotToggle');
@@ -1533,8 +1265,6 @@
                         chatbotSend.click();
                     }
                 });
-            } else {
-                console.error('One or more chatbot elements not found');
             }
 
             showHome();
