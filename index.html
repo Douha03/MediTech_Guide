@@ -673,7 +673,7 @@
                         <div class="stat-label">Dispositifs</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">8</div>
+                        <div class="stat-number">9</div>
                         <div class="stat-label">Spécialités</div>
                     </div>
                     <div class="stat-card">
@@ -711,10 +711,10 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="service-card" data-service="radiologie">
+                    <div class="service-card" data-service="imagerie_medicale">
                         <div class="card-icon" aria-hidden="true">📡</div>
                         <div class="card-content">
-                            <h3 class="card-title">Radiologie</h3>
+                            <h3 class="card-title">Imagerie Médicale</h3>
                             <p class="card-description">Technologies d'imagerie médicale pour un diagnostic précis et non invasif. Solutions complètes d'imagerie diagnostique.</p>
                             <ul style="margin-top: 15px; color: #718096;">
                                 <li>Scanners haute résolution</li>
@@ -770,14 +770,38 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="service-card" data-service="urgences">
-                        <div class="card-icon" aria-hidden="true">🚑</div>
+                    <div class="service-card" data-service="sterilisation">
+                        <div class="card-icon" aria-hidden="true">🧼</div>
                         <div class="card-content">
-                            <h3 class="card-title">Urgences</h3>
-                            <p class="card-description">Équipements pour les soins d'urgence et la réanimation. Technologies pour une intervention rapide et efficace.</p>
+                            <h3 class="card-title">Stérilisation</h3>
+                            <p class="card-description">Équipements pour la stérilisation des instruments et matériels médicaux. Solutions pour garantir un environnement stérile.</p>
                             <ul style="margin-top: 15px; color: #718096;">
-                                <li>Défibrillateurs automatiques</li>
-                                <li>Ventilateurs d'urgence</li>
+                                <li>Autoclaves</li>
+                                <li>Stérilisateurs plasma</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-card" data-service="bloc_operatoire">
+                        <div class="card-icon" aria-hidden="true">🔪</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Bloc Opératoire</h3>
+                            <p class="card-description">Équipements pour les interventions chirurgicales. Technologies pour des opérations sécurisées et précises.</p>
+                            <ul style="margin-top: 15px; color: #718096;">
+                                <li>Tables chirurgicales</li>
+                                <li>Lampes opératoires</li>
+                                <li>Robots chirurgicaux</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-card" data-service="reanimation">
+                        <div class="card-icon" aria-hidden="true">🩺</div>
+                        <div class="card-content">
+                            <h3 class="card-title">Réanimation</h3>
+                            <p class="card-description">Équipements pour les soins intensifs et la réanimation. Technologies pour la prise en charge des patients critiques.</p>
+                            <ul style="margin-top: 15px; color: #718096;">
+                                <li>Ventilateurs intensifs</li>
+                                <li>Moniteurs multiparamètres</li>
+                                <li>Pompes à perfusion</li>
                             </ul>
                         </div>
                     </div>
@@ -833,679 +857,822 @@
         let currentDevice = '';
         let chatHistory = [];
 
-        const devices = {
-            pediatrie: [
-                { 
-                    name: 'Échographe Pédiatrique', 
-                    image: 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/ecoped.png', 
-                    role: 'Diagnostic par imagerie pour enfants et nourrissons.',
-                    principle: 'Utilise des ultrasons pour produire des images des organes internes en temps réel.',
-                    components: ['Sonde à ultrasons', 'Écran Full HD', 'Système de traitement d\'image', 'Clavier de commande'],
-                    maintenance: ['Vérifier l\'état de la sonde', 'Nettoyer l\'écran et le clavier', 'Calibrer le système mensuellement', 'Mettre à jour le logiciel'],
-                    brands: ['Philips Healthcare', 'GE Healthcare']
-                },
-                { 
-                    name: 'Moniteur Néonatal', 
-                    image: 'https://via.placeholder.com/400x250?text=Moniteur+Néonatal', 
-                    role: 'Surveillance continue des paramètres vitaux des nouveau-nés.',
-                    principle: 'Mesure et affiche les signaux vitaux comme le rythme cardiaque et la saturation en oxygène.',
-                    components: ['Capteurs SpO2', 'Électrodes ECG', 'Écran tactile', 'Système d\'alarme'],
-                    maintenance: ['Vérifier les capteurs quotidiennement', 'Nettoyer les électrodes', 'Tester les alarmes', 'Remplacer la batterie si nécessaire'],
-                    brands: ['GE Healthcare', 'Dräger']
-                }
-            ],
-            cardiologie: [
-                { 
-                    name: 'Électrocardiographe', 
-                    image: 'https://via.placeholder.com/400x250?text=ECG', 
-                    role: 'Diagnostic des anomalies cardiaques par enregistrement électrique.',
-                    principle: 'Enregistre l\'activité électrique du cœur via des électrodes placées sur la peau.',
-                    components: ['Électrodes', 'Câbles de dérivation', 'Imprimante thermique', 'Écran LCD'],
-                    maintenance: ['Vérifier les électrodes', 'Nettoyer les câbles', 'Tester l\'imprimante', 'Calibrer l\'appareil'],
-                    brands: ['Mortara Instruments', 'Philips Healthcare']
-                },
-                { 
-                    name: 'Échocardiographe', 
-                    image: 'https://via.placeholder.com/400x250?text=Échocardiographe', 
-                    role: 'Imagerie du cœur pour évaluer sa structure et sa fonction.',
-                    principle: 'Utilise des ultrasons pour visualiser le cœur et les flux sanguins.',
-                    components: ['Sonde à ultrasons', 'Écran 4K', 'Système Doppler', 'Logiciel d\'analyse'],
-                    maintenance: ['Inspecter la sonde', 'Nettoyer l\'écran', 'Vérifier le logiciel', 'Calibrer le Doppler'],
-                    brands: ['Siemens Healthineers', 'Philips Healthcare']
-                }
-            ],
-            radiologie: [
-                { 
-                    name: 'Scanner', 
-                    image: 'https://via.placeholder.com/400x250?text=Scanner', 
-                    role: 'Imagerie par tomodensitométrie pour diagnostics détaillés.',
-                    principle: 'Utilise des rayons X pour créer des images en coupes des organes.',
-                    components: ['Tube à rayons X', 'Détecteurs', 'Table d\'examen', 'Console de traitement'],
-                    maintenance: ['Vérifier le tube à rayons X', 'Nettoyer la table', 'Calibrer les détecteurs', 'Mettre à jour le logiciel'],
-                    brands: ['Canon Medical', 'Siemens Healthineers']
-                },
-                { 
-                    name: 'IRM', 
-                    image: 'https://via.placeholder.com/400x250?text=IRM', 
-                    role: 'Imagerie par résonance magnétique pour diagnostics non invasifs.',
-                    principle: 'Utilise des champs magnétiques et des ondes radio pour produire des images détaillées.',
-                    components: ['Aimant principal', 'Bobines RF', 'Table d\'examen', 'Système de refroidissement'],
-                    maintenance: ['Vérifier le système de refroidissement', 'Inspecter les bobines', 'Calibrer l\'aimant', 'Tester les sécurités'],
-                    brands: ['Philips Healthcare', 'Siemens Healthineers']
-                }
-            ],
-            neurologie: [
-                { 
-                    name: 'Électroencéphalographe', 
-                    image: 'https://via.placeholder.com/400x250?text=EEG', 
-                    role: 'Analyse de l\'activité électrique du cerveau.',
-                    principle: 'Enregistre les signaux électriques via des électrodes sur le cuir chevelu.',
-                    components: ['Électrodes EEG', 'Amplificateur', 'Écran d\'analyse', 'Logiciel de traitement'],
-                    maintenance: ['Vérifier les électrodes', 'Nettoyer l\'amplificateur', 'Tester le logiciel', 'Calibrer l\'appareil'],
-                    brands: ['Nihon Kohden', 'Philips Healthcare']
-                }
-            ],
-            orthopédie: [
-                { 
-                    name: 'Densitomètre Osseux', 
-                    image: 'https://via.placeholder.com/400x250?text=DEXA', 
-                    role: 'Mesure de la densité minérale osseuse pour diagnostiquer l\'ostéoporose.',
-                    principle: 'Utilise des rayons X à double énergie pour évaluer la densité osseuse.',
-                    components: ['Source de rayons X', 'Détecteur DEXA', 'Table de scan', 'Logiciel d\'analyse'],
-                    maintenance: ['Vérifier la source de rayons X', 'Nettoyer la table', 'Calibrer le détecteur', 'Mettre à jour le logiciel'],
-                    brands: ['Hologic Inc', 'GE Healthcare']
-                }
-            ],
-            gastroentérologie: [
-                { 
-                    name: 'Coloscope', 
-                    image: 'https://via.placeholder.com/400x250?text=Coloscope', 
-                    role: 'Exploration visuelle du côlon pour dépistage et diagnostic.',
-                    principle: 'Utilise une caméra flexible pour visualiser l\'intérieur du côlon.',
-                    components: ['Endoscope flexible', 'Caméra HD', 'Source lumineuse', 'Système de contrôle'],
-                    maintenance: ['Désinfecter l\'endoscope', 'Vérifier la caméra', 'Tester la source lumineuse', 'Inspecter les canaux'],
-                    brands: ['Olympus Medical', 'Fujifilm']
-                }
-            ],
-            oncologie: [
-                { 
-                    name: 'PET Scanner', 
-                    image: 'https://via.placeholder.com/400x250?text=PET+Scanner', 
-                    role: 'Imagerie pour le diagnostic et le suivi des cancers.',
-                    principle: 'Utilise des traceurs radioactifs pour détecter les anomalies métaboliques.',
-                    components: ['Détecteurs de rayonnement', 'Table d\'examen', 'Système d\'injection', 'Console d\'analyse'],
-                    maintenance: ['Vérifier les détecteurs', 'Calibrer le système d\'injection', 'Nettoyer la table', 'Mettre à jour le logiciel'],
-                    brands: ['Siemens Healthineers', 'GE Healthcare']
-                },
-                { 
-                    name: 'Radiothérapie Linac', 
-                    image: 'https://via.placeholder.com/400x250?text=Linac', 
-                    role: 'Traitement ciblé des tumeurs par rayonnement.',
-                    principle: 'Délivre des faisceaux de rayonnement précis pour détruire les cellules cancéreuses.',
-                    components: ['Accélérateur linéaire', 'Collimator', 'Table de traitement', 'Système de planification'],
-                    maintenance: ['Vérifier le collimator', 'Calibrer l\'accélérateur', 'Inspecter la table', 'Tester le logiciel'],
-                    brands: ['Varian Medical', 'Elekta']
-                }
-            ],
-            urgences: [
-                { 
-                    name: 'Défibrillateur Automatique', 
-                    image: 'https://via.placeholder.com/400x250?text=Défibrillateur', 
-                    role: 'Restauration du rythme cardiaque en cas d\'arrêt cardiaque.',
-                    principle: 'Délivre un choc électrique pour rétablir le rythme cardiaque normal.',
-                    components: ['Électrodes', 'Batterie', 'Écran d\'interface', 'Système d\'analyse ECG'],
-                    maintenance: ['Vérifier les électrodes', 'Tester la batterie', 'Calibrer l\'analyseur ECG', 'Mettre à jour le firmware'],
-                    brands: ['Philips Healthcare', 'Zoll Medical']
-                },
-                { 
-                    name: 'Ventilateur d\'Urgence', 
-                    image: 'https://via.placeholder.com/400x250?text=Ventilateur', 
-                    role: 'Support respiratoire pour les patients en détresse.',
-                    principle: 'Fournit une ventilation mécanique pour assister ou remplacer la respiration.',
-                    components: ['Circuit respiratoire', 'Écran de contrôle', 'Capteurs de pression', 'Système d\'alarme'],
-                    maintenance: ['Nettoyer le circuit', 'Vérifier les capteurs', 'Tester les alarmes', 'Calibrer le système'],
-                    brands: ['Dräger', 'Medtronic']
-                }
-            ]
-        };
-
-        const services = {
-            pediatrie: {
-                name: 'Pédiatrie',
-                description: 'Équipements spécialisés pour le diagnostic et le traitement des enfants et nourrissons. Technologies adaptées aux besoins spécifiques de la médecine pédiatrique.',
-                examples: ['Échographes pédiatriques', 'Moniteurs néonataux', 'Ventilateurs adaptés']
-            },
-            cardiologie: {
-                name: 'Cardiologie',
-                description: 'Dispositifs avancés pour l\'exploration et le traitement des pathologies cardiovasculaires. Technologies de pointe pour un diagnostic précis.',
-                examples: ['Électrocardiographes', 'Échocardiographes', 'Holters et défibrillateurs']
-            },
-            radiologie: {
-                name: 'Radiologie',
-                description: 'Technologies d\'imagerie médicale pour un diagnostic précis et non invasif. Solutions complètes d\'imagerie diagnostique.',
-                examples: ['Scanners haute résolution', 'IRM 3 Tesla', 'Mammographie numérique']
-            },
-            neurologie: {
-                name: 'Neurologie',
-                description: 'Équipements spécialisés pour l\'étude du système nerveux central et périphérique. Diagnostic neurologique avancé.',
-                examples: ['Électroencéphalographes', 'Scanner cérébral', 'Doppler transcrânien']
-            },
-            orthopédie: {
-                name: 'Orthopédie',
-                description: 'Dispositifs pour le diagnostic et le traitement des troubles musculo-squelettiques. Imagerie et thérapie osseuse.',
-                examples: ['Radiographie osseuse', 'Arthroscopes', 'Densitométrie osseuse']
-            },
-            gastroentérologie: {
-                name: 'Gastro-entérologie',
-                description: 'Équipements pour l\'exploration du système digestif et des organes associés. Endoscopie et imagerie digestive.',
-                examples: ['Endoscopie avancée', 'Coloscopie haute définition', 'pH-métrie 24h']
-            },
-            oncologie: {
-                name: 'Oncologie',
-                description: 'Technologies pour le diagnostic et le traitement des cancers. Solutions avancées pour l\'imagerie et la thérapie oncologique.',
-                examples: ['PET Scanner', 'Radiothérapie Linac']
-            },
-            urgences: {
-                name: 'Urgences',
-                description: 'Équipements pour les soins d\'urgence et la réanimation. Technologies pour une intervention rapide et efficace.',
-                examples: ['Défibrillateurs automatiques', 'Ventilateurs d\'urgence']
-            }
-        };
-
-        function hideAllPages() {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.add('hidden');
-                section.style.display = 'none';
-            });
+       const devices = {
+        pediatrie: [
+        { 
+            name: 'Échographe Pédiatrique', 
+            image: 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/ecoped.png', 
+            role: 'Diagnostic par imagerie pour enfants et nourrissons.',
+            principle: 'Utilise des ultrasons pour produire des images des organes internes en temps réel.',
+            components: ['Sonde à ultrasons', 'Écran Full HD', 'Système de traitement d\'image', 'Clavier de commande'],
+            maintenance: ['Vérifier l\'état de la sonde', 'Nettoyer l\'écran et le clavier', 'Calibrer le système mensuellement', 'Mettre à jour le logiciel'],
+            brands: ['Philips Healthcare', 'GE Healthcare'],
+            normes: ['Installation dans une salle à température contrôlée (18-24°C)', 'Connexion électrique stable avec protection contre les surtensions', 'Conformité aux normes CEI 60601 pour la sécurité électrique']
+        },
+        { 
+            name: 'Moniteur Néonatal', 
+            image: 'https://via.placeholder.com/400x250?text=Moniteur+Néonatal', 
+            role: 'Surveillance continue des paramètres vitaux des nouveau-nés.',
+            principle: 'Mesure et affiche les signaux vitaux comme le rythme cardiaque et la saturation en oxygène.',
+            components: ['Capteurs SpO2', 'Électrodes ECG', 'Écran tactile', 'Système d\'alarme'],
+            maintenance: ['Vérifier les capteurs quotidiennement', 'Nettoyer les électrodes', 'Tester les alarmes', 'Remplacer la batterie si nécessaire'],
+            brands: ['GE Healthcare', 'Dräger'],
+            normes: ['Installation dans une unité de soins intensifs néonatals', 'Conformité aux normes ISO 80601-2-61 pour la surveillance', 'Alimentation électrique avec batterie de secours']
         }
-
-        function updateBreadcrumb(items) {
-            const breadcrumb = document.getElementById('breadcrumb');
-            if (!breadcrumb) return;
-            breadcrumb.innerHTML = '';
-            items.forEach((item, index) => {
-                const button = document.createElement('button');
-                button.textContent = item.text;
-                button.setAttribute('aria-label', item.text);
-                button.onclick = item.action;
-                breadcrumb.appendChild(button);
-                if (index < items.length - 1) {
-                    breadcrumb.appendChild(document.createTextNode(' > '));
-                }
-            });
+    ],
+    cardiologie: [
+        { 
+            name: 'Électrocardiographe', 
+            image: 'https://via.placeholder.com/400x250?text=ECG', 
+            role: 'Diagnostic des anomalies cardiaques par enregistrement électrique.',
+            principle: 'Enregistre l\'activité électrique du cœur via des électrodes placées sur la peau.',
+            components: ['Électrodes', 'Câbles de dérivation', 'Imprimante thermique', 'Écran LCD'],
+            maintenance: ['Vérifier les électrodes', 'Nettoyer les câbles', 'Tester l\'imprimante', 'Calibrer l\'appareil'],
+            brands: ['Mortara Instruments', 'Philips Healthcare'],
+            normes: ['Installation dans une salle d\'examen sans interférences électromagnétiques', 'Conformité aux normes CEI 60601-2-25 pour les ECG', 'Mise à la terre obligatoire']
+        },
+        { 
+            name: 'Échocardiographe', 
+            image: 'https://via.placeholder.com/400x250?text=Échocardiographe', 
+            role: 'Imagerie du cœur pour évaluer sa structure et sa fonction.',
+            principle: 'Utilise des ultrasons pour visualiser le cœur et les flux sanguins.',
+            components: ['Sonde à ultrasons', 'Écran 4K', 'Système Doppler', 'Logiciel d\'analyse'],
+            maintenance: ['Inspecter la sonde', 'Nettoyer l\'écran', 'Vérifier le logiciel', 'Calibrer le Doppler'],
+            brands: ['Siemens Healthineers', 'Philips Healthcare'],
+            normes: ['Installation dans une salle à température contrôlée', 'Conformité aux normes CEI 60601-2-37 pour l\'échographie', 'Protection contre les interférences électriques']
         }
-
-        function showHome() {
-            hideAllPages();
-            const homePage = document.getElementById('home-page');
-            if (homePage) {
-                homePage.classList.remove('hidden');
-                homePage.style.display = 'block';
-                homePage.style.opacity = '1';
-            } else {
-                console.error('home-page element not found');
-            }
-            updateBreadcrumb([]);
-            updateStats();
+    ],
+    imagerie_medicale: [
+        { 
+            name: 'Scanner', 
+            image: 'https://via.placeholder.com/400x250?text=Scanner', 
+            role: 'Imagerie par tomodensitométrie pour diagnostics détaillés.',
+            principle: 'Utilise des rayons X pour créer des images en coupes des organes.',
+            components: ['Tube à rayons X', 'Détecteurs', 'Table d\'examen', 'Console de traitement'],
+            maintenance: ['Vérifier le tube à rayons X', 'Nettoyer la table', 'Calibrer les détecteurs', 'Mettre à jour le logiciel'],
+            brands: ['Canon Medical', 'Siemens Healthineers'],
+            normes: ['Installation dans une salle avec blindage au plomb (épaisseur 2-3 mm)', 'Conformité aux normes CEI 60601-2-44', 'Système de refroidissement adéquat']
+        },
+        { 
+            name: 'IRM', 
+            image: 'https://via.placeholder.com/400x250?text=IRM', 
+            role: 'Imagerie par résonance magnétique pour diagnostics non invasifs.',
+            principle: 'Utilise des champs magnétiques et des ondes radio pour produire des images détaillées.',
+            components: ['Aimant principal', 'Bobines RF', 'Table d\'examen', 'Système de refroidissement'],
+            maintenance: ['Vérifier le système de refroidissement', 'Inspecter les bobines', 'Calibrer l\'aimant', 'Tester les sécurités'],
+            brands: ['Philips Healthcare', 'Siemens Healthineers'],
+            normes: ['Installation dans une cage de Faraday pour bloquer les interférences', 'Conformité aux normes CEI 60601-2-33', 'Zone de sécurité magnétique délimitée']
         }
-
-        function showServices() {
-            hideAllPages();
-            const servicesPage = document.getElementById('services-page');
-            if (servicesPage) {
-                servicesPage.classList.remove('hidden');
-                servicesPage.style.display = 'block';
-                servicesPage.style.opacity = '1';
-            } else {
-                console.error('services-page element not found');
-                return;
-            }
-            updateBreadcrumb([{ text: 'Spécialités Médicales', action: showServices }]);
+    ],
+    neurologie: [
+        { 
+            name: 'Électroencéphalographe', 
+            image: 'https://via.placeholder.com/400x250?text=EEG', 
+            role: 'Analyse de l\'activité électrique du cerveau.',
+            principle: 'Enregistre les signaux électriques via des électrodes sur le cuir chevelu.',
+            components: ['Électrodes EEG', 'Amplificateur', 'Écran d\'analyse', 'Logiciel de traitement'],
+            maintenance: ['Vérifier les électrodes', 'Nettoyer l\'amplificateur', 'Tester le logiciel', 'Calibrer l\'appareil'],
+            brands: ['Nihon Kohden', 'Philips Healthcare'],
+            normes: ['Installation dans une salle sans interférences électromagnétiques', 'Conformité aux normes CEI 60601-2-26', 'Mise à la terre obligatoire']
         }
-
-        function showDevices(service) {
-            if (!devices[service]) {
-                const devicesGrid = document.getElementById('devicesGrid');
-                if (devicesGrid) {
-                    devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour cette spécialité.</p>';
-                }
-                return;
-            }
-
-            currentService = service;
-            hideAllPages();
-            const devicesPage = document.getElementById('devices-page');
-            const devicesTitle = document.getElementById('devicesTitle');
-            const devicesGrid = document.getElementById('devicesGrid');
-            
-            if (!devicesPage || !devicesTitle || !devicesGrid) {
-                console.error('devices-page or related elements not found');
-                return;
-            }
-
-            devicesPage.classList.remove('hidden');
-            devicesPage.style.display = 'block';
-            devicesPage.style.opacity = '1';
-            devicesTitle.textContent = `Dispositifs Médicaux - ${service.charAt(0).toUpperCase() + service.slice(1)}`;
-            devicesGrid.innerHTML = '';
-            
-            const fragment = document.createDocumentFragment();
-            sortDevices(devices[service]).forEach(device => {
-                const card = createDeviceCard(device);
-                fragment.appendChild(card);
-            });
-            devicesGrid.appendChild(fragment);
-            
-            updateBreadcrumb([
-                { text: 'Spécialités Médicales', action: showServices },
-                { text: service.charAt(0).toUpperCase() + service.slice(1), action: () => showDevices(service) }
-            ]);
+    ],
+    orthopédie: [
+        { 
+            name: 'Densitomètre Osseux', 
+            image: 'https://via.placeholder.com/400x250?text=DEXA', 
+            role: 'Mesure de la densité minérale osseuse pour diagnostiquer l\'ostéoporose.',
+            principle: 'Utilise des rayons X à double énergie pour évaluer la densité osseuse.',
+            components: ['Source de rayons X', 'Détecteur DEXA', 'Table de scan', 'Logiciel d\'analyse'],
+            maintenance: ['Vérifier la source de rayons X', 'Nettoyer la table', 'Calibrer le détecteur', 'Mettre à jour le logiciel'],
+            brands: ['Hologic Inc', 'GE Healthcare'],
+            normes: ['Installation dans une salle avec blindage au plomb (1-2 mm)', 'Conformité aux normes CEI 60601-2-54', 'Ventilation adéquate']
         }
-
-        function showDeviceDetails(deviceName) {
-            const device = findDeviceByName(deviceName);
-            if (!device) {
-                console.error(`Device ${deviceName} not found`);
-                return;
-            }
-            
-            currentDevice = deviceName;
-            hideAllPages();
-            const deviceDetailsPage = document.getElementById('device-details-page');
-            const deviceDetailsContent = document.getElementById('deviceDetailsContent');
-            
-            if (!deviceDetailsPage || !deviceDetailsContent) {
-                console.error('device-details-page or related elements not found');
-                return;
-            }
-
-            deviceDetailsPage.classList.remove('hidden');
-            deviceDetailsPage.style.display = 'block';
-            deviceDetailsPage.style.opacity = '1';
-            deviceDetailsContent.innerHTML = createDeviceDetailsHTML(device);
-            
-            updateBreadcrumb([
-                { text: 'Spécialités Médicales', action: showServices },
-                { text: currentService.charAt(0).toUpperCase() + currentService.slice(1), action: () => showDevices(currentService) },
-                { text: device.name, action: () => showDeviceDetails(deviceName) }
-            ]);
+    ],
+    gastroentérologie: [
+        { 
+            name: 'Coloscope', 
+            image: 'https://via.placeholder.com/400x250?text=Coloscope', 
+            role: 'Exploration visuelle du côlon pour dépistage et diagnostic.',
+            principle: 'Utilise une caméra flexible pour visualiser l\'intérieur du côlon.',
+            components: ['Endoscope flexible', 'Caméra HD', 'Source lumineuse', 'Système de contrôle'],
+            maintenance: ['Désinfecter l\'endoscope', 'Vérifier la caméra', 'Tester la source lumineuse', 'Inspecter les canaux'],
+            brands: ['Olympus Medical', 'Fujifilm'],
+            normes: ['Installation dans une salle d\'endoscopie propre', 'Conformité aux normes ISO 13485 pour la désinfection', 'Stockage dans un espace stérile']
         }
-
-        function findDeviceByName(name) {
-            for (const service in devices) {
-                const device = devices[service].find(d => d.name === name);
-                if (device) return device;
-            }
-            return null;
+    ],
+    oncologie: [
+        { 
+            name: 'PET Scanner', 
+            image: 'https://via.placeholder.com/400x250?text=PET+Scanner', 
+            role: 'Imagerie pour le diagnostic et le suivi des cancers.',
+            principle: 'Utilise des traceurs radioactifs pour détecter les anomalies métaboliques.',
+            components: ['Détecteurs de rayonnement', 'Table d\'examen', 'Système d\'injection', 'Console d\'analyse'],
+            maintenance: ['Vérifier les détecteurs', 'Calibrer le système d\'injection', 'Nettoyer la table', 'Mettre à jour le logiciel'],
+            brands: ['Siemens Healthineers', 'GE Healthcare'],
+            normes: ['Installation dans une salle avec blindage au plomb (2-3 mm)', 'Conformité aux normes CEI 60601-2-64', 'Gestion sécurisée des traceurs radioactifs']
+        },
+        { 
+            name: 'Radiothérapie Linac', 
+            image: 'https://via.placeholder.com/400x250?text=Linac', 
+            role: 'Traitement ciblé des tumeurs par rayonnement.',
+            principle: 'Délivre des faisceaux de rayonnement précis pour détruire les cellules cancéreuses.',
+            components: ['Accélérateur linéaire', 'Collimator', 'Table de traitement', 'Système de planification'],
+            maintenance: ['Vérifier le collimator', 'Calibrer l\'accélérateur', 'Inspecter la table', 'Tester le logiciel'],
+            brands: ['Varian Medical', 'Elekta'],
+            normes: ['Installation dans un bunker avec blindage au plomb (4-6 mm)', 'Conformité aux normes CEI 60601-2-1', 'Système de refroidissement haute capacité']
         }
-
-        function createDeviceCard(device) {
-            const card = document.createElement('div');
-            card.className = 'device-card';
-            card.innerHTML = `
-                <img src="${device.image}" alt="${device.name}" class="card-image" loading="lazy">
-                <div class="card-content">
-                    <h3 class="card-title">${device.name}</h3>
-                </div>
-            `;
-            card.addEventListener('click', () => showDeviceDetails(device.name));
-            return card;
+    ],
+    sterilisation: [
+        { 
+            name: 'Autoclave', 
+            image: 'https://via.placeholder.com/400x250?text=Autoclave', 
+            role: 'Stérilisation des instruments médicaux par vapeur sous pression.',
+            principle: 'Utilise la vapeur à haute température et pression pour éliminer les micro-organismes.',
+            components: ['Chambre de stérilisation', 'Système de vapeur', 'Panneau de contrôle', 'Système de drainage'],
+            maintenance: ['Vérifier les joints d\'étanchéité', 'Nettoyer la chambre', 'Tester le système de vapeur', 'Calibrer les capteurs de pression'],
+            brands: ['Getinge', 'Steris'],
+            normes: ['Installation dans une salle dédiée avec ventilation', 'Conformité aux normes ISO 17665', 'Eau déminéralisée pour la vapeur']
+        },
+        { 
+            name: 'Stérilisateur Plasma', 
+            image: 'https://via.placeholder.com/400x250?text=Stérilisateur+Plasma', 
+            role: 'Stérilisation à basse température pour équipements sensibles.',
+            principle: 'Utilise du peroxyde d\'hydrogène sous forme de plasma pour stériliser.',
+            components: ['Chambre à vide', 'Générateur de plasma', 'Système de contrôle', 'Cartouches de peroxyde'],
+            maintenance: ['Vérifier les cartouches', 'Nettoyer la chambre', 'Tester le générateur', 'Calibrer le système'],
+            brands: ['Sterrad', 'Getinge'],
+            normes: ['Installation dans une salle propre avec alimentation stable', 'Conformité aux normes ISO 14937', 'Ventilation pour évacuation des gaz']
         }
-
-        function createDeviceDetailsHTML(device) {
-            return `
-                <h1 class="page-title">${device.name}</h1>
-                <img src="${device.image}" alt="${device.name}" class="device-image" loading="lazy">
-                
-                <div class="device-info">
-                    <h3>Rôle</h3>
-                    <p>${device.role}</p>
-                </div>
-
-                <div class="device-info">
-                    <h3>Principe de Fonctionnement</h3>
-                    <p>${device.principle}</p>
-                </div>
-
-                <div class="device-info">
-                    <h3>Composants Principaux</h3>
-                    <ul>
-                        ${device.components.map(component => `<li>${component}</li>`).join('')}
-                    </ul>
-                </div>
-
-                <div class="device-info">
-                    <h3>Checklist pour Maintenance Préventive</h3>
-                    <ul>
-                        ${device.maintenance.map(item => `<li>${item}</li>`).join('')}
-                    </ul>
-                </div>
-
-                <div class="device-info">
-                    <h3>Marques</h3>
-                    <ul>
-                        ${device.brands.map(brand => `<li>${brand}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
+    ],
+    bloc_operatoire: [
+        { 
+            name: 'Table Chirurgicale', 
+            image: 'https://via.placeholder.com/400x250?text=Table+Chirurgicale', 
+            role: 'Support ajustable pour les interventions chirurgicales.',
+            principle: 'Permet un positionnement précis du patient pendant la chirurgie.',
+            components: ['Plateau réglable', 'Système hydraulique', 'Commandes électriques', 'Accessoires de positionnement'],
+            maintenance: ['Vérifier les mécanismes hydrauliques', 'Nettoyer le plateau', 'Tester les commandes', 'Lubrifier les articulations'],
+            brands: ['Maquet', 'Steris'],
+            normes: ['Installation dans un bloc opératoire stérile', 'Conformité aux normes CEI 60601-2-46', 'Surface antistatique']
+        },
+        { 
+            name: 'Lampe Opératoire', 
+            image: 'https://via.placeholder.com/400x250?text=Lampe+Opératoire', 
+            role: 'Éclairage précis du champ opératoire.',
+            principle: 'Fournit un éclairage intense et focalisé sans ombres.',
+            components: ['Source LED', 'Bras articulé', 'Panneau de contrôle', 'Filtres anti-chaleur'],
+            maintenance: ['Vérifier les LED', 'Nettoyer les filtres', 'Tester les articulations', 'Calibrer l\'intensité lumineuse'],
+            brands: ['Dräger', 'Maquet'],
+            normes: ['Installation au plafond ou sur bras mobile', 'Conformité aux normes CEI 60601-2-41', 'Éclairage sans UV']
+        },
+        { 
+            name: 'Robot Chirurgical', 
+            image: 'https://via.placeholder.com/400x250?text=Robot+Chirurgical', 
+            role: 'Assistance robotisée pour chirurgies de précision.',
+            principle: 'Utilise des bras robotisés contrôlés par le chirurgien pour des interventions mini-invasives.',
+            components: ['Bras robotisés', 'Console de contrôle', 'Caméra 3D', 'Instruments chirurgicaux'],
+            maintenance: ['Vérifier les bras robotisés', 'Calibrer la caméra', 'Tester la console', 'Mettre à jour le logiciel'],
+            brands: ['Intuitive Surgical', 'Medtronic'],
+            normes: ['Installation dans un bloc opératoire dédié', 'Conformité aux normes CEI 60601-1', 'Formation obligatoire pour les opérateurs']
         }
-
-        function updateStats() {
-            const deviceCount = Object.values(devices).flat().length;
-            const deviceCountElement = document.getElementById('deviceCount');
-            if (deviceCountElement) {
-                deviceCountElement.textContent = deviceCount;
-            }
+    ],
+    reanimation: [
+        { 
+            name: 'Ventilateur Intensif', 
+            image: 'https://via.placeholder.com/400x250?text=Ventilateur+Intensif', 
+            role: 'Support respiratoire pour patients en soins intensifs.',
+            principle: 'Fournit une ventilation mécanique pour assister ou remplacer la respiration.',
+            components: ['Circuit respiratoire', 'Écran de contrôle', 'Capteurs de pression', 'Système d\'alarme'],
+            maintenance: ['Nettoyer le circuit', 'Vérifier les capteurs', 'Tester les alarmes', 'Calibrer le système'],
+            brands: ['Dräger', 'Medtronic'],
+            normes: ['Installation dans une unité de réanimation', 'Conformité aux normes ISO 80601-2-12', 'Alimentation avec batterie de secours']
+        },
+        { 
+            name: 'Moniteur Multiparamètres', 
+            image: 'https://via.placeholder.com/400x250?text=Moniteur+Multiparamètres', 
+            role: 'Surveillance des paramètres vitaux en temps réel.',
+            principle: 'Mesure les paramètres comme l\'ECG, la SpO2, la pression artérielle et la température.',
+            components: ['Écran tactile', 'Capteurs SpO2', 'Cuffes de pression', 'Électrodes ECG'],
+            maintenance: ['Vérifier les capteurs', 'Nettoyer l\'écran', 'Tester les alarmes', 'Calibrer les mesures'],
+            brands: ['Philips Healthcare', 'GE Healthcare'],
+            normes: ['Installation dans une unité de soins intensifs', 'Conformité aux normes CEI 60601-2-27', 'Connexion électrique stable']
+        },
+        { 
+            name: 'Pompe à Perfusion', 
+            image: 'https://via.placeholder.com/400x250?text=Pompe+à+Perfusion', 
+            role: 'Administration précise de médicaments ou de fluides.',
+            principle: 'Contrôle le débit d\'administration des fluides via un système programmable.',
+            components: ['Système de pompe', 'Écran de contrôle', 'Tubulures', 'Système d\'alarme'],
+            maintenance: ['Vérifier les tubulures', 'Nettoyer la pompe', 'Tester les alarmes', 'Calibrer le débit'],
+            brands: ['B. Braun', 'Medtronic'],
+            normes: ['Installation dans une unité de soins intensifs', 'Conformité aux normes CEI 60601-2-24', 'Stockage des tubulures stériles']
         }
+    ]
+};
 
-        function sortDevices(deviceList) {
-            const sortSelect = document.getElementById('sortSelect');
-            if (!sortSelect) return deviceList;
-            const sortValue = sortSelect.value;
+const services = {
+    pediatrie: {
+        name: 'Pédiatrie',
+        description: 'Équipements spécialisés pour le diagnostic et le traitement des enfants et nourrissons. Technologies adaptées aux besoins spécifiques de la médecine pédiatrique.',
+        examples: ['Échographes pédiatriques', 'Moniteurs néonataux', 'Ventilateurs adaptés']
+    },
+    cardiologie: {
+        name: 'Cardiologie',
+        description: 'Dispositifs avancés pour l\'exploration et le traitement des pathologies cardiovasculaires. Technologies de pointe pour un diagnostic précis.',
+        examples: ['Électrocardiographes', 'Échocardiographes', 'Holters et défibrillateurs']
+    },
+    imagerie_medicale: {
+        name: 'Imagerie Médicale',
+        description: 'Technologies d\'imagerie médicale pour un diagnostic précis et non invasif. Solutions complètes d\'imagerie diagnostique.',
+        examples: ['Scanners haute résolution', 'IRM 3 Tesla', 'Mammographie numérique']
+    },
+    neurologie: {
+        name: 'Neurologie',
+        description: 'Équipements spécialisés pour l\'étude du système nerveux central et périphérique. Diagnostic neurologique avancé.',
+        examples: ['Électroencéphalographes', 'Scanner cérébral', 'Doppler transcrânien']
+    },
+    orthopédie: {
+        name: 'Orthopédie',
+        description: 'Dispositifs pour le diagnostic et le traitement des troubles musculo-squelettiques. Imagerie et thérapie osseuse.',
+        examples: ['Radiographie osseuse', 'Arthroscopes', 'Densitométrie osseuse']
+    },
+    gastroentérologie: {
+        name: 'Gastro-entérologie',
+        description: 'Équipements pour l\'exploration du système digestif et des organes associés. Endoscopie et imagerie digestive.',
+        examples: ['Endoscopie avancée', 'Coloscopie haute définition', 'pH-métrie 24h']
+    },
+    oncologie: {
+        name: 'Oncologie',
+        description: 'Technologies pour le diagnostic et le traitement des cancers. Solutions avancées pour l\'imagerie et la thérapie oncologique.',
+        examples: ['PET Scanner', 'Radiothérapie Linac']
+    },
+    sterilisation: {
+        name: 'Stérilisation',
+        description: 'Équipements pour la stérilisation des instruments et matériels médicaux. Solutions pour garantir un environnement stérile.',
+        examples: ['Autoclaves', 'Stérilisateurs plasma']
+    },
+    bloc_operatoire: {
+        name: 'Bloc Opératoire',
+        description: 'Équipements pour les interventions chirurgicales. Technologies pour des opérations sécurisées et précises.',
+        examples: ['Tables chirurgicales', 'Lampes opératoires', 'Robots chirurgicaux']
+    },
+    reanimation: {
+        name: 'Réanimation',
+        description: 'Équipements pour les soins intensifs et la réanimation. Technologies pour la prise en charge des patients critiques.',
+        examples: ['Ventilateurs intensifs', 'Moniteurs multiparamètres', 'Pompes à perfusion']
+    }
+};
 
-            return [...deviceList].sort((a, b) => {
-                if (sortValue === 'name-asc') {
-                    return a.name.localeCompare(b.name);
-                } else if (sortValue === 'name-desc') {
-                    return b.name.localeCompare(a.name);
-                }
-                return 0;
-            });
+function hideAllPages() {
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.add('hidden');
+        section.style.display = 'none';
+    });
+}
+
+function updateBreadcrumb(items) {
+    const breadcrumb = document.getElementById('breadcrumb');
+    if (!breadcrumb) return;
+    breadcrumb.innerHTML = '';
+    items.forEach((item, index) => {
+        const button = document.createElement('button');
+        button.textContent = item.text;
+        button.setAttribute('aria-label', item.text);
+        button.onclick = item.action;
+        breadcrumb.appendChild(button);
+        if (index < items.length - 1) {
+            breadcrumb.appendChild(document.createTextNode(' > '));
         }
+    });
+}
 
-        function addChatMessage(message, isUser, suggestions = []) {
-            const chatbotBody = document.getElementById('chatbotBody');
-            if (!chatbotBody) return;
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
-            messageDiv.innerHTML = `<p>${message}</p>`;
-            if (!isUser && suggestions.length > 0) {
-                const suggestionsDiv = document.createElement('div');
-                suggestionsDiv.className = 'chatbot-suggestions';
-                suggestions.forEach(suggestion => {
-                    const button = document.createElement('button');
-                    button.className = 'suggestion-btn';
-                    button.textContent = suggestion.text;
-                    button.onclick = () => {
-                        document.getElementById('chatbotInput').value = suggestion.query;
-                        document.getElementById('chatbotSend').click();
-                    };
-                    suggestionsDiv.appendChild(button);
-                });
-                messageDiv.appendChild(suggestionsDiv);
-            }
-            chatbotBody.appendChild(messageDiv);
-            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+function showHome() {
+    hideAllPages();
+    const homePage = document.getElementById('home-page');
+    if (homePage) {
+        homePage.classList.remove('hidden');
+        homePage.style.display = 'block';
+        homePage.style.opacity = '1';
+    } else {
+        console.error('home-page element not found');
+    }
+    updateBreadcrumb([]);
+    updateStats();
+}
+
+function showServices() {
+    hideAllPages();
+    const servicesPage = document.getElementById('services-page');
+    if (servicesPage) {
+        servicesPage.classList.remove('hidden');
+        servicesPage.style.display = 'block';
+        servicesPage.style.opacity = '1';
+    } else {
+        console.error('services-page element not found');
+        return;
+    }
+    updateBreadcrumb([{ text: 'Spécialités Médicales', action: showServices }]);
+}
+
+function showDevices(service) {
+    if (!devices[service]) {
+        const devicesGrid = document.getElementById('devicesGrid');
+        if (devicesGrid) {
+            devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour cette spécialité.</p>';
         }
+        return;
+    }
 
-        function showTypingAnimation(show) {
-            const typing = document.getElementById('chatbotTyping');
-            if (typing) {
-                typing.style.display = show ? 'block' : 'none';
-            }
+    currentService = service;
+    hideAllPages();
+    const devicesPage = document.getElementById('devices-page');
+    const devicesTitle = document.getElementById('devicesTitle');
+    const devicesGrid = document.getElementById('devicesGrid');
+    
+    if (!devicesPage || !devicesTitle || !devicesGrid) {
+        console.error('devices-page or related elements not found');
+        return;
+    }
+
+    devicesPage.classList.remove('hidden');
+    devicesPage.style.display = 'block';
+    devicesPage.style.opacity = '1';
+    devicesTitle.textContent = `Dispositifs Médicaux - ${services[service].name}`;
+    devicesGrid.innerHTML = '';
+    
+    const fragment = document.createDocumentFragment();
+    sortDevices(devices[service]).forEach(device => {
+        const card = createDeviceCard(device);
+        fragment.appendChild(card);
+    });
+    devicesGrid.appendChild(fragment);
+    
+    updateBreadcrumb([
+        { text: 'Spécialités Médicales', action: showServices },
+        { text: services[service].name, action: () => showDevices(service) }
+    ]);
+}
+
+function showDeviceDetails(deviceName) {
+    const device = findDeviceByName(deviceName);
+    if (!device) {
+        console.error(`Device ${deviceName} not found`);
+        return;
+    }
+    
+    currentDevice = deviceName;
+    hideAllPages();
+    const deviceDetailsPage = document.getElementById('device-details-page');
+    const deviceDetailsContent = document.getElementById('deviceDetailsContent');
+    
+    if (!deviceDetailsPage || !deviceDetailsContent) {
+        console.error('device-details-page or related elements not found');
+        return;
+    }
+
+    deviceDetailsPage.classList.remove('hidden');
+    deviceDetailsPage.style.display = 'block';
+    deviceDetailsPage.style.opacity = '1';
+    deviceDetailsContent.innerHTML = createDeviceDetailsHTML(device);
+    
+    updateBreadcrumb([
+        { text: 'Spécialités Médicales', action: showServices },
+        { text: services[currentService].name, action: () => showDevices(currentService) },
+        { text: device.name, action: () => showDeviceDetails(deviceName) }
+    ]);
+}
+
+function findDeviceByName(name) {
+    for (const service in devices) {
+        const device = devices[service].find(d => d.name.toLowerCase() === name.toLowerCase());
+        if (device) {
+            currentService = service; // Update currentService when device is found
+            return device;
         }
+    }
+    return null;
+}
 
-        function processChatbotQuery(query) {
-            const normalizedQuery = query.toLowerCase().trim();
-            chatHistory.push({ query: normalizedQuery, timestamp: Date.now() });
-            let response = 'Désolé, je n\'ai pas compris votre question. Pouvez-vous reformuler ou demander quelque chose sur les dispositifs, les marques ou les spécialités médicales ?';
-            let suggestions = [];
+function createDeviceCard(device) {
+    const card = document.createElement('div');
+    card.className = 'device-card';
+    card.innerHTML = `
+        <img src="${device.image}" alt="${device.name}" class="card-image" loading="lazy">
+        <div class="card-content">
+            <h3 class="card-title">${device.name}</h3>
+        </div>
+    `;
+    card.addEventListener('click', () => showDeviceDetails(device.name));
+    return card;
+}
 
-            // Synonym mappings
-            const synonyms = {
-                'scanner': ['scanner', 'tomodensitomètre', 'ct'],
-                'irm': ['irm', 'résonance magnétique', 'mri'],
-                'ecg': ['électrocardiographe', 'ecg'],
-                'eeg': ['électroencéphalographe', 'eeg'],
-                'défib': ['défibrillateur', 'defibrillator'],
-                'ventilateur': ['ventilateur', 'respirateur']
+function createDeviceDetailsHTML(device) {
+    return `
+        <h1 class="page-title">${device.name}</h1>
+        <img src="${device.image}" alt="${device.name}" class="device-image" loading="lazy">
+        
+        <div class="device-info">
+            <h3>Rôle</h3>
+            <p>${device.role}</p>
+        </div>
+
+        <div class="device-info">
+            <h3>Principe de Fonctionnement</h3>
+            <p>${device.principle}</p>
+        </div>
+
+        <div class="device-info">
+            <h3>Composants Principaux</h3>
+            <ul>
+                ${device.components.map(component => `<li>${component}</li>`).join('')}
+            </ul>
+        </div>
+
+        <div class="device-info">
+            <h3>Checklist pour Maintenance Préventive</h3>
+            <ul>
+                ${device.maintenance.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+        </div>
+
+        <div class="device-info">
+            <h3>Marques</h3>
+            <ul>
+                ${device.brands.map(brand => `<li>${brand}</li>`).join('')}
+            </ul>
+        </div>
+
+        <div class="device-info">
+            <h3>Normes</h3>
+            <ul>
+                ${device.normes.map(norm => `<li>${norm}</li>`).join('')}
+            </ul>
+        </div>
+    `;
+}
+
+function updateStats() {
+    const deviceCount = Object.values(devices).flat().length;
+    const deviceCountElement = document.getElementById('deviceCount');
+    if (deviceCountElement) {
+        deviceCountElement.textContent = deviceCount;
+    }
+}
+
+function sortDevices(deviceList) {
+    const sortSelect = document.getElementById('sortSelect');
+    if (!sortSelect) return deviceList;
+    const sortValue = sortSelect.value;
+
+    return [...deviceList].sort((a, b) => {
+        if (sortValue === 'name-asc') {
+            return a.name.localeCompare(b.name);
+        } else if (sortValue === 'name-desc') {
+            return b.name.localeCompare(a.name);
+        }
+        return 0;
+    });
+}
+
+function addChatMessage(message, isUser, suggestions = []) {
+    const chatbotBody = document.getElementById('chatbotBody');
+    if (!chatbotBody) return;
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
+    messageDiv.innerHTML = `<p>${message}</p>`;
+    if (!isUser && suggestions.length > 0) {
+        const suggestionsDiv = document.createElement('div');
+        suggestionsDiv.className = 'chatbot-suggestions';
+        suggestions.forEach(suggestion => {
+            const button = document.createElement('button');
+            button.className = 'suggestion-btn';
+            button.textContent = suggestion.text;
+            button.onclick = () => {
+                document.getElementById('chatbotInput').value = suggestion.query;
+                document.getElementById('chatbotSend').click();
             };
+            suggestionsDiv.appendChild(button);
+        });
+        messageDiv.appendChild(suggestionsDiv);
+    }
+    chatbotBody.appendChild(messageDiv);
+    chatbotBody.scrollTop = chatbotBody.scrollHeight;
+}
 
-            // Find matching device or service
-            let contextDevice = chatHistory.length > 1 ? findDeviceByName(chatHistory[chatHistory.length - 2].query) : null;
-            let matchedDevice = null;
-            let matchedService = null;
+function showTypingAnimation(show) {
+    const typing = document.getElementById('chatbotTyping');
+    if (typing) {
+        typing.style.display = show ? 'block' : 'none';
+    }
+}
 
-            for (const serviceKey in services) {
-                const service = services[serviceKey];
-                if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
-                    matchedService = serviceKey;
-                    response = `${service.name} : ${service.description} Exemples de dispositifs : ${service.examples.join(', ')}.`;
+function processChatbotQuery(query) {
+    const normalizedQuery = query.toLowerCase().trim();
+    chatHistory.push({ query: normalizedQuery, timestamp: Date.now() });
+    let response = 'Désolé, je n\'ai pas compris votre question. Pouvez-vous reformuler ou demander quelque chose sur les dispositifs, les marques ou les spécialités médicales ?';
+    let suggestions = [];
+
+    // Synonym mappings
+    const synonyms = {
+        'scanner': ['scanner', 'tomodensitomètre', 'ct'],
+        'irm': ['irm', 'résonance magnétique', 'mri'],
+        'ecg': ['électrocardiographe', 'ecg'],
+        'eeg': ['électroencéphalographe', 'eeg'],
+        'ventilateur': ['ventilateur', 'respirateur'],
+        'autoclave': ['autoclave', 'stérilisateur vapeur'],
+        'robot chirurgical': ['robot chirurgical', 'robot chirurgie']
+    };
+
+    // Find matching device or service
+    let contextDevice = chatHistory.length > 1 ? findDeviceByName(chatHistory[chatHistory.length - 2].query) : null;
+    let matchedDevice = null;
+    let matchedService = null;
+
+    for (const serviceKey in services) {
+        const service = services[serviceKey];
+        if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
+            matchedService = serviceKey;
+            response = `${service.name} : ${service.description} Exemples de dispositifs : ${service.examples.join(', ')}.`;
+            suggestions = [
+                { text: 'Voir les dispositifs', query: `Dispositifs de ${service.name}` },
+                { text: 'En savoir plus', query: `Détails sur ${service.name}` }
+            ];
+            break;
+        }
+    }
+
+    for (const serviceKey in devices) {
+        const deviceList = devices[serviceKey];
+        for (const device of deviceList) {
+            const deviceSynonyms = Object.keys(synonyms).find(key => synonyms[key].includes(device.name.toLowerCase())) || device.name.toLowerCase();
+            if (normalizedQuery.includes(device.name.toLowerCase()) || (deviceSynonyms && normalizedQuery.includes(deviceSynonyms))) {
+                matchedDevice = device;
+                response = `${device.name} (${services[serviceKey].name}) : \n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}\n- Normes : ${device.normes.join(', ')}`;
+                suggestions = [
+                    { text: 'Composants', query: `Composants de ${device.name}` },
+                    { text: 'Maintenance', query: `Maintenance de ${device.name}` },
+                    { text: 'Marques', query: `Marques de ${device.name}` },
+                    { text: 'Normes', query: `Normes de ${device.name}` }
+                ];
+                break;
+            }
+            if (normalizedQuery.includes('rôle') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                matchedDevice = device;
+                response = `Le rôle de ${device.name} est : ${device.role}`;
+                suggestions = [{ text: 'Principe', query: `Principe de ${device.name}` }];
+                break;
+            }
+            if (normalizedQuery.includes('principe') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                matchedDevice = device;
+                response = `Le principe de fonctionnement de ${device.name} est : ${device.principle}`;
+                suggestions = [{ text: 'Composants', query: `Composants de ${device.name}` }];
+                break;
+            }
+            if (normalizedQuery.includes('composants') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                matchedDevice = device;
+                response = `Les composants principaux de ${device.name} sont : ${device.components.join(', ')}`;
+                suggestions = [{ text: 'Maintenance', query: `Maintenance de ${device.name}` }];
+                break;
+            }
+            if (normalizedQuery.includes('maintenance') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                matchedDevice = device;
+                response = `La checklist pour la maintenance préventive de ${device.name} est : ${device.maintenance.join(', ')}`;
+                suggestions = [{ text: 'Marques', query: `Marques de ${device.name}` }];
+                break;
+            }
+            if (normalizedQuery.includes('marques') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                matchedDevice = device;
+                response = `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
+                suggestions = [{ text: 'Normes', query: `Normes de ${device.name}` }];
+                break;
+            }
+            if (normalizedQuery.includes('normes') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                matchedDevice = device;
+                response = `Les normes pour ${device.name} sont : ${device.normes.join(', ')}`;
+                suggestions = [{ text: 'Rôle', query: `Rôle de ${device.name}` }];
+                break;
+            }
+        }
+        if (matchedDevice) break;
+    }
+
+    // Handle comparison queries
+    if (normalizedQuery.includes('comparer') || normalizedQuery.includes('compare')) {
+        const deviceNames = Object.values(devices).flat().map(d => d.name.toLowerCase());
+        const foundDevices = deviceNames.filter(name => normalizedQuery.includes(name));
+        if (foundDevices.length >= 2) {
+            const device1 = findDeviceByName(foundDevices[0]);
+            const device2 = findDeviceByName(foundDevices[1]);
+            if (device1 && device2) {
+                response = `Comparaison entre ${device1.name} et ${device2.name} :\n` +
+                    `- **Rôle** : ${device1.name} : ${device1.role} | ${device2.name} : ${device2.role}\n` +
+                    `- **Principe** : ${device1.name} : ${device1.principle} | ${device2.name} : ${device2.principle}\n` +
+                    `- **Marques** : ${device1.name} : ${device1.brands.join(', ')} | ${device2.name} : ${device2.brands.join(', ')}\n` +
+                    `- **Normes** : ${device1.name} : ${device1.normes.join(', ')} | ${device2.name} : ${device2.normes.join(', ')}`;
+                suggestions = [
+                    { text: `Composants de ${device1.name}`, query: `Composants de ${device1.name}` },
+                    { text: `Composants de ${device2.name}`, query: `Composants de ${device2.name}` }
+                ];
+            }
+        }
+    }
+
+    // Handle English queries
+    if (/^(what is|what's|tell me about)/i.test(normalizedQuery)) {
+        for (const serviceKey in devices) {
+            const deviceList = devices[serviceKey];
+            for (const device of deviceList) {
+                if (normalizedQuery.includes(device.name.toLowerCase()) || (synonyms[device.name.toLowerCase()] && synonyms[device.name.toLowerCase()].some(s => normalizedQuery.includes(s)))) {
+                    matchedDevice = device;
+                    response = `${device.name} (${services[serviceKey].name}) : \n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}\n- Normes : ${device.normes.join(', ')}`;
                     suggestions = [
-                        { text: 'Voir les dispositifs', query: `Dispositifs de ${service.name}` },
-                        { text: 'En savoir plus', query: `Détails sur ${service.name}` }
+                        { text: 'Composants', query: `Composants de ${device.name}` },
+                        { text: 'Maintenance', query: `Maintenance de ${device.name}` },
+                        { text: 'Marques', query: `Marques de ${device.name}` },
+                        { text: 'Normes', query: `Normes de ${device.name}` }
                     ];
                     break;
                 }
             }
-
-            for (const serviceKey in devices) {
-                const deviceList = devices[serviceKey];
-                for (const device of deviceList) {
-                    const deviceSynonyms = Object.keys(synonyms).find(key => synonyms[key].includes(device.name.toLowerCase())) || device.name.toLowerCase();
-                    if (normalizedQuery.includes(device.name.toLowerCase()) || (deviceSynonyms && normalizedQuery.includes(deviceSynonyms))) {
-                        matchedDevice = device;
-                        response = `${device.name} (${serviceKey.charAt(0).toUpperCase() + serviceKey.slice(1)}) : \n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}`;
-                        suggestions = [
-                            { text: 'Composants', query: `Composants de ${device.name}` },
-                            { text: 'Maintenance', query: `Maintenance de ${device.name}` },
-                            { text: 'Marques', query: `Marques de ${device.name}` }
-                        ];
-                        break;
-                    }
-                    if (normalizedQuery.includes('rôle') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                        matchedDevice = device;
-                        response = `Le rôle de ${device.name} est : ${device.role}`;
-                        suggestions = [{ text: 'Principe', query: `Principe de ${device.name}` }];
-                        break;
-                    }
-                    if (normalizedQuery.includes('principe') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                        matchedDevice = device;
-                        response = `Le principe de fonctionnement de ${device.name} est : ${device.principle}`;
-                        suggestions = [{ text: 'Composants', query: `Composants de ${device.name}` }];
-                        break;
-                    }
-                    if (normalizedQuery.includes('composants') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                        matchedDevice = device;
-                        response = `Les composants principaux de ${device.name} sont : ${device.components.join(', ')}`;
-                        suggestions = [{ text: 'Maintenance', query: `Maintenance de ${device.name}` }];
-                        break;
-                    }
-                    if (normalizedQuery.includes('maintenance') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                        matchedDevice = device;
-                        response = `La checklist pour la maintenance préventive de ${device.name} est : ${device.maintenance.join(', ')}`;
-                        suggestions = [{ text: 'Marques', query: `Marques de ${device.name}` }];
-                        break;
-                    }
-                    if (normalizedQuery.includes('marques') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                        matchedDevice = device;
-                        response = `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
-                        suggestions = [{ text: 'Rôle', query: `Rôle de ${device.name}` }];
-                        break;
-                    }
-                }
-                if (matchedDevice) break;
-            }
-
-            // Handle comparison queries
-            if (normalizedQuery.includes('comparer') || normalizedQuery.includes('compare')) {
-                const deviceNames = Object.values(devices).flat().map(d => d.name.toLowerCase());
-                const foundDevices = deviceNames.filter(name => normalizedQuery.includes(name));
-                if (foundDevices.length >= 2) {
-                    const device1 = findDeviceByName(foundDevices[0]);
-                    const device2 = findDeviceByName(foundDevices[1]);
-                    if (device1 && device2) {
-                        response = `Comparaison entre ${device1.name} et ${device2.name} :\n` +
-                            `- **Rôle** : ${device1.name} : ${device1.role} | ${device2.name} : ${device2.role}\n` +
-                            `- **Principe** : ${device1.name} : ${device1.principle} | ${device2.name} : ${device2.principle}\n` +
-                            `- **Marques** : ${device1.name} : ${device1.brands.join(', ')} | ${device2.name} : ${device2.brands.join(', ')}`;
-                        suggestions = [
-                            { text: `Composants de ${device1.name}`, query: `Composants de ${device1.name}` },
-                            { text: `Composants de ${device2.name}`, query: `Composants de ${device2.name}` }
-                        ];
-                    }
-                }
-            }
-
-            // Handle English queries
-            if (/^(what is|what's|tell me about)/i.test(normalizedQuery)) {
-                for (const serviceKey in devices) {
-                    const deviceList = devices[serviceKey];
-                    for (const device of deviceList) {
-                        if (normalizedQuery.includes(device.name.toLowerCase()) || (synonyms[device.name.toLowerCase()] && synonyms[device.name.toLowerCase()].some(s => normalizedQuery.includes(s)))) {
-                            matchedDevice = device;
-                            response = `${device.name} (${serviceKey.charAt(0).toUpperCase() + serviceKey.slice(1)}) : \n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}`;
-                            suggestions = [
-                                { text: 'Composants', query: `Composants de ${device.name}` },
-                                { text: 'Maintenance', query: `Maintenance de ${device.name}` },
-                                { text: 'Marques', query: `Marques de ${device.name}` }
-                            ];
-                            break;
-                        }
-                    }
-                    if (matchedDevice) break;
-                }
-            }
-
-            const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
-            for (const brand of allBrands) {
-                if (normalizedQuery.includes(brand.toLowerCase())) {
-                    const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
-                    const deviceNames = devicesWithBrand.map(device => device.name);
-                    response = `La marque ${brand} est associée aux dispositifs suivants : ${deviceNames.join(', ')}.`;
-                    suggestions = deviceNames.slice(0, 2).map(name => ({ text: `Détails sur ${name}`, query: name }));
-                    break;
-                }
-            }
-
-            if (normalizedQuery.includes('spécialités') || normalizedQuery.includes('specialties')) {
-                response = `MediTech propose des équipements pour les spécialités suivantes : ${Object.values(services).map(s => s.name).join(', ')}.`;
-                suggestions = Object.keys(services).slice(0, 3).map(key => ({ text: services[key].name, query: services[key].name }));
-            } else if (normalizedQuery.includes('dispositifs') || normalizedQuery.includes('devices')) {
-                const allDevices = Object.values(devices).flat().map(d => d.name);
-                response = `MediTech propose les dispositifs suivants : ${allDevices.join(', ')}.`;
-                suggestions = allDevices.slice(0, 3).map(name => ({ text: `Détails sur ${name}`, query: name }));
-            } else if (normalizedQuery.includes('marques') || normalizedQuery.includes('brands')) {
-                response = `Les marques disponibles sur MediTech incluent : ${allBrands.join(', ')}.`;
-                suggestions = allBrands.slice(0, 3).map(brand => ({ text: `Dispositifs de ${brand}`, query: brand }));
-            }
-
-            return { response, suggestions };
+            if (matchedDevice) break;
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const exploreServicesBtn = document.getElementById('exploreServicesBtn');
-            if (exploreServicesBtn) {
-                exploreServicesBtn.addEventListener('click', showServices);
+    const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
+    for (const brand of allBrands) {
+        if (normalizedQuery.includes(brand.toLowerCase())) {
+            const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
+            const deviceNames = devicesWithBrand.map(device => device.name);
+            response = `La marque ${brand} est associée aux dispositifs suivants : ${deviceNames.join(', ')}.`;
+            suggestions = deviceNames.slice(0, 2).map(name => ({ text: `Détails sur ${name}`, query: name }));
+            break;
+        }
+    }
+
+    if (normalizedQuery.includes('spécialités') || normalizedQuery.includes('specialties')) {
+        response = `MediTech propose des équipements pour les spécialités suivantes : ${Object.values(services).map(s => s.name).join(', ')}.`;
+        suggestions = Object.keys(services).slice(0, 3).map(key => ({ text: services[key].name, query: services[key].name }));
+    } else if (normalizedQuery.includes('dispositifs') || normalizedQuery.includes('devices')) {
+        const allDevices = Object.values(devices).flat().map(d => d.name);
+        response = `MediTech propose les dispositifs suivants : ${allDevices.join(', ')}.`;
+        suggestions = allDevices.slice(0, 3).map(name => ({ text: `Détails sur ${name}`, query: name }));
+    } else if (normalizedQuery.includes('marques') || normalizedQuery.includes('brands')) {
+        response = `Les marques disponibles sur MediTech incluent : ${allBrands.join(', ')}.`;
+        suggestions = allBrands.slice(0, 3).map(brand => ({ text: `Dispositifs de ${brand}`, query: brand }));
+    }
+
+    return { response, suggestions };
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const exploreServicesBtn = document.getElementById('exploreServicesBtn');
+    if (exploreServicesBtn) {
+        exploreServicesBtn.addEventListener('click', showServices);
+    }
+
+    const homeBackBtn = document.getElementById('homeBackBtn');
+    if (homeBackBtn) {
+        homeBackBtn.addEventListener('click', showHome);
+    }
+
+    const servicesBackBtn = document.getElementById('servicesBackBtn');
+    if (servicesBackBtn) {
+        servicesBackBtn.addEventListener('click', showServices);
+    }
+
+    const devicesBackBtn = document.getElementById('devicesBackBtn');
+    if (devicesBackBtn) {
+        devicesBackBtn.addEventListener('click', () => showDevices(currentService));
+    }
+
+    document.querySelectorAll('.service-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const service = card.getAttribute('data-service');
+            if (service) {
+                showDevices(service);
             }
-
-            const homeBackBtn = document.getElementById('homeBackBtn');
-            if (homeBackBtn) {
-                homeBackBtn.addEventListener('click', showHome);
-            }
-
-            const servicesBackBtn = document.getElementById('servicesBackBtn');
-            if (servicesBackBtn) {
-                servicesBackBtn.addEventListener('click', showServices);
-            }
-
-            const devicesBackBtn = document.getElementById('devicesBackBtn');
-            if (devicesBackBtn) {
-                devicesBackBtn.addEventListener('click', () => showDevices(currentService));
-            }
-
-            document.querySelectorAll('.service-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const service = card.getAttribute('data-service');
-                    if (service) {
-                        showDevices(service);
-                    }
-                });
-            });
-
-            const searchBox = document.getElementById('searchBox');
-            if (searchBox) {
-                searchBox.addEventListener('input', (e) => {
-                    const searchTerm = e.target.value.toLowerCase();
-                    const devicesGrid = document.getElementById('devicesGrid');
-                    if (!devicesGrid) return;
-                    devicesGrid.innerHTML = '';
-
-                    if (currentService && devices[currentService]) {
-                        const filteredDevices = devices[currentService].filter(device =>
-                            device.name.toLowerCase().includes(searchTerm) ||
-                            device.role.toLowerCase().includes(searchTerm)
-                        );
-                        if (filteredDevices.length > 0) {
-                            const fragment = document.createDocumentFragment();
-                            sortDevices(filteredDevices).forEach(device => {
-                                const card = createDeviceCard(device);
-                                fragment.appendChild(card);
-                            });
-                            devicesGrid.appendChild(fragment);
-                        } else {
-                            devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour cette spécialité.</p>';
-                        }
-                    }
-                });
-            }
-
-            const sortSelect = document.getElementById('sortSelect');
-            if (sortSelect) {
-                sortSelect.addEventListener('change', () => {
-                    if (currentService) {
-                        showDevices(currentService);
-                    }
-                });
-            }
-
-            const chatbotToggle = document.getElementById('chatbotToggle');
-            const chatbotContainer = document.getElementById('chatbotContainer');
-            const chatbotClose = document.getElementById('chatbotClose');
-            const chatbotSend = document.getElementById('chatbotSend');
-            const chatbotInput = document.getElementById('chatbotInput');
-
-            if (chatbotToggle && chatbotContainer && chatbotClose && chatbotSend && chatbotInput) {
-                chatbotToggle.addEventListener('click', () => {
-                    chatbotContainer.style.display = chatbotContainer.style.display === 'block' ? 'none' : 'block';
-                    if (chatbotContainer.style.display === 'block') {
-                        chatbotInput.focus();
-                        chatHistory = [];
-                        addChatMessage('Bonjour ! Je suis MediTech Assistant. Posez-moi une question sur les dispositifs, les marques ou les spécialités médicales.', false, [
-                            { text: 'Liste des spécialités', query: 'Spécialités' },
-                            { text: 'Liste des dispositifs', query: 'Dispositifs' }
-                        ]);
-                    }
-                });
-
-                chatbotClose.addEventListener('click', () => {
-                    chatbotContainer.style.display = 'none';
-                    chatHistory = [];
-                });
-
-                chatbotSend.addEventListener('click', () => {
-                    const query = chatbotInput.value.trim();
-                    if (query) {
-                        addChatMessage(query, true);
-                        showTypingAnimation(true);
-                        setTimeout(() => {
-                            const { response, suggestions } = processChatbotQuery(query);
-                            showTypingAnimation(false);
-                            addChatMessage(response, false, suggestions);
-                            chatbotInput.value = '';
-                        }, 1000);
-                    }
-                });
-
-                chatbotInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && chatbotInput.value.trim()) {
-                        chatbotSend.click();
-                    }
-                });
-            }
-
-            showHome();
         });
-    </script>
-</body>
-</html>
+    });
+
+    const searchBox = document.getElementById('searchBox');
+    if (searchBox) {
+        searchBox.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            const devicesGrid = document.getElementById('devicesGrid');
+            if (!devicesGrid) return;
+            devicesGrid.innerHTML = '';
+
+            const allDevices = Object.entries(devices).flatMap(([service, deviceList]) =>
+                deviceList.map(device => ({ ...device, service }))
+            );
+            const filteredDevices = allDevices.filter(device =>
+                device.name.toLowerCase().includes(searchTerm) ||
+                device.role.toLowerCase().includes(searchTerm)
+            );
+
+            if (filteredDevices.length > 0) {
+                const fragment = document.createDocumentFragment();
+                sortDevices(filteredDevices).forEach(device => {
+                    const card = createDeviceCard(device);
+                    fragment.appendChild(card);
+                });
+                devicesGrid.appendChild(fragment);
+                hideAllPages();
+                const devicesPage = document.getElementById('devices-page');
+                if (devicesPage) {
+                    devicesPage.classList.remove('hidden');
+                    devicesPage.style.display = 'block';
+                    devicesPage.style.opacity = '1';
+                    document.getElementById('devicesTitle').textContent = 'Résultats de la recherche';
+                    updateBreadcrumb([{ text: 'Recherche', action: () => searchBox.dispatchEvent(new Event('input')) }]);
+                }
+            } else {
+                devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé.</p>';
+                hideAllPages();
+                const devicesPage = document.getElementById('devices-page');
+                if (devicesPage) {
+                    devicesPage.classList.remove('hidden');
+                    devicesPage.style.display = 'block';
+                    devicesPage.style.opacity = '1';
+                    document.getElementById('devicesTitle').textContent = 'Résultats de la recherche';
+                    updateBreadcrumb([{ text: 'Recherche', action: () => searchBox.dispatchEvent(new Event('input')) }]);
+                }
+            }
+        });
+    }
+
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+            if (currentService) {
+                showDevices(currentService);
+            } else {
+                searchBox.dispatchEvent(new Event('input'));
+            }
+        });
+    }
+
+    const chatbotToggle = document.getElementById('chatbotToggle');
+    const chatbotContainer = document.getElementById('chatbotContainer');
+    const chatbotClose = document.getElementById('chatbotClose');
+    const chatbotSend = document.getElementById('chatbotSend');
+    const chatbotInput = document.getElementById('chatbotInput');
+
+    if (chatbotToggle && chatbotContainer && chatbotClose && chatbotSend && chatbotInput) {
+        chatbotToggle.addEventListener('click', () => {
+            chatbotContainer.style.display = chatbotContainer.style.display === 'block' ? 'none' : 'block';
+            if (chatbotContainer.style.display === 'block') {
+                chatbotInput.focus();
+                chatHistory = [];
+                addChatMessage('Bonjour ! Je suis MediTech Assistant. Posez-moi une question sur les dispositifs, les marques ou les spécialités médicales.', false, [
+                    { text: 'Liste des spécialités', query: 'Spécialités' },
+                    { text: 'Liste des dispositifs', query: 'Dispositifs' }
+                ]);
+            }
+        });
+
+        chatbotClose.addEventListener('click', () => {
+            chatbotContainer.style.display = 'none';
+            chatHistory = [];
+            const chatbotBody = document.getElementById('chatbotBody');
+            if (chatbotBody) {
+                chatbotBody.innerHTML = '';
+                addChatMessage('Bonjour ! Je suis MediTech Assistant. Posez-moi une question sur les dispositifs, les marques ou les spécialités médicales.', false, [
+                    { text: 'Liste des spécialités', query: 'Spécialités' },
+                    { text: 'Liste des dispositifs', query: 'Dispositifs' }
+                ]);
+            }
+        });
+
+        chatbotSend.addEventListener('click', () => {
+            const query = chatbotInput.value.trim();
+            if (query) {
+                addChatMessage(query, true);
+                chatbotInput.value = '';
+                showTypingAnimation(true);
+                setTimeout(() => {
+                    const { response, suggestions } = processChatbotQuery(query);
+                    showTypingAnimation(false);
+                    addChatMessage(response, false, suggestions);
+                }, 1000); // Simulate processing delay
+            }
+        });
+
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && chatbotInput.value.trim()) {
+                chatbotSend.click();
+            }
+        });
+    }
+
+    // Handle image errors
+    document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('error', () => {
+            img.src = 'https://via.placeholder.com/400x250?text=Image+Indisponible';
+            img.alt = 'Image indisponible';
+        });
+    });
+
+    // Initialize the home page
+    showHome();
+});
