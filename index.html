@@ -1130,6 +1130,7 @@ function hideAllPages() {
     });
 }
 
+// Update breadcrumb navigation
 function updateBreadcrumb(items) {
     const breadcrumb = document.getElementById('breadcrumb');
     if (!breadcrumb) return;
@@ -1146,6 +1147,7 @@ function updateBreadcrumb(items) {
     });
 }
 
+// Show home page
 function showHome() {
     hideAllPages();
     const homePage = document.getElementById('home-page');
@@ -1160,6 +1162,7 @@ function showHome() {
     updateStats();
 }
 
+// Show services page
 function showServices() {
     hideAllPages();
     const servicesPage = document.getElementById('services-page');
@@ -1174,6 +1177,7 @@ function showServices() {
     updateBreadcrumb([{ text: 'Spécialités Médicales', action: showServices }]);
 }
 
+// Show devices for a specific service
 function showDevices(service) {
     if (!devices[service]) {
         const devicesGrid = document.getElementById('devicesGrid');
@@ -1213,6 +1217,7 @@ function showDevices(service) {
     ]);
 }
 
+// Show device details
 function showDeviceDetails(deviceName) {
     const device = findDeviceByName(deviceName);
     if (!device) {
@@ -1242,6 +1247,7 @@ function showDeviceDetails(deviceName) {
     ]);
 }
 
+// Find device by name
 function findDeviceByName(name) {
     for (const service in devices) {
         const device = devices[service].find(d => d.name.toLowerCase() === name.toLowerCase());
@@ -1253,6 +1259,7 @@ function findDeviceByName(name) {
     return null;
 }
 
+// Create device card
 function createDeviceCard(device) {
     const card = document.createElement('div');
     card.className = 'device-card';
@@ -1266,6 +1273,7 @@ function createDeviceCard(device) {
     return card;
 }
 
+// Create device details HTML
 function createDeviceDetailsHTML(device) {
     return `
         <h1 class="page-title">${device.name}</h1>
@@ -1311,6 +1319,7 @@ function createDeviceDetailsHTML(device) {
     `;
 }
 
+// Update stats on home page
 function updateStats() {
     const deviceCount = Object.values(devices).flat().length;
     const deviceCountElement = document.getElementById('deviceCount');
@@ -1319,6 +1328,7 @@ function updateStats() {
     }
 }
 
+// Sort devices based on selection
 function sortDevices(deviceList) {
     const sortSelect = document.getElementById('sortSelect');
     if (!sortSelect) return deviceList;
@@ -1334,6 +1344,7 @@ function sortDevices(deviceList) {
     });
 }
 
+// Add chat message to chatbot body
 function addChatMessage(message, isUser, suggestions = []) {
     const chatbotBody = document.getElementById('chatbotBody');
     if (!chatbotBody) return;
@@ -1348,8 +1359,12 @@ function addChatMessage(message, isUser, suggestions = []) {
             button.className = 'suggestion-btn';
             button.textContent = suggestion.text;
             button.onclick = () => {
-                document.getElementById('chatbotInput').value = suggestion.query;
-                document.getElementById('chatbotSend').click();
+                const chatbotInput = document.getElementById('chatbotInput');
+                const chatbotSend = document.getElementById('chatbotSend');
+                if (chatbotInput && chatbotSend) {
+                    chatbotInput.value = suggestion.query;
+                    chatbotSend.click();
+                }
             };
             suggestionsDiv.appendChild(button);
         });
@@ -1359,6 +1374,7 @@ function addChatMessage(message, isUser, suggestions = []) {
     chatbotBody.scrollTop = chatbotBody.scrollHeight;
 }
 
+// Show or hide typing animation
 function showTypingAnimation(show) {
     const typing = document.getElementById('chatbotTyping');
     if (typing) {
@@ -1366,6 +1382,7 @@ function showTypingAnimation(show) {
     }
 }
 
+// Process chatbot query
 function processChatbotQuery(query) {
     const normalizedQuery = query.toLowerCase().trim();
     chatHistory.push({ query: normalizedQuery, timestamp: Date.now() });
@@ -1405,7 +1422,7 @@ function processChatbotQuery(query) {
         const deviceList = devices[serviceKey];
         for (const device of deviceList) {
             const deviceSynonyms = Object.keys(synonyms).find(key => synonyms[key].includes(device.name.toLowerCase())) || device.name.toLowerCase();
-            if (normalizedQuery.includes(device.name.toLowerCase()) || (deviceSynonyms && normalizedQuery.includes(deviceSynonyms))) {
+            if (normalizedQuery.includes(device.name.toLowerCase()) || (deviceSynonyms && synonyms[deviceSynonyms]?.some(s => normalizedQuery.includes(s)))) {
                 matchedDevice = device;
                 response = `${device.name} (${services[serviceKey].name}) : \n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}\n- Normes : ${device.normes.join(', ')}`;
                 suggestions = [
@@ -1524,6 +1541,7 @@ function processChatbotQuery(query) {
     return { response, suggestions };
 }
 
+// Initialize on DOM content loaded
 document.addEventListener('DOMContentLoaded', () => {
     const exploreServicesBtn = document.getElementById('exploreServicesBtn');
     if (exploreServicesBtn) {
@@ -1624,10 +1642,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (chatbotContainer.style.display === 'block') {
                 chatbotInput.focus();
                 chatHistory = [];
-                addChatMessage('Bonjour ! Je suis MediTech Assistant. Posez-moi une question sur les dispositifs, les marques ou les spécialités médicales.', false, [
-                    { text: 'Liste des spécialités', query: 'Spécialités' },
-                    { text: 'Liste des dispositifs', query: 'Dispositifs' }
-                ]);
+                const chatbotBody = document.getElementById('chatbotBody');
+                if (chatbotBody) {
+                    chatbotBody.innerHTML = '';
+                    addChatMessage('Bonjour ! Je suis MediTech Assistant. Posez-moi une question sur les dispositifs, les marques ou les spécialités médicales.', false, [
+                        { text: 'Liste des spécialités', query: 'Spécialités' },
+                        { text: 'Liste des dispositifs', query: 'Dispositifs' }
+                    ]);
+                }
             }
         });
 
