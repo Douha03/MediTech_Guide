@@ -1444,35 +1444,13 @@
             });
         };
 
-        const filterDevices = (query) => {
-            const devicesGrid = $('#devicesGrid');
-            if (!devicesGrid || state.currentPage !== 'devices-page') {
-                return;
-            }
-
-            devicesWithQuery = state.devicesGrid;
-
-            const fragment = document.createDocumentFragment();
-            const filteredDevices = sortDevices(devices[state.currentService]).filter(device => 
-                device.name.toLowerCase().includes(query.toLowerCase())
-            );
-
-            if (filteredDevices.length === 0) {
-                devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour ce filtre.</p>';
-                showNotification('Aucun résultat trouvé.', 'error');
-            } else {
-                filteredDevices.forEach(device => {
-                    fragment.appendChild(createDeviceCard(device));
-                });
-                devicesWithQuery.appendChild(fragment);
-                showNotification(`${filteredDevices.length} dispositif(s) trouvés.`, 'success');
-            }
-        }
-
-        const handleSearch = () => {
-            const query = query.toLowerCase().trim();
-
+                // Search handling
+        const handleSearch = (query) => {
+            query = query.trim().toLowerCase(); // Normalize query
             if (!query) {
+                if (state.currentPage === 'devices-page' && state.currentService) {
+                    showDevices(state.currentService); // Reset devices grid if on devices page
+                }
                 return;
             }
 
@@ -1480,7 +1458,7 @@
             const device = findDeviceByName(query);
             if (device) {
                 showDeviceDetails(device.name);
-                showNotification(`Found device: ${device.name}`, 'success');
+                showNotification(`Dispositif trouvé : ${device.name}`, 'success');
                 return;
             }
 
@@ -1488,11 +1466,12 @@
             const serviceKey = findServiceByName(query);
             if (serviceKey) {
                 showServices(serviceKey);
+                showNotification(`Spécialité trouvée : ${services[serviceKey].name}`, 'success');
                 return;
             }
 
             // Filter devices if on devices page
-            if (state.currentPage === 'devices-page') {
+            if (state.currentPage === 'devices-page' && state.currentService) {
                 filterDevices(query);
             } else {
                 // Fallback to chatbot
@@ -1501,10 +1480,38 @@
                 setTimeout(() => {
                     showTypingAnimation(false);
                     const response = processChatbotQuery(query);
-                    addChatResponse(response);
+                    if (typeof response === 'object') {
+                        addChatMessage(response.response, false, response.suggestions);
+                    } else {
+                        addChatMessage(response, false);
+                    }
                 }, 500);
             }
-        }
+        };
+
+        const filterDevices = (query) => {
+            const devicesGrid = $('#devicesGrid');
+            if (!devicesGrid || state.currentPage !== 'devices-page' || !state.currentService) {
+                return;
+            }
+
+            const fragment = document.createDocumentFragment();
+            const filteredDevices = sortDevices(devices[state.currentService]).filter(device => 
+                device.name.toLowerCase().includes(query.toLowerCase())
+            );
+
+            devicesGrid.innerHTML = ''; // Clear the grid
+            if (filteredDevices.length === 0) {
+                devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour ce filtre.</p>';
+                showNotification('Aucun résultat trouvé.', 'error');
+            } else {
+                filteredDevices.forEach(device => {
+                    fragment.appendChild(createDeviceCard(device));
+                });
+                devicesGrid.appendChild(fragment);
+                showNotification(`${filteredDevices.length} dispositif(s) trouvés.`, 'success');
+            }
+        };
 
         const updateStats = () => {
             const deviceCount = Object.values(devices).flat().length;
