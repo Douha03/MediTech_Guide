@@ -9,7 +9,7 @@
     <meta property="og:title" content="MediTech - Votre Guide Biomédical">
     <meta property="og:description" content="Explorez notre écosystème de technologies médicales de pointe pour un diagnostic et un traitement précis.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://via.placeholder.com/1200x630?text=MediTech">
+    <meta property="og:image" content="https://sl.bing.net/jSTsvEJzwG">
     <meta property="og:url" content="https://www.meditech.com">
     <title>MediTech - Votre Guide Biomédical</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -86,7 +86,16 @@
             gap: 10px;
         }
 
-        .logo-icon {
+        .logo-img {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .logo-img-error {
+            display: none;
             font-size: 2rem;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
@@ -222,12 +231,12 @@
             box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
 
-        .btn-chatguide {
+        .btn-chatbot {
             background: var(--secondary-color);
             color: var(--white);
-            padding: 12px 25px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 1rem;
             cursor: pointer;
             transition: var(--transition);
@@ -236,10 +245,10 @@
             display: inline-block;
         }
 
-        .btn-chatguide:hover {
+        .btn-chatbot:hover {
             background: var(--primary-color);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.3);
+            box-shadow: 0 8px 20px rgba(118, 147, 162, 0.3);
         }
 
         .services-grid, .devices-grid {
@@ -377,19 +386,26 @@
         }
 
         .back-btn {
-            background: var(--bg-light);
-            color: var(--text-dark);
-            padding: 10px 20px;
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
             cursor: pointer;
             transition: var(--transition);
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
         }
 
         .back-btn:hover {
-            background: var(--primary-color);
-            color: var(--white);
-            border-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
 
         .sort-section {
@@ -615,7 +631,7 @@
 
         @media (max-width: 768px) {
             .container {
-                padding: 120px 10px 15px;
+                padding: 140px 10px 15px;
             }
 
             .content-section {
@@ -635,7 +651,15 @@
                 width: 100%;
             }
 
-            .hero-section .btn-primary, .hero-section .btn-chatguide {
+            .logo-img {
+                height: 32px;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+
+            .hero-section .btn-primary, .hero-section .btn-chatbot {
                 margin: 10px 0 0;
                 width: 100%;
                 text-align: center;
@@ -651,6 +675,11 @@
 
             .services-grid {
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+
+            .back-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
             }
         }
 
@@ -680,7 +709,8 @@
         <header class="header" role="banner">
             <div class="header-content">
                 <div class="logo">
-                    <span class="logo-icon" aria-hidden="true">🏥</span>
+                    <img src="https://sl.bing.net/jSTsvEJzwG" alt="MediTech Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="logo-img-error" aria-hidden="true">🏥</span>
                     <span class="logo-text">MediTech</span>
                 </div>
                 <div class="search-container">
@@ -698,7 +728,7 @@
                     <h2>L'Innovation au Service de la Médecine</h2>
                     <p>Explorez notre écosystème de technologies médicales de pointe pour un diagnostic et un traitement précis dans toutes les spécialités médicales.</p>
                     <button class="btn-primary" id="exploreServicesBtn" aria-label="Explorer les spécialités médicales">Explorer nos Spécialités</button>
-                    <button class="btn-chatguide" id="chatGuideBtn" aria-label="Ouvrir le ChatGuide IA">IA ChatGuide</button>
+                    <button class="btn-chatbot" id="chatGuideBtn" aria-label="Ouvrir le ChatGuide IA">IA ChatGuide</button>
                 </article>
                 <div class="stats-section" aria-label="Statistiques MediTech">
                     <div class="stat-card">
@@ -717,13 +747,13 @@
             </section>
 
             <section id="services-page" class="content-section hidden" aria-labelledby="services-title">
-                <button class="back-btn" id="homeBackBtn" aria-label="Retour à l'accueil">← Retour</button>
+                <button class="back-btn" id="homeBackBtn" aria-label="Retour à l'accueil"><i class="fas fa-arrow-left"></i> Retour</button>
                 <h1 class="page-title" id="services-title">Spécialités Médicales</h1>
                 <div class="services-grid" id="servicesGrid" aria-live="polite"></div>
             </section>
 
             <section id="devices-page" class="content-section hidden" aria-labelledby="devices-title">
-                <button class="back-btn" id="servicesBackBtn" aria-label="Retour aux spécialités">← Retour</button>
+                <button class="back-btn" id="servicesBackBtn" aria-label="Retour aux spécialités"><i class="fas fa-arrow-left"></i> Retour</button>
                 <h1 class="page-title" id="devices-title">Dispositifs Médicaux</h1>
                 <div class="sort-section">
                     <label for="sortSelect" class="sr-only">Trier les dispositifs</label>
@@ -736,12 +766,12 @@
             </section>
 
             <section id="device-details-page" class="content-section hidden" aria-labelledby="device-details-title">
-                <button class="back-btn" id="devicesBackBtn" aria-label="Retour aux dispositifs">← Retour</button>
+                <button class="back-btn" id="devicesBackBtn" aria-label="Retour aux dispositifs"><i class="fas fa-arrow-left"></i> Retour</button>
                 <div class="device-details" id="deviceDetailsContent" aria-live="polite"></div>
             </section>
 
             <section id="chatbot-page" class="content-section hidden" aria-labelledby="chatbot-title">
-                <button class="back-btn" id="chatbotBackBtn" aria-label="Retour à la page précédente">← Retour</button>
+                <button class="back-btn" id="chatbotBackBtn" aria-label="Retour à la page précédente"><i class="fas fa-arrow-left"></i> Retour</button>
                 <h1 class="page-title" id="chatbot-title">MediTech Assistant</h1>
                 <div class="chatbot-header">
                     <span>MediTech Assistant</span>
@@ -1355,307 +1385,358 @@
                     </ul>
                 </div>
             `;
-            };
+        };
 
-            const sortDevices = (deviceList) => {
-                const sortSelect = $('#sortSelect');
-                if (!sortSelect) return deviceList;
-                const sortValue = sortSelect.value;
-                return [...deviceList].sort((a, b) => {
-                    return sortValue === 'name-asc' ?
-                        a.name.localeCompare(b.name)
-                        : b.name.localeCompare(a.name);
-                    });
-                };
+        const sortDevices = (deviceList) => {
+            const sortSelect = $('#sortSelect');
+            if (!sortSelect) return deviceList;
+            const sortValue = sortSelect.value;
+            return [...deviceList].sort((a, b) => {
+                return sortValue === 'name-asc' ?
+                    a.name.localeCompare(b.name)
+                    : b.name.localeCompare(a.name);
+            });
+        };
 
-                const filterDevices = (query) => {
-                    const devicesGrid = $('#devicesGrid');
-                    if (!devicesGrid || state.currentPage !== 'devices-page') return;
-                    const deviceList = devices[state.currentService] || [];
-                    devicesGrid.innerHTML = '';
-                    const fragment = document.createDocumentFragment();
-                    const filteredDevices = sortDevices(deviceList).filter(device => 
-                        device.name.toLowerCase().includes(query.toLowerCase())
-                    );
-                    if (filteredDevices.length === 0) {
-                        devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour cette recherche.</p>';
-                        showNotification('Aucun résultat trouvé.', 'error');
-                    } else {
-                        filteredDevices.forEach(device => {
-                            fragment.appendChild(createDeviceCard(device));
-                        });
-                        devicesGrid.appendChild(fragment);
-                        showNotification(`${filteredDevices.length} dispositif(s) trouvé(s).`, 'success');
+        const filterDevices = (query) => {
+            const devicesGrid = $('#devicesGrid');
+            if (!devicesGrid || state.currentPage !== 'devices-page') return;
+            const deviceList = devices[state.currentService] || [];
+            devicesGrid.innerHTML = '';
+            const fragment = document.createDocumentFragment();
+            const filteredDevices = sortDevices(deviceList).filter(device => 
+                device.name.toLowerCase().includes(query.toLowerCase())
+            );
+            if (filteredDevices.length === 0) {
+                devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour cette recherche.</p>';
+                showNotification('Aucun résultat trouvé.', 'error');
+            } else {
+                filteredDevices.forEach(device => {
+                    fragment.appendChild(createDeviceCard(device));
+                });
+                devicesGrid.appendChild(fragment);
+                showNotification(`${filteredDevices.length} dispositif(s) trouvé(s).`, 'success');
+            }
+        };
+
+        const handleSearch = (query) => {
+            if (!query.trim()) return;
+            const normalizedQuery = query.toLowerCase().trim();
+
+            // Search for device match
+            const device = findDeviceByName(normalizedQuery);
+            if (device) {
+                showDeviceDetails(device.name);
+                showNotification(`Dispositif trouvé : ${device.name}`, 'success');
+                return;
+            }
+
+            // Search for service match
+            const serviceKey = findServiceByName(normalizedQuery);
+            if (serviceKey) {
+                showServices(serviceKey);
+                return;
+            }
+
+            // If on devices page, filter devices
+            if (state.currentPage === 'devices-page') {
+                filterDevices(normalizedQuery);
+            } else {
+                // Fallback to chatbot
+                addChatMessage(query, true);
+                showTypingAnimation(true);
+                setTimeout(() => {
+                    showTypingAnimation(false);
+                    const response = processChatbotQuery(normalizedQuery);
+                    addChatMessage(response, false);
+                }, 1000);
+            }
+        };
+
+        const updateStats = () => {
+            const deviceCount = Object.values(devices).flat().length;
+            const deviceCountElement = $('#deviceCount');
+            if (deviceCountElement) {
+                deviceCountElement.textContent = deviceCount;
+            }
+        };
+
+        // Chatbot
+        const synonyms = {
+            scanner: ['scanner', 'tomodensitomètre', 'ct'],
+            irm: ['irm', 'résonance magnétique', 'mri'],
+            ecg: ['électrocardiographe', 'ecg'],
+            eeg: ['électroencéphalographe', 'eeg'],
+            ventilateur: ['ventilateur', 'respirateur'],
+            autoclave: ['autoclave', 'stérilisateur vapeur'],
+            'robot chirurgical': ['robot chirurgical', 'robot chirurgie']
+        };
+
+        const addChatMessage = (message, isUser) => {
+            const chatbotBody = $('#chatbotBody');
+            if (!chatbotBody) return;
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            chatbotBody.appendChild(messageDiv);
+            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+        };
+
+        const showTypingAnimation = (show) => {
+            const typing = $('#chatbotTyping');
+            if (typing) {
+                typing.style.display = show ? 'block' : 'none';
+            }
+        };
+
+        const processChatbotQuery = (query) => {
+            try {
+                if (!devices || !services) {
+                    throw new Error('Données des dispositifs ou services non disponibles.');
+                }
+                const normalizedQuery = query.toLowerCase().trim();
+                state.chatHistory.push({ query: normalizedQuery, timestamp: Date.now() });
+                let response = 'Désolé, je n\'ai pas compris votre question. Essayez de demander quelque chose sur les dispositifs, les marques ou les spécialités médicales.';
+
+                // Check for service match
+                for (const serviceKey in services) {
+                    const service = services[serviceKey];
+                    if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
+                        return `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
                     }
-                };
+                }
 
-                const handleSearch = (query) => {
-                    if (!query.trim()) return;
-                    const normalizedQuery = query.toLowerCase().trim();
-
-                    // Search for device match
-                    const device = findDeviceByName(normalizedQuery);
-                    if (device) {
-                        showDeviceDetails(device.name);
-                        showNotification(`Dispositif trouvé : ${device.name}`, 'success');
-                        return;
+                // Check for device match
+                let contextDevice = state.chatHistory.length > 1 ? findDeviceByName(state.chatHistory[state.chatHistory.length - 2].query) : null;
+                for (const serviceKey in devices) {
+                    const deviceList = devices[serviceKey];
+                    for (const device of deviceList) {
+                        const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
+                        if (deviceSynonyms.some(s => normalizedQuery.includes(s))) {
+                            return `${device.name} (${services[serviceKey].name}) :\n- Rôle} : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}\n- Normes : ${device.normes.join(', ')}`;
+                        }
+                        if (normalizedQuery.includes('rôle') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                            return `Le rôle du ${device.name} est : ${device.role}`;
+                        }
+                        if (normalizedQuery.includes('principe') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                            return `Le principe de fonctionnement du ${device.name} est : ${device.principle}`;
+                        }
+                        if (normalizedQuery.includes('composants') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                            return `Les composants principaux du ${device.name} sont : ${device.components.join(', ')}`;
+                        }
+                        if (normalizedQuery.includes('maintenance') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                            return `La checklist pour la maintenance du ${device.name} est : ${device.maintenance.join(', ')}`;
+                        }
+                        if (normalizedQuery.includes('marques') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                            return `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
+                        }
+                        if (normalizedQuery.includes('normes') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                            return `Les normes pour ${device.name} sont : ${device.normes.join(', ')}`;
+                        }
                     }
+                }
 
-                    // Search for service match
-                    const serviceKey = findServiceByName(normalizedQuery);
-                    if (serviceKey) {
-                        showServices(serviceKey);
-                        return;
+                // Check for comparison
+                if (normalizedQuery.includes('comparer') || normalizedQuery.includes('compare')) {
+                    const deviceNames = Object.values(devices).flat().map(d => d.name.toLowerCase());
+                    const foundDevices = deviceNames.filter(name => normalizedQuery.includes(name));
+                    if (foundDevices.length >= 2) {
+                        const device1 = findDeviceByName(foundDevices[0]);
+                        const device2 = findDeviceByName(foundDevices[1]);
+                        if (device1 && device2) {
+                            return `Comparaison entre ${device1.name} et ${device2.name} :\n` +
+                                `- **Rôle** : ${device1.name} : ${device1.role} | ${device2.name} : ${device2.role}\n` +
+                                `- **Principe** : ${device1.name} : ${device1.principle} | ${device2.name} : ${device2.principle}\n` +
+                                `- **Marques** : ${device1.name} : ${device1.brands.join(', ')} | ${device2.name} : ${device2.brands.join(', ')}\n` +
+                                `- **Normes** : ${device1.name} : ${device1.normes.join(', ')} | ${device2.name} : ${device2.normes.join(', ')}`;
+                        }
                     }
+                }
 
-                    // If on devices page, filter devices
-                    if (state.currentPage === 'devices-page') {
-                        filterDevices(normalizedQuery);
-                    } else {
-                        // Fallback to chatbot
+                // Check for general queries
+                if (normalizedQuery.includes('spécialités') || normalizedQuery.includes('specialties')) {
+                    return `MediTech propose des équipements pour : ${Object.values(services).map(s => s.name).join(', ')}`;
+                }
+                if (normalizedQuery.includes('dispositifs') || normalizedQuery.includes('devices')) {
+                    const allDevices = Object.values(devices).flat().map(d => d.name);
+                    return `MediTech propose : ${allDevices.join(', ')}`;
+                }
+                if (normalizedQuery.includes('marques') || normalizedQuery.includes('brands')) {
+                    const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
+                    return `Marques disponibles : ${allBrands.join(', ')}`;
+                }
+
+                // Check for brand-specific queries
+                const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
+                for (const brand of allBrands) {
+                    if (brand.toLowerCase().indexOf(normalizedQuery) !== -1) {
+                        const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
+                        return `La marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand.map(device => device.name).join(', ')}`;
+                    }
+                }
+
+                return response;
+            } catch (error) {
+                console.error('Error processing chatbot query:', error);
+                showNotification('Une erreur est survenue lors du traitement de votre question.', 'error');
+                return 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
+            }
+        };
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            showHome();
+
+            // Search
+            const searchBox = $('#searchBox');
+            if (searchBox) {
+                searchBox.addEventListener('input', debounce((e) => handleSearch(e.target.value), 300));
+                searchBox.addEventListener('keypress', (event) => {
+                    if (event.key === 'Enter') {
+                        handleSearch(event.target.value);
+                    }
+                });
+            }
+
+            // Chatbot
+            const chatbotSend = $('#chatbotSend');
+            const chatbotInput = $('#chatbotInput');
+            if (chatbotSend && chatbotInput) {
+                const sendMessage = () => {
+                    const query = chatbotInput.value.trim();
+                    if (query) {
                         addChatMessage(query, true);
                         showTypingAnimation(true);
                         setTimeout(() => {
                             showTypingAnimation(false);
-                            const response = processChatbotQuery(normalizedQuery);
+                            const response = processChatbotQuery(query);
                             addChatMessage(response, false);
+                            chatbotInput.value = '';
                         }, 1000);
                     }
                 };
-
-                const updateStats = () => {
-                    const deviceCount = Object.values(devices).flat().length;
-                    const deviceCountElement = $('#deviceCount');
-                    if (deviceCountElement) {
-                        deviceCountElement.textContent = deviceCount;
-                    }
-                };
-
-                // Chatbot
-                const synonyms = {
-                    scanner: ['scanner', 'tomodensitomètre', 'ct'],
-                    irm: ['irm', 'résonance magnétique', 'mri'],
-                    ecg: ['électrocardiographe', 'ecg'],
-                    eeg: ['électroencéphalographe', 'eeg'],
-                    ventilateur: ['ventilateur', 'respirateur'],
-                    autoclave: ['autoclave', 'stérilisateur vapeur'],
-                    'robot chirurgical': ['robot chirurgical', 'robot chirurgie']
-                };
-
-                const addChatMessage = (message, isUser) => {
-                    const chatbotBody = $('#chatbotBody');
-                    if (!chatbotBody) return;
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
-                    messageDiv.innerHTML = `<p>${message}</p>`;
-                    chatbotBody.appendChild(messageDiv);
-                    chatbotBody.scrollTop = chatbotBody.scrollHeight;
-                };
-
-                const showTypingAnimation = (show) => {
-                    const typing = $('#chatbotTyping');
-                    if (typing) {
-                        typing.style.display = show ? 'block' : 'none';
-                    }
-                };
-
-                const processChatbotQuery = (query) => {
-                    try {
-                        if (!devices || !services) {
-                            throw new Error('Données des dispositifs ou services non disponibles.');
-                        }
-                        const normalizedQuery = query.toLowerCase().trim();
-                        state.chatHistory.push({ query: normalizedQuery, timestamp: Date.now() });
-                        let response = 'Désolé, je n\'ai pas compris votre question. Essayez de demander quelque chose sur les dispositifs, les marques ou les spécialités médicales.';
-
-                        // Check for service match
-                        for (const serviceKey in services) {
-                            const service = services[serviceKey];
-                            if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
-                                return `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
-                            }
-                        }
-
-                        // Check for device match
-                        let contextDevice = state.chatHistory.length > 1 ? findDeviceByName(state.chatHistory[state.chatHistory.length - 2].query) : null;
-                        for (const serviceKey in devices) {
-                            const deviceList = devices[serviceKey];
-                            for (const device of deviceList) {
-                                const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                                if (deviceSynonyms.some(s => normalizedQuery.includes(s))) {
-                                    return `${device.name} (${services[serviceKey].name}) :\n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}\n- Normes : ${device.normes.join(', ')}`;
-                                }
-                                if (normalizedQuery.includes('rôle') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                                    return `Le rôle de ${device.name} est : ${device.role}`;
-                                }
-                                if (normalizedQuery.includes('principe') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                                    return `Le principe de fonctionnement de ${device.name} est : ${device.principle}`;
-                                }
-                                if (normalizedQuery.includes('composants') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                                    return `Les composants principaux de ${device.name} sont : ${device.components.join(', ')}`;
-                                }
-                                if (normalizedQuery.includes('maintenance') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                                    return `La checklist pour le maintenance de ${device.name} est : ${device.maintenance.join(', ')}`;
-                                }
-                                if (normalizedQuery.includes('marques') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                                    return `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
-                                }
-                                if (normalizedQuery.includes('normes') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                                    return `Les normes pour ${device.name} sont : ${device.normes.join(', ')}`;
-                                }
-                            }
-                        }
-
-                        // Check for comparison
-                        if (normalizedQuery.includes('comparer') || normalizedQuery.includes('compare')) {
-                            const deviceNames = Object.values(devices).flat().map(d => d.name.toLowerCase());
-                            const foundDevices = deviceNames.filter(name => normalizedQuery.includes(name));
-                            if (foundDevices.length >= 2) {
-                                const device1 = findDeviceByName(foundDevices[0]);
-                                const device2 = findDeviceByName(foundDevices[1]);
-                                if (device1 && device2) {
-                                    return `Comparaison entre ${device1.name} et ${device2.name} :\n` +
-                                        `- **Rôle** : ${device1.name} : ${device1.role} | ${device2.name} : ${device2.role}\n` +
-                                        `- **Principe** : ${device1.name} : ${device1.principle} | ${device2.name} : ${device2.principle}\n` +
-                                        `- **Marques** : ${device1.name} : ${device1.brands.join(', ')} | ${device2.name} : ${device2.brands.join(', ')}\n` +
-                                        `- **Normes** : ${device1.name} : ${device1.normes.join(', ')} | ${device2.name} : ${device2.normes.join(', ')}`;
-                                }
-                            }
-                        }
-
-                        // Check for general queries
-                        if (normalizedQuery.includes('spécialités') || normalizedQuery.includes('specialties')) {
-                            return `MediTech propose des équipements pour : ${Object.values(services).map(s => s.name).join(', ')}`;
-                        }
-                        if (normalizedQuery.includes('dispositifs') || normalizedQuery.includes('devices')) {
-                            const allDevices = Object.values(devices).flat().map(d => d.name);
-                            return `MediTech propose : ${allDevices.join(', ')}`;
-                        }
-                        if (normalizedQuery.includes('marques') || normalizedQuery.includes('brands')) {
-                            const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
-                            return `Marques disponibles : ${allBrands.join(', ')}`;
-                        }
-
-                        // Check for brand-specific queries
-                        const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
-                        for (const brand of allBrands) {
-                            if (brand.toLowerCase().indexOf(normalizedQuery) !== -1) {
-                                const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
-                                return `La marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand.map(device => device.name).join(', ')}`;
-                            }
-                        }
-
-                        return response;
-                    } catch (error) {
-                        console.error('Error processing chatbot query:', error);
-                        showNotification('Une erreur est survenue lors du traitement de votre question.', 'error');
-                        return 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
-                    }
-                };
-
-                // Event Listeners
-                document.addEventListener('DOMContentLoaded', () => {
-                    showHome();
-
-                    // Search
-                    const searchBox = $('#searchBox');
-                    if (searchBox) {
-                        searchBox.addEventListener('input', debounce((e) => handleSearch(e.target.value), 300));
-                        searchBox.addEventListener('keypress', (event) => {
-                            if (event.key === 'Enter') {
-                                handleSearch(event.target.value);
-                            }
-                        });
-                    }
-
-                    // Chatbot
-                    const chatbotSend = $('#chatbotSend');
-                    const chatbotInput = $('#chatbotInput');
-                    if (chatbotSend && chatbotInput) {
-                        const sendMessage = () => {
-                            const query = chatbotInput.value.trim();
-                            if (query) {
-                                addChatMessage(query, true);
-                                showTypingAnimation(true);
-                                setTimeout(() => {
-                                    showTypingAnimation(false);
-                                    const response = processChatbotQuery(query);
-                                    addChatMessage(response, false);
-                                    chatbotInput.value = '';
-                                }, 1000);
-                            }
-                        };
-                        chatbotSend.addEventListener('click', sendMessage);
-                        chatbotInput.addEventListener('keypress', (event) => {
-                            if (event.key === 'Enter') {
-                                event.preventDefault();
-                                sendMessage();
-                            }
-                        });
-                    }
-
-                    // Theme Toggle
-                    const themeToggle = $('#themeToggle');
-                    if (themeToggle) {
-                        themeToggle.addEventListener('click', () => {
-                            const currentTheme = document.documentElement.getAttribute('data-theme');
-                            document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
-                            themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
-                        });
-                    }
-
-                    // Sort Devices
-                    const sortSelect = $('#sortSelect');
-                    if (sortSelect) {
-                        sortSelect.addEventListener('change', () => {
-                            if (state.currentPage === 'devices-page' && state.currentService) {
-                                showDevices(state.currentService);
-                            }
-                        });
-                    }
-
-                    // Navigation Buttons
-                    const exploreServicesBtn = $('#exploreServicesBtn');
-                    if (exploreServicesBtn) {
-                        exploreServicesBtn.addEventListener('click', () => showServices());
-                    }
-
-                    const homeBackBtn = $('#homeBackBtn');
-                    if (homeBackBtn) {
-                        homeBackBtn.addEventListener('click', showHome);
-                    }
-
-                    const servicesBackBtn = $('#servicesBackBtn');
-                    if (servicesBackBtn) {
-                        servicesBackBtn.addEventListener('click', () => {
-                            console.log('Navigating back to services. Current state:', state);
-                            showServices();
-                        });
-                    }
-
-                    const devicesBackBtn = $('#devicesBackBtn');
-                    if (devicesBackBtn) {
-                        devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
-                    }
-
-                    const chatbotBackBtn = $('#chatbotBackBtn');
-                    if (chatbotBackBtn) {
-                        chatbotBackBtn.addEventListener('click', () => {
-                            const previousPage = state.navigationHistory[state.navigationHistory.length - 2];
-                            if (previousPage) {
-                                previousPage.action();
-                                state.navigationHistory.pop();
-                            } else {
-                                showHome();
-                            }
-                        });
-                    }
-
-                    const chatGuideBtn = $('#chatGuideBtn');
-                    if (chatGuideBtn) {
-                        chatGuideBtn.addEventListener('click', showChatbotPage);
+                chatbotSend.addEventListener('click', sendMessage);
+                chatbotInput.addEventListener('keypress', (event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        sendMessage();
                     }
                 });
-            </script>
-        </body>
-    </html>
+            }
+
+            // Theme Toggle
+            const themeToggle = $('#themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+                    themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+                });
+            // Sort Devices
+            const sortSelect = $('#sortSelect');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', () => {
+                    if (state.currentPage === 'devices-page' && state.currentService) {
+                        showDevices(state.currentService);
+                    }
+                });
+            }
+
+            // Navigation Buttons
+            const exploreServicesBtn = $('#exploreServicesBtn');
+            if (exploreServicesBtn) {
+                exploreServicesBtn.addEventListener('click', () => showServices());
+            }
+
+            const homeBackBtn = $('#homeBackBtn');
+            if (homeBackBtn) {
+                homeBackBtn.addEventListener('click', showHome);
+            }
+
+            const servicesBackBtn = $('#servicesBackBtn');
+            if (servicesBackBtn) {
+                servicesBackBtn.addEventListener('click', showServices);
+            }
+
+            const devicesBackBtn = $('#devicesBackBtn');
+            if (devicesBackBtn) {
+                devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
+            }
+
+            const chatbotBackBtn = $('#chatbotBackBtn');
+            if (chatbotBackBtn) {
+                chatbotBackBtn.addEventListener('click', () => {
+                    const previousPage = state.navigationHistory[state.navigationHistory.length - 2];
+                    if (previousPage) {
+                        previousPage.action();
+                        state.navigationHistory.pop();
+                    } else {
+                        showHome();
+                    }
+                });
+            }
+
+                        const chatGuideBtn = $('#chatGuideBtn');
+            if (chatGuideBtn) {
+                chatGuideBtn.addEventListener('click', showChatbotPage);
+            }
+
+            // Initialize page
+            updateStats();
+
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', (event) => {
+                const page = event.state ? event.state.page : 'home-page';
+                switch (page) {
+                    case 'home-page':
+                        showHome();
+                        break;
+                    case 'services-page':
+                        showServices();
+                        break;
+                    case 'devices-page':
+                        if (state.currentService) showDevices(state.currentService);
+                        else showServices();
+                        break;
+                    case 'device-details-page':
+                        if (state.currentDevice) showDeviceDetails(state.currentDevice);
+                        else if (state.currentService) showDevices(state.currentService);
+                        else showServices();
+                        break;
+                    case 'chatbot-page':
+                        showChatbotPage();
+                        break;
+                    default:
+                        showHome();
+                }
+            });
+
+            // Save initial state to history
+            history.replaceState({ page: 'home-page' }, '', '');
+        };
+
+        // Accessibility: Focus management for keyboard navigation
+        document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    const searchBox = $('#searchBox');
+                    if (searchBox && document.activeElement === searchBox) {
+                        searchBox.blur();
+                    }
+                    const chatbotInput = $('#chatbotInput');
+                    if (chatbotInput && document.activeElement === chatbotInput) {
+                        chatbotInput.blur();
+                    }
+                }
+            });
+
+            // Ensure logo image loads correctly
+            const logoImg = $('.logo-img');
+            if (logoImg) {
+                logoImg.addEventListener('load', () => {
+                    logoImg.style.display = 'block';
+                    logoImg.nextElementSibling.style.display = 'none';
+                });
+            }
+        </script>
+    </body>
+</html>
