@@ -1670,29 +1670,118 @@ const showTypingAnimation = (show) => {
     }
 };
 
-const processChatbotQuery = (query) => {
-    query = query.toLowerCase().trim();
-    const device = findDeviceByName(query);
-    if (device) {
-        return {
-            response: `Vous avez demandé des informations sur "${device.name}". Voulez-vous voir les détails ?`,
-            suggestions: [
-                { text: `Détails de ${device.name}`, action: () => { showDeviceDetails(device.name); return `Affichage des détails de ${device.name}.`; } }
-            ]
-        };
-    }
-    const serviceKey = findServiceByName(query);
-    if (serviceKey) {
-        return {
-            response: `Vous avez demandé des informations sur "${services[serviceKey].name}". Voulez-vous voir les dispositifs associés ?`,
-            suggestions: [
-                { text: `Dispositifs de ${services[serviceKey].name}`, action: () => { showDevices(serviceKey); return `Affichage des dispositifs pour ${services[serviceKey].name}.`; } }
-            ]
-        };
-    }
-    return `Désolé, je n'ai pas trouvé de correspondance pour "${query}". Essayez un autre dispositif ou spécialité, ou reformulez votre question.`;
-};
+        const processChatbotQuery = (query) => {
+            try {
+                if (!devices || !services) {
+                    throw new Error('Données des dispositifs ou services non disponibles.');
+                }
+                const normalizedQuery = query.toLowerCase().trim();
+                state.chatHistory.push({ query: normalizedQuery, timestamp: Date.now() });
+                let response = 'Désolé, je n\'ai pas compris votre question. Essayez de demander quelque chose sur les dispositifs, les marques ou les spécialités médicales.';
+                let suggestions = [];
 
+                // Check for service match
+                for (const serviceKey in services) {
+                    const service = services[serviceKey];
+                    if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
+                        return `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
+                    }
+                }
+
+                // Check for device match and provide suggestions
+                let foundDevice = null;
+                for (const serviceKey in devices) {
+                    const deviceList = devices[serviceKey];
+                    for (const device of deviceList) {
+                        const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
+                        if (deviceSynonyms.some(s => normalizedQuery.includes(s))) {
+                            foundDevice = device;
+                            suggestions = [
+                                { text: `Quel est le rôle du ${device.name} ?`, action: () => `Le rôle du ${device.name} est : ${device.role}` },
+                                { text: `Quel est le principe de fonctionnement du ${device.name} ?`, action: () => `Le principe de fonctionnement du ${device.name} est : ${device.principle}` },
+                                { text: `Quels sont les composants du ${device.name} ?`, action: () => `Les composants principaux du ${device.name} sont : ${device.components.join(', ')}` },
+                                { text: `Quelle est la maintenance du ${device.name} ?`, action: () => `La checklist pour la maintenance du ${device.name} est : ${device.maintenance.join(', ')}` },
+                                { text: `Quelles sont les marques du ${device.name} ?`, action: () => `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}` },
+                                { text: `Quelles sont les normes du ${device.name} ?`, action: () => `Les normes pour ${device.name} sont : ${device.normes.join(', ')}` }
+                            ];
+                            response = `Vous avez demandé des informations sur ${device.name}. Voici quelques suggestions :`;
+                            return { response, suggestions };
+                        }
+                    }
+                }
+
+                // Handle specific device attribute queries
+                let contextDevice = state.chatHistory.length > 1 ? findDeviceByName(state.chatHistory[state.chatHistory.length - 2].query) : null;
+                for (const serviceKey in devices) {
+                    const deviceList = devices[serviceKey];
+                    for (const device of deviceList) {
+                        if (normalizedQuery.includes('rôle') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                            return `Le rôle du ${device.name} est : ${device.role}`;
+                        }
+                        if (normalizedQuery.includes('principe') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                            return `Le principe de fonctionnement du ${device.name} est : ${device.principle}`;
+                        }
+                        if (normalizedQuery.includes('composants') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                            return `Les composants principaux du ${device.name} sont : ${device.components.join(', ')}`;
+                        }
+                        if (normalizedQuery.includes('maintenance') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                            return `La checklist pour la maintenance du ${device.name} est : ${device.maintenance.join(', ')}`;
+                        }
+                        if (normalizedQuery.includes('marques') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                            return `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
+                        }
+                        if (normalizedQuery.includes('normes') && (normalizedQuery.includes(normalizedQuery)) || (contextDevice && contextDevice.name === device.name)) {
+                            return `Les normes pour ${device.name} sont : ${device.normes.join(', ')}`;
+                        }
+                    }
+                }
+
+                // Check for comparison
+                if (normalizedQuery.includes('comparer') || normalizedQuery.includes('compare')) {
+                    const deviceNames = Object.values(devices).flat().map(d => d.name.toLowerCase());
+                    const foundDevices = deviceNames.filter(name => normalizedQuery.includes(name));
+                    if (foundDevices.length >= 2) {
+                        const device1 = findDeviceByName(foundDevices[0]);
+                        const device2 = findDeviceByName(foundDevices[1]);
+                        if (device1 && device2) {
+                            return `Comparaison entre ${device1.name} et ${device2.name} :\n` +
+                                `- **Rôle** : ${device1.name} : ${device1.role} | ${device2.name} : ${device2.role}\n` +
+                                `- **Principe** : ${device1.name} : ${device1.principle} | ${device2.name} : ${device2.principle}\n` +
+                                `- **Marques** : ${device1.name} : ${device1.brands.join(', ')} | ${device2.name} : ${device2.brands.join(', ')}\n` +
+                                `- **Normes** : ${device1.name} : ${device1.normes.join(', ')} | ${device2.name} : ${device2.normes.join(', ')}`;
+                        }
+                    }
+                }
+
+                // Check for general queries
+                if (normalizedQuery.includes('spécialités') || normalizedQuery.includes('specialties')) {
+                    return `MediTech propose des équipements pour : ${Object.values(services).map(s => s.name).join(', ')}`;
+                }
+                if (normalizedQuery.includes('dispositifs') || normalizedQuery.includes('devices')) {
+                    const allDevices = Object.values(devices).flat().map(d => d.name);
+                    return `MediTech propose : ${allDevices.join(', ')}`;
+                }
+                if (normalizedQuery.includes('marques') || normalizedQuery.includes('brands')) {
+                    const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
+                    return `Marques disponibles : ${allBrands.join(', ')}`;
+                }
+
+                // Check for brand-specific queries
+                const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
+                for (const brand of allBrands) {
+                    if (brand.toLowerCase().indexOf(normalizedQuery) !== -1) {
+                        const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
+                        return `La marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand.map(device => device.name).join(', ')}`;
+                    }
+                }
+
+                return response;
+            } catch (error) {
+                console.error('Error processing chatbot query:', error);
+                showNotification('Une erreur est survenue lors du traitement de votre question.', 'error');
+                return 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
+            }
+        };
 // Quiz Generation
 const generateQuiz = () => {
     const devicesList = Object.values(devices).flat();
