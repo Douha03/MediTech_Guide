@@ -251,6 +251,24 @@
             box-shadow: 0 8px 20px rgba(118, 147, 162, 0.3);
         }
 
+        .btn-quiz {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            margin-right: 10px;
+        }
+
+        .btn-quiz:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
         .services-grid, .devices-grid {
             display: grid;
             gap: 20px;
@@ -500,6 +518,28 @@
             border: 1px solid var(--border-light);
         }
 
+        .chatbot-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .suggestion-btn {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .suggestion-btn:hover {
+            background: var(--secondary-color);
+        }
+
         .chatbot-input {
             display: flex;
             padding: 8px;
@@ -631,7 +671,7 @@
 
         @media (max-width: 768px) {
             .container {
-                padding: 140px 10px 15px;
+                padding: 160px 10px 15px;
             }
 
             .content-section {
@@ -659,7 +699,7 @@
                 font-size: 1.5rem;
             }
 
-            .hero-section .btn-primary, .hero-section .btn-chatbot {
+            .hero-section .btn-primary, .hero-section .btn-chatbot, .hero-section .btn-quiz {
                 margin: 10px 0 0;
                 width: 100%;
                 text-align: center;
@@ -727,6 +767,7 @@
                 <article class="hero-section">
                     <h2>L'Innovation au Service de la Médecine</h2>
                     <p>Explorez notre écosystème de technologies médicales de pointe pour un diagnostic et un traitement précis dans toutes les spécialités médicales.</p>
+                    <button class="btn-quiz" id="generateQuizBtn" aria-label="Générer un quiz sur les technologies médicales">Générer un Quiz</button>
                     <button class="btn-primary" id="exploreServicesBtn" aria-label="Explorer les spécialités médicales">Explorer nos Spécialités</button>
                     <button class="btn-chatbot" id="chatGuideBtn" aria-label="Ouvrir le ChatGuide IA">IA ChatGuide</button>
                 </article>
@@ -1218,10 +1259,8 @@
                 if (servicesGrid.children.length === 0) {
                     servicesGrid.innerHTML = '<p class="image-error">Aucun service disponible.</p>';
                     showNotification('Aucun service trouvé.', 'error');
-                } else {
-                    console.log('Services grid populated with', servicesGrid.children.length, 'cards');
                 }
-                state.currentService = '';
+                state.currentService = highlightService;
                 state.currentDevice = '';
                 state.navigationHistory = [{ text: 'Spécialités Médicales', action: showServices }];
             } catch (error) {
@@ -1394,7 +1433,7 @@
             return [...deviceList].sort((a, b) => {
                 return sortValue === 'name-asc' ?
                     a.name.localeCompare(b.name)
-                    : b.name.localeCompare(a.name);
+                    : b.name.localeCompare(b.name);
             });
         };
 
@@ -1472,12 +1511,32 @@
             'robot chirurgical': ['robot chirurgical', 'robot chirurgie']
         };
 
-        const addChatMessage = (message, isUser) => {
+        const addChatMessage = (message, isUser, suggestions = []) => {
             const chatbotBody = $('#chatbotBody');
             if (!chatbotBody) return;
             const messageDiv = document.createElement('div');
             messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
             messageDiv.innerHTML = `<p>${message}</p>`;
+            if (!isUser && suggestions.length > 0) {
+                const suggestionsDiv = document.createElement('div');
+                suggestionsDiv.className = 'chatbot-suggestions';
+                suggestions.forEach(suggestion => {
+                    const button = document.createElement('button');
+                    button.className = 'suggestion-btn';
+                    button.textContent = suggestion.text;
+                    button.addEventListener('click', () => {
+                        addChatMessage(suggestion.text, true);
+                        showTypingAnimation(true);
+                        setTimeout(() => {
+                            showTypingAnimation(false);
+                            const response = suggestion.action();
+                            addChatMessage(response, false);
+                        }, 1000);
+                    });
+                    suggestionsDiv.appendChild(button);
+                });
+                messageDiv.appendChild(suggestionsDiv);
+            }
             chatbotBody.appendChild(messageDiv);
             chatbotBody.scrollTop = chatbotBody.scrollHeight;
         };
@@ -1497,6 +1556,7 @@
                 const normalizedQuery = query.toLowerCase().trim();
                 state.chatHistory.push({ query: normalizedQuery, timestamp: Date.now() });
                 let response = 'Désolé, je n\'ai pas compris votre question. Essayez de demander quelque chose sur les dispositifs, les marques ou les spécialités médicales.';
+                let suggestions = [];
 
                 // Check for service match
                 for (const serviceKey in services) {
@@ -1506,15 +1566,33 @@
                     }
                 }
 
-                // Check for device match
-                let contextDevice = state.chatHistory.length > 1 ? findDeviceByName(state.chatHistory[state.chatHistory.length - 2].query) : null;
+                // Check for device match and provide suggestions
+                let foundDevice = null;
                 for (const serviceKey in devices) {
                     const deviceList = devices[serviceKey];
                     for (const device of deviceList) {
                         const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
                         if (deviceSynonyms.some(s => normalizedQuery.includes(s))) {
-                            return `${device.name} (${services[serviceKey].name}) :\n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}\n- Normes : ${device.normes.join(', ')}`;
+                            foundDevice = device;
+                            suggestions = [
+                                { text: `Quel est le rôle du ${device.name} ?`, action: () => `Le rôle du ${device.name} est : ${device.role}` },
+                                { text: `Quel est le principe de fonctionnement du ${device.name} ?`, action: () => `Le principe de fonctionnement du ${device.name} est : ${device.principle}` },
+                                { text: `Quels sont les composants du ${device.name} ?`, action: () => `Les composants principaux du ${device.name} sont : ${device.components.join(', ')}` },
+                                { text: `Quelle est la maintenance du ${device.name} ?`, action: () => `La checklist pour la maintenance du ${device.name} est : ${device.maintenance.join(', ')}` },
+                                { text: `Quelles sont les marques du ${device.name} ?`, action: () => `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}` },
+                                { text: `Quelles sont les normes du ${device.name} ?`, action: () => `Les normes pour ${device.name} sont : ${device.normes.join(', ')}` }
+                            ];
+                            response = `Vous avez demandé des informations sur ${device.name}. Voici quelques suggestions :`;
+                            return { response, suggestions };
                         }
+                    }
+                }
+
+                // Handle specific device attribute queries
+                let contextDevice = state.chatHistory.length > 1 ? findDeviceByName(state.chatHistory[state.chatHistory.length - 2].query) : null;
+                for (const serviceKey in devices) {
+                    const deviceList = devices[serviceKey];
+                    for (const device of deviceList) {
                         if (normalizedQuery.includes('rôle') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
                             return `Le rôle du ${device.name} est : ${device.role}`;
                         }
@@ -1583,168 +1661,230 @@
             }
         };
 
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
+        // Generate Quiz
+        const generateQuiz = () => {
+            const allDevices = Object.values(devices).flat();
+            if (allDevices.length < 4) {
+                showNotification('Pas assez de dispositifs pour générer un quiz.', 'error');
+                return;
+            }
+            const shuffledDevices = allDevices.sort(() => Math.random() - 0.5).slice(0, 4);
+            const correctDevice = shuffledDevices[Math.floor(Math.random() * 4)];
+            const question = `Quel dispositif est utilisé pour : ${correctDevice.role}?`;
+            const options = shuffledDevices.map(device => device.name);
+            const quizHTML = `
+                <h2>Quiz sur les Technologies Médicales</h2>
+                <p>${question}</p>
+                <div class="quiz-options">
+                    ${options.map((option, index) => `
+                        <button class="btn-primary quiz-option" data-correct="${option === correctDevice.name}">${option}</button>
+                    `).join('')}
+                </div>
+            `;
+            const generateQuiz = () => {
+    const allDevices = Object.values(devices).flat();
+    if (allDevices.length < 4) {
+        showNotification('Pas assez de dispositifs pour générer un quiz.', 'error');
+        return;
+    }
+    const shuffledDevices = allDevices.sort(() => Math.random() - 0.5).slice(0, 4);
+    const correctDevice = shuffledDevices[Math.floor(Math.random() * 4)];
+    const question = `Quel dispositif est utilisé pour : ${correctDevice.role}?`;
+    const options = shuffledDevices.map(device => device.name);
+    const quizHTML = `
+        <h2>Quiz sur les Technologies Médicales</h2>
+        <p>${question}</p>
+        <div class="quiz-options">
+            ${options.map((option, index) => `
+                <button class="btn-primary quiz-option" data-correct="${option === correctDevice.name}">${option}</button>
+            `).join('')}
+        </div>
+    `;
+    const quizSection = document.createElement('section');
+    quizSection.id = 'quiz-page';
+    quizSection.className = 'content-section';
+    quizSection.innerHTML = `
+        <button class="back-btn" id="quizBackBtn" aria-label="Retour à l'accueil"><i class="fas fa-arrow-left"></i> Retour</button>
+        <h1 class="page-title">Quiz MediTech</h1>
+        ${quizHTML}
+    `;
+    hideAllPages();
+    document.querySelector('main').appendChild(quizSection);
+    showPage('quiz-page', 'Quiz MediTech', [
+        { text: 'Quiz MediTech', action: generateQuiz }
+    ]);
+    state.navigationHistory = [{ text: 'Quiz MediTech', action: generateQuiz }];
+
+    // Add event listeners for quiz options
+    $$('.quiz-option').forEach(button => {
+        button.addEventListener('click', () => {
+            const isCorrect = button.getAttribute('data-correct') === 'true';
+            const feedback = document.createElement('p');
+            feedback.className = 'quiz-feedback';
+            feedback.style.color = isCorrect ? '#28a745' : '#f56565';
+            feedback.textContent = isCorrect 
+                ? 'Correct ! Bien joué !' 
+                : `Incorrect. La bonne réponse était : ${correctDevice.name}.`;
+            quizSection.appendChild(feedback);
+
+            // Disable all buttons after selection
+            $$('.quiz-option').forEach(btn => {
+                btn.disabled = true;
+                btn.style.cursor = 'not-allowed';
+                btn.style.opacity = '0.6';
+            });
+
+            // Add a "Try Again" button
+            const tryAgainBtn = document.createElement('button');
+            tryAgainBtn.className = 'btn-primary';
+            tryAgainBtn.textContent = 'Rejouer';
+            tryAgainBtn.style.marginTop = '20px';
+            tryAgainBtn.addEventListener('click', () => {
+                quizSection.remove();
+                generateQuiz();
+            });
+            quizSection.appendChild(tryAgainBtn);
+
+            showNotification(isCorrect ? 'Bonne réponse !' : 'Mauvaise réponse.', isCorrect ? 'success' : 'error');
+        });
+    });
+
+    // Add event listener for quiz back button
+    const quizBackBtn = $('#quizBackBtn');
+    if (quizBackBtn) {
+        quizBackBtn.addEventListener('click', () => {
+            quizSection.remove();
             showHome();
+        });
+    }
+};
 
-            // Search
-            const searchBox = $('#searchBox');
-            if (searchBox) {
-                searchBox.addEventListener('input', debounce((e) => handleSearch(e.target.value), 300));
-                searchBox.addEventListener('keypress', (event) => {
-                    if (event.key === 'Enter') {
-                        handleSearch(event.target.value);
-                    }
-                });
-            }
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    showHome();
 
-            // Chatbot
-            const chatbotSend = $('#chatbotSend');
-            const chatbotInput = $('#chatbotInput');
-            if (chatbotSend && chatbotInput) {
-                const sendMessage = () => {
-                    const query = chatbotInput.value.trim();
-                    if (query) {
-                        addChatMessage(query, true);
-                        showTypingAnimation(true);
-                        setTimeout(() => {
-                            showTypingAnimation(false);
-                            const response = processChatbotQuery(query);
-                            addChatMessage(response, false);
-                            chatbotInput.value = '';
-                        }, 1000);
-                    }
-                };
-                chatbotSend.addEventListener('click', sendMessage);
-                chatbotInput.addEventListener('keypress', (event) => {
-                    if (event.key === 'Enter') {
-                        event.preventDefault();
-                        sendMessage();
-                    }
-                });
-            }
+    // Theme Toggle
+    const themeToggle = $('#themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.setAttribute('data-theme', 
+                document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+            );
+            themeToggle.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+            showNotification('Thème changé avec succès.', 'success');
+        });
+    }
 
-            // Theme Toggle
-            const themeToggle = $('#themeToggle');
-            if (themeToggle) {
-                themeToggle.addEventListener('click', () => {
-                    const currentTheme = document.documentElement.getAttribute('data-theme');
-                    document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
-                    themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
-                });
-            }
-
-            // Sort Devices
-            const sortSelect = $('#sortSelect');
-            if (sortSelect) {
-                sortSelect.addEventListener('change', () => {
-                    if (state.currentPage === 'devices-page' && state.currentService) {
-                        showDevices(state.currentService);
-                    }
-                });
-            }
-
-            // Navigation Buttons
-            const exploreServicesBtn = $('#exploreServicesBtn');
-            if (exploreServicesBtn) {
-                exploreServicesBtn.addEventListener('click', () => showServices());
-            }
-
-            const homeBackBtn = $('#homeBackBtn');
-            if (homeBackBtn) {
-                homeBackBtn.addEventListener('click', showHome);
-            }
-
-            const servicesBackBtn = $('#servicesBackBtn');
-            if (servicesBackBtn) {
-                servicesBackBtn.addEventListener('click', showServices);
-            }
-
-            const devicesBackBtn = $('#devicesBackBtn');
-            if (devicesBackBtn) {
-                devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
-            }
-
-            const chatbotBackBtn = $('#chatbotBackBtn');
-            if (chatbotBackBtn) {
-                chatbotBackBtn.addEventListener('click', () => {
-                    const previousPage = state.navigationHistory[state.navigationHistory.length - 2];
-                    if (previousPage) {
-                        previousPage.action();
-                        state.navigationHistory.pop();
-                    } else {
-                        showHome();
-                    }
-                });
-            }
-
-            const chatGuideBtn = $('#chatGuideBtn');
-            if (chatGuideBtn) {
-                chatGuideBtn.addEventListener('click', showChatbotPage);
-            }
-
-            // Initialize page
-            updateStats();
-
-            // Handle browser back/forward buttons
-            window.addEventListener('popstate', (event) => {
-                const page = event.state ? event.state.page : 'home-page';
-                switch (page) {
-                    case 'home-page':
-                        showHome();
-                        break;
-                    case 'services-page':
-                        showServices();
-                        break;
-                    case 'devices-page':
-                        if (state.currentService) showDevices(state.currentService);
-                        else showServices();
-                        break;
-                    case 'device-details-page':
-                        if (state.currentDevice) showDeviceDetails(state.currentDevice);
-                        else if (state.currentService) showDevices(state.currentService);
-                        else showServices();
-                        break;
-                    case 'chatbot-page':
-                        showChatbotPage();
-                        break;
-                    default:
-                        showHome();
-                }
-            });
-
-            // Save initial state to history
-            history.replaceState({ page: 'home-page' }, '', '');
-
-            // Accessibility: Focus management for keyboard navigation
-                        // Accessibility: Focus management for keyboard navigation
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape') {
-                    const searchBox = $('#searchBox');
-                    if (searchBox && document.activeElement === searchBox) {
-                        searchBox.blur();
-                    }
-                    const chatbotInput = $('#chatbotInput');
-                    if (chatbotInput && document.activeElement === chatbotInput) {
-                        chatbotInput.blur();
-                    }
-                }
-            });
-
-            // Ensure logo image loads correctly
-            const logoImg = $('.logo-img');
-            if (logoImg) {
-                logoImg.addEventListener('load', () => {
-                    logoImg.style.display = 'block';
-                    logoImg.nextElementSibling.style.display = 'none';
-                });
-                logoImg.addEventListener('error', () => {
-                    logoImg.style.display = 'none';
-                    logoImg.nextElementSibling.style.display = 'block';
-                });
+    // Search
+    const searchBox = $('#searchBox');
+    if (searchBox) {
+        searchBox.addEventListener('input', debounce(() => handleSearch(searchBox.value), 300));
+        searchBox.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSearch(searchBox.value);
             }
         });
+    }
+
+    // Navigation Buttons
+    const exploreServicesBtn = $('#exploreServicesBtn');
+    if (exploreServicesBtn) {
+        exploreServicesBtn.addEventListener('click', () => showServices());
+    }
+
+    const chatGuideBtn = $('#chatGuideBtn');
+    if (chatGuideBtn) {
+        chatGuideBtn.addEventListener('click', showChatbotPage);
+    }
+
+    const homeBackBtn = $('#homeBackBtn');
+    if (homeBackBtn) {
+        homeBackBtn.addEventListener('click', showHome);
+    }
+
+    const servicesBackBtn = $('#servicesBackBtn');
+    if (servicesBackBtn) {
+        servicesBackBtn.addEventListener('click', () => {
+            showServices(state.currentService || '');
+            state.currentDevice = '';
+        });
+    }
+
+    const devicesBackBtn = $('#devicesBackBtn');
+    if (devicesBackBtn) {
+        devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
+    }
+
+    const chatbotBackBtn = $('#chatbotBackBtn');
+    if (chatbotBackBtn) {
+        chatbotBackBtn.addEventListener('click', () => {
+            showPage(state.navigationHistory[state.navigationHistory.length - 2]?.action || showHome);
+            state.navigationHistory.pop();
+        });
+    }
+
+    const sortSelect = $('#sortSelect');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+            if (state.currentService) {
+                showDevices(state.currentService);
+            }
+        });
+    }
+
+    // Chatbot Input
+    const chatbotSend = $('#chatbotSend');
+    const chatbotInput = $('#chatbotInput');
+    if (chatbotSend && chatbotInput) {
+        chatbotSend.addEventListener('click', () => {
+            const query = chatbotInput.value.trim();
+            if (query) {
+                addChatMessage(query, true);
+                chatbotInput.value = '';
+                showTypingAnimation(true);
+                setTimeout(() => {
+                    showTypingAnimation(false);
+                    const response = processChatbotQuery(query);
+                    if (typeof response === 'object') {
+                        addChatMessage(response.response, false, response.suggestions);
+                    } else {
+                        addChatMessage(response, false);
+                    }
+                }, 1000);
+            }
+        });
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                chatbotSend.click();
+            }
+        });
+    }
+
+    // Quiz Button
+    const generateQuizBtn = $('#generateQuizBtn');
+    if (generateQuizBtn) {
+        generateQuizBtn.addEventListener('click', generateQuiz);
+    }
+});
+
+// Accessibility Enhancements
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const activeElement = document.activeElement;
+        if (activeElement.tagName === 'INPUT') {
+            activeElement.blur();
+        } else if (state.currentPage !== 'home-page') {
+            const backBtn = $(`#${state.currentPage.replace('-page', 'BackBtn')}`);
+            if (backBtn) backBtn.click();
+        }
+    }
+});
+
+// Initial Data Check
+if (!services || !devices) {
+    console.error('Services or devices data is missing');
+    showNotification('Erreur : Données des services ou dispositifs manquantes.', 'error');
+}
     </script>
 </body>
 </html>
-</xaiArtifact>
