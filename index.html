@@ -3,109 +3,145 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MediTech - Votre Guide Biomédical</title>
-  <meta name="description" content="MediTech - Découvrez les technologies médicales avancées pour toutes les spécialités médicales.">
-  <meta name="keywords" content="technologies médicales, équipements médicaux, santé, diagnostic, thérapie">
-  <meta name="author" content="MediTech">
+  <meta name="description" content="MediTech offre des technologies médicales avancées pour un diagnostic et un traitement précis dans toutes les spécialités médicales.">
+  <title>MediTech - Technologies Médicales</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="script.js" defer></script>
 </head>
 <body>
   <noscript>
-    <div class="no-js" role="alert">
+    <div style="text-align: center; padding: 20px; background: #f8d7da; color: #721c24;">
       JavaScript est désactivé. Veuillez l'activer pour une expérience optimale.
     </div>
   </noscript>
-  <div class="container">
-    <header class="header" role="banner">
-      <div class="header-content">
-        <div class="logo">
-          <span class="logo-icon" aria-hidden="true">🏥</span>
-          <span class="logo-text">MediTech</span>
-        </div>
-        <div class="search-container">
-          <input type="text" class="search-box" id="searchBox" placeholder="Rechercher des dispositifs médicaux..." aria-label="Rechercher des dispositifs médicaux">
-          <button class="theme-toggle" id="themeToggle" aria-label="Basculer entre thème clair et sombre">🌙</button>
-        </div>
+
+  <header class="header">
+    <div class="header-content container">
+      <div class="logo">
+        <span class="logo-icon" aria-hidden="true">🏥</span>
+        <span class="logo-text">MediTech</span>
       </div>
-      <nav class="nav-breadcrumb" id="breadcrumb" aria-label="Fil d'Ariane"></nav>
-    </header>
-
-    <main role="main">
-      <section id="home-page" class="content-section" aria-labelledby="home-title">
-        <h1 class="page-title" id="home-title">Technologies Médicales Avancées</h1>
-        <article class="hero-section">
-          <h2>L'Innovation au Service de la Médecine</h2>
-          <p>Explorez notre écosystème de technologies médicales de pointe pour un diagnostic et un traitement précis dans toutes les spécialités médicales.</p>
-          <button class="btn-primary" id="exploreServicesBtn" aria-label="Explorer les spécialités médicales">Explorer nos Spécialités</button>
-        </article>
-        <div class="stats-section" aria-label="Statistiques MediTech">
-          <div class="stat-card">
-            <div class="stat-number" id="deviceCount">0</div>
-            <div class="stat-label">Dispositifs</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">9</div>
-            <div class="stat-label">Spécialités</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">98%</div>
-            <div class="stat-label">Satisfaction</div>
-          </div>
-        </div>
-      </section>
-
-      <section id="services-page" class="content-section hidden" aria-labelledby="services-title">
-        <button class="back-btn" id="homeBackBtn" aria-label="Retour à l'accueil">← Retour</button>
-        <h1 class="page-title" id="services-title">Spécialités Médicales</h1>
-        <div class="services-grid" id="servicesGrid" aria-live="polite"></div>
-      </section>
-
-      <section id="devices-page" class="content-section hidden" aria-labelledby="devices-title">
-        <button class="back-btn" id="servicesBackBtn" aria-label="Retour aux spécialités">← Retour</button>
-        <h1 class="page-title" id="devicesTitle">Dispositifs Médicaux</h1>
-        <div class="sort-section">
-          <label for="sortSelect" class="sr-only">Trier les dispositifs</label>
-          <select class="sort-select" id="sortSelect">
-            <option value="name-asc">Nom (A-Z)</option>
-            <option value="name-desc">Nom (Z-A)</option>
-          </select>
-        </div>
-        <div class="devices-grid" id="devicesGrid" aria-live="polite"></div>
-      </section>
-
-      <section id="device-details-page" class="content-section hidden" aria-labelledby="device-details-title">
-        <button class="back-btn" id="devicesBackBtn" aria-label="Retour aux dispositifs">← Retour</button>
-        <div class="device-details" id="deviceDetailsContent" aria-live="polite"></div>
-      </section>
-    </main>
-
-    <button class="chatbot-toggle" id="chatbotToggle" aria-label="Ouvrir le chatbot">💬</button>
-    <div class="chatbot-container" id="chatbotContainer">
-      <div class="chatbot-header">
-        <span>MediTech Assistant</span>
-        <button class="chatbot-close" id="chatbotClose" aria-label="Fermer le chatbot">×</button>
-      </div>
-      <div class="chatbot-body" id="chatbotBody" aria-live="polite">
-        <div class="chatbot-typing" id="chatbotTyping">
-          <span>.</span><span>.</span><span>.</span>
-        </div>
-      </div>
-      <div class="chatbot-input">
-        <input type="text" id="chatbotInput" placeholder="Posez une question..." aria-label="Saisir une question pour le chatbot">
-        <button id="chatbotSend" aria-label="Envoyer la question">➤</button>
-      </div>
+      <nav class="nav">
+        <label for="search-box" class="visually-hidden">Rechercher</label>
+        <input type="search" id="search-box" class="search-box" placeholder="Rechercher...">
+        <button class="theme-toggle" aria-label="Basculer entre thème clair et sombre">
+          <span aria-hidden="true">🌙</span>
+          <span class="visually-hidden">Basculer le thème</span>
+        </button>
+      </nav>
+      <nav class="nav-breadcrumb" aria-label="Fil d'Ariane">
+        <button class="breadcrumb-home" aria-current="page">Accueil</button>
+      </nav>
     </div>
+  </header>
 
-    <footer class="footer" role="contentinfo">
+  <main class="container">
+    <section id="home" class="hero-section content-section">
+      <h1 class="page-title">Technologies Médicales Avancées</h1>
+      <p>L'Innovation au Service de la Médecine</p>
+      <p>Explorez notre écosystème de technologies médicales de pointe pour un diagnostic et un traitement précis dans toutes les spécialités médicales.</p>
+      <button class="btn-primary" data-section="specialties">Explorer nos Spécialités</button>
+      <div class="stats-section">
+        <div class="stat-card">
+          <span class="stat-number">0</span>
+          <p class="stat-label">Dispositifs</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">9</span>
+          <p class="stat-label">Spécialités</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">98%</span>
+          <p class="stat-label">Satisfaction</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="specialties" class="content-section hidden">
+      <nav class="nav-breadcrumb" aria-label="Fil d'Ariane">
+        <button class="breadcrumb-back" data-section="home">← Retour</button>
+        <span>Spécialités Médicales</span>
+      </nav>
+      <h2 class="page-title">Spécialités Médicales</h2>
+      <div class="services-grid">
+        <!-- Static fallback content -->
+        <div class="service-card">
+          <h3 class="card-title">Cardiologie</h3>
+          <p class="card-description">Solutions avancées pour le diagnostic cardiaque.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="card-title">Neurologie</h3>
+          <p class="card-description">Technologies pour le traitement des troubles neurologiques.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="devices" class="content-section hidden">
+      <nav class="nav-breadcrumb" aria-label="Fil d'Ariane">
+        <button class="breadcrumb-back" data-section="home">← Retour</button>
+        <span>Dispositifs Médicaux</span>
+      </nav>
+      <h2 class="page-title">Dispositifs Médicaux</h2>
+      <div class="sort-options">
+        <label for="sort-devices">Trier les dispositifs</label>
+        <select id="sort-devices">
+          <option value="az">Nom (A-Z)</option>
+          <option value="za">Nom (Z-A)</option>
+        </select>
+      </div>
+      <div class="devices-grid">
+        <!-- Static fallback content -->
+        <div class="device-card">
+          <h3 class="card-title">Échographe Portable</h3>
+          <p class="card-description">Appareil compact pour diagnostics rapides.</p>
+        </div>
+        <div class="device-card">
+          <h3 class="card-title">Moniteur Cardiaque</h3>
+          <p class="card-description">Surveillance en temps réel des fonctions vitales.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="device-detail" class="content-section hidden">
+      <nav class="nav-breadcrumb" aria-label="Fil d'Ariane">
+        <button class="breadcrumb-back" data-section="devices">← Retour</button>
+        <span>Détails du Dispositif</span>
+      </nav>
+      <h2 class="page-title">Détails du Dispositif</h2>
+      <div class="device-detail-content">
+        <!-- Static fallback content -->
+        <p>Sélectionnez un dispositif pour voir les détails.</p>
+      </div>
+    </section>
+  </main>
+
+  <button class="chatbot-toggle" aria-label="Ouvrir le MediTech Assistant">
+    <span aria-hidden="true">💬</span>
+    <span class="visually-hidden">Ouvrir le chat</span>
+  </button>
+
+  <aside id="chatbot" class="chatbot hidden">
+    <div class="chatbot-header">
+      <h3>MediTech Assistant</h3>
+      <button class="chatbot-close" aria-label="Fermer le chat">×</button>
+    </div>
+    <div class="chatbot-messages">
+      <p>Bienvenue ! Comment puis-je vous aider aujourd'hui ?</p>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" placeholder="Tapez votre message..." aria-label="Message au MediTech Assistant">
+      <button aria-label="Envoyer le message">➤</button>
+    </div>
+  </aside>
+
+  <footer class="footer">
+    <div class="container">
       <p>© 2025 MediTech. Tous droits réservés.</p>
       <p>
-        <a href="mailto:info@meditech.com" aria-label="Contacter MediTech par e-mail">info@meditech.com</a>
-        <a href="tel:+33123456789" aria-label="Contacter MediTech par téléphone">+33 1 23 45 67 89</a>
+        <a href="mailto:info@meditech.com">info@meditech.com</a>
+        <a href="tel:+33123456789">+33 1 23 45 67 89</a>
       </p>
-    </footer>
-  </div>
-
-  <script src="script.js"></script>
+    </div>
+  </footer>
 </body>
 </html>
