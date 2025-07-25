@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -100,7 +101,7 @@
         }
 
         .search-container {
-            display: var(--secondary-color);
+            display: flex;
             flex-direction: row;
             align-items: center;
             gap: 10px;
@@ -108,7 +109,7 @@
 
         .search-box {
             background: var(--bg-light);
-            border: 2px solid var(--border-light);
+            border: 1px solid var(--border-light);
             padding: 10px;
             border-radius: 8px;
             width: 280px;
@@ -167,15 +168,13 @@
             min-height: 500px;
             opacity: 0;
             transition: opacity 0.5s ease;
-        }
-
-        .content-section {
             display: none;
         }
 
         .content-section:not(.hidden) {
             opacity: 1;
             animation: slideIn 0.5s ease;
+            display: block;
         }
 
         .page-title {
@@ -196,7 +195,7 @@
 
         .hero-section h2 {
             font-size: 1.8rem;
-            color: var(--text-light);
+            color: var(--text-dark);
             margin-bottom: 20px;
         }
 
@@ -273,7 +272,7 @@
             margin-bottom: 15px;
         }
 
-        .service-image, .card-image {
+        .card-image {
             width: 100%;
             max-height: 150px;
             border-radius: 8px;
@@ -618,7 +617,7 @@
 
         @media (max-width: 768px) {
             .container {
-                padding-top: 80px;
+                padding-top: 120px;
                 padding-right: 10px;
                 padding-bottom: 15px;
                 padding-left: 10px;
@@ -658,10 +657,6 @@
 
             .services-grid {
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            }
-
-            .service-image {
-                max-height: 120px;
             }
         }
 
@@ -730,9 +725,7 @@
             <section id="services-page" class="content-section hidden" aria-labelledby="services-title">
                 <button class="back-btn" id="homeBackBtn" aria-label="Retour à l'accueil">← Retour</button>
                 <h1 class="page-title" id="services-title">Spécialités Médicales</h1>
-                <div class="services-grid" id="servicesGrid" aria-live="polite">
-                    <!-- Dynamically populated -->
-                </div>
+                <div class="services-grid" id="servicesGrid" aria-live="polite"></div>
             </section>
 
             <section id="devices-page" class="content-section hidden" aria-labelledby="devices-title">
@@ -1162,7 +1155,6 @@
                 const servicesGrid = $('#servicesGrid');
                 if (!servicesGrid) {
                     console.error('servicesGrid element not found');
-                    showNotification('Erreur de chargement des services.', 'error');
                     return;
                 }
                 servicesGrid.innerHTML = '';
@@ -1176,13 +1168,11 @@
                         card.setAttribute('role', 'button');
                         card.setAttribute('aria-label', `Voir les dispositifs pour ${service.name}`);
                         card.innerHTML = `
-                            <img src="${service.image}" alt="${service.name}" class="service-image" loading="lazy" onerror="this.nextElementSibling.style.display='block'; this.style.display='none'">
-                            <p class="image-error" style="display: none;">Image non disponible</p>
                             <div class="card-icon" aria-hidden="true">${service.icon}</div>
                             <div class="card-content">
                                 <h3 class="card-title">${service.name}</h3>
                                 <p class="card-description">${service.description}</p>
-                                <ul style="margin-top: 10px; color: var(--text-light);">
+                                <ul style="margin-top: 10px; color: var(--white);">
                                     ${service.examples.map(ex => `<li>${ex}</li>`).join('')}
                                 </ul>
                             </div>
@@ -1192,30 +1182,26 @@
                             card.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         }
                         card.addEventListener('click', () => showDevices(key));
-                        card.addEventListener('keypress', (e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
+                        card.addEventListener('keypress', (event) => {
+                            if (event.key === 'Enter' || event.key === ' ') {
                                 showDevices(key);
                             }
                         });
                         fragment.appendChild(card);
                     } catch (error) {
                         console.error(`Error creating card for service ${key}:`, error);
-                        showNotification(`Erreur lors du rendu du service ${service.name}.`, 'error');
                     }
                 });
                 servicesGrid.appendChild(fragment);
                 if (servicesGrid.children.length === 0) {
                     servicesGrid.innerHTML = '<p class="image-error">Aucun service disponible.</p>';
-                    showNotification('Aucun service trouvé.', 'error');
-                } else {
-                    showNotification('Spécialités chargées avec succès.', 'success');
                 }
                 state.currentService = '';
                 state.currentDevice = '';
                 state.navigationHistory = [{ text: 'Spécialités Médicales', action: showServices }];
             } catch (error) {
                 console.error('Error in showServices:', error);
-                showNotification('Erreur lors du chargement des services.', 'error');
+                servicesGrid.innerHTML = '<p class="image-error">Aucun service disponible.</p>';
             }
         };
 
@@ -1330,14 +1316,14 @@
                 if (e.key === 'Enter' || e.key === ' ') {
                     showDeviceDetails(device.name);
                 }
-            });
+                });
             return card;
         };
 
         const createDeviceDetailsHTML = (device) => {
             return `
                 <h1 class="page-title" id="device-details-title">${device.name}</h1>
-                <img src="${device.image}" alt="${device.name}" class="device-image" loading="lazy" onerror="this.nextElementSibling.style.display='block'; this.style.display='none'">
+                <img src="${device.image}" alt="${device.name}" class="device-image" loading="lazy" onerror="this.nextElementSibling.style.display='block'; this.style.display='none';">
                 <p class="image-error" style="display: none;">Image non disponible</p>
                 <div class="device-info">
                     <h3><i class="fas fa-info-circle"></i> Rôle</h3>
@@ -1379,10 +1365,10 @@
             if (!sortSelect) return deviceList;
             const sortValue = sortSelect.value;
             return [...deviceList].sort((a, b) => {
-                return sortValue === 'name-asc'
-                    ? a.name.localeCompare(b.name)
+                return sortValue === 'name-asc' ?
+                    a.name.localeCompare(b.name)
                     : b.name.localeCompare(a.name);
-            });
+                });
         };
 
         // Search functionality
@@ -1392,7 +1378,7 @@
             const deviceList = devices[state.currentService] || [];
             devicesGrid.innerHTML = '';
             const fragment = document.createDocumentFragment();
-            const filteredDevices = sortDevices(deviceList).filter(device =>
+            const filteredDevices = sortDevices(deviceList).filter(device => 
                 device.name.toLowerCase().includes(query.toLowerCase())
             );
             if (filteredDevices.length === 0) {
@@ -1423,7 +1409,6 @@
             const serviceKey = findServiceByName(normalizedQuery);
             if (serviceKey) {
                 showServices(serviceKey);
-                showNotification(`Spécialité trouvée : ${services[serviceKey].name}`, 'success');
                 return;
             }
 
@@ -1485,7 +1470,7 @@
                 }
                 const normalizedQuery = query.toLowerCase().trim();
                 state.chatHistory.push({ query: normalizedQuery, timestamp: Date.now() });
-                let response = 'Désolé, je n\'ai pas compris votre question. Essayez de demander quelque chose sur les dispositifs, les marques ou les spécialités médicales.';
+                let response = 'Désolé je n\'ai pas compris votre question. Essayez de demander quelque chose sur les dispositifs, les marques ou les spécialités médicales.';
 
                 // Check for service match
                 for (const serviceKey in services) {
@@ -1568,7 +1553,7 @@
             } catch (error) {
                 console.error('Error processing chatbot query:', error);
                 showNotification('Une erreur est survenue lors du traitement de votre question.', 'error');
-                return 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
+                return 'Désolé une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
             }
         };
 
@@ -1580,8 +1565,8 @@
             const searchBox = $('#searchBox');
             if (searchBox) {
                 searchBox.addEventListener('input', debounce((e) => handleSearch(e.target.value), 300));
-                searchBox.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
+                searchBox.addEventListener('keypress', (event) => {
+                    if (event.key === 'Enter') {
                         handleSearch(e.target.value);
                     }
                 });
@@ -1598,7 +1583,7 @@
                 homeBackBtn.addEventListener('click', showHome);
             }
 
-                        const servicesBackBtn = $('#servicesBackBtn');
+            const servicesBackBtn = $('#servicesBackBtn');
             if (servicesBackBtn) {
                 servicesBackBtn.addEventListener('click', showServices);
             }
@@ -1642,18 +1627,30 @@
                         }, 1000);
                     }
                 };
-                chatbotSend.addEventListener('click', sendMessage);
-                chatbotInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
+                                chatbotSend.addEventListener('click', sendMessage);
+                chatbotInput.addEventListener('keypress', (event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
                         sendMessage();
                     }
                 });
             }
 
+            // Theme Toggle
+            const themeToggle = $('#themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+                    themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+                });
+            }
+
+            // Sort Devices
             const sortSelect = $('#sortSelect');
             if (sortSelect) {
                 sortSelect.addEventListener('change', () => {
-                    if (state.currentPage === 'devices-page') {
+                    if (state.currentPage === 'devices-page' && state.currentService) {
                         showDevices(state.currentService);
                     }
                 });
