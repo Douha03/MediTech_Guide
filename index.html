@@ -839,7 +839,7 @@
         <footer class="footer" role="contentinfo">
             <p>© 2025 MediTech. Tous droits réservés.</p>
             <p>
-                <a href="mailto:info@meditech.com" aria-label="Contacter MediTech par e-mail">info@meditech.com</a>
+                <a href="wine:mailto:info@meditech.com" aria-label="Contacter MediTech par e-mail">info@meditech.com</a>
                 <a href="tel:+33123456789" aria-label="Contacter MediTech par téléphone">+33 1 23 45 67 89</a>
             </p>
         </footer>
@@ -931,6 +931,16 @@
                     maintenance: ['Vérifier les capteurs quotidiennement', 'Nettoyer les électrodes', 'Tester les alarmes', 'Remplacer la batterie si nécessaire'],
                     brands: ['GE Healthcare', 'Dräger'],
                     normes: ['Installation dans une unité de soins intensifs néonatals', 'Conformité aux normes ISO 80601-2-61', 'Alimentation électrique avec batterie de secours']
+                },
+                {
+                    name: 'Incubateur Néonatal',
+                    image: 'https://via.placeholder.com/400x250?text=Incubateur+Néonatal',
+                    role: 'Maintien de l\'environnement thermique pour les nouveau-nés prématurés.',
+                    principle: 'Fournit un environnement contrôlé en température et humidité pour stabiliser les nouveau-nés.',
+                    components: ['Chambre d\'incubation', 'Système de chauffage', 'Capteurs d\'humidité', 'Écran de contrôle'],
+                    maintenance: ['Vérifier les capteurs d\'humidité', 'Nettoyer la chambre', 'Calibrer le système de chauffage', 'Tester les alarmes'],
+                    brands: ['Dräger', 'GE Healthcare'],
+                    normes: ['Installation dans une unité néonatale', 'Conformité aux normes CEI 60601-2-19', 'Alimentation électrique stable']
                 }
             ],
             cardiologie: [
@@ -953,6 +963,16 @@
                     maintenance: ['Inspecter la sonde', 'Nettoyer l\'écran', 'Vérifier le logiciel', 'Calibrer le Doppler'],
                     brands: ['Siemens Healthineers', 'Philips Healthcare'],
                     normes: ['Installation dans une salle à température contrôlée', 'Conformité aux normes CEI 60601-2-37', 'Protection contre les interférences électriques']
+                },
+                {
+                    name: 'Défibrillateur Automatique',
+                    image: 'https://via.placeholder.com/400x250?text=Défibrillateur',
+                    role: 'Restauration du rythme cardiaque en cas d\'arythmie grave.',
+                    principle: 'Délivre un choc électrique pour rétablir un rythme cardiaque normal.',
+                    components: ['Électrodes adhésives', 'Batterie rechargeable', 'Écran de contrôle', 'Système d\'analyse ECG'],
+                    maintenance: ['Tester la batterie', 'Vérifier les électrodes', 'Calibrer l\'analyseur ECG', 'Mettre à jour le firmware'],
+                    brands: ['Philips Healthcare', 'ZOLL Medical'],
+                    normes: ['Installation dans une zone accessible', 'Conformité aux normes CEI 60601-2-4', 'Formation des utilisateurs requise']
                 }
             ],
             imagerie_medicale: [
@@ -975,6 +995,16 @@
                     maintenance: ['Vérifier le système de refroidissement', 'Inspecter les bobines', 'Calibrer l\'aimant', 'Tester les sécurités'],
                     brands: ['Philips Healthcare', 'Siemens Healthineers'],
                     normes: ['Installation dans une cage de Faraday', 'Conformité aux normes CEI 60601-2-33', 'Zone de sécurité magnétique délimitée']
+                },
+                {
+                    name: 'Mammographe Numérique',
+                    image: 'https://via.placeholder.com/400x250?text=Mammographe',
+                    role: 'Dépistage et diagnostic du cancer du sein par imagerie.',
+                    principle: 'Utilise des rayons X à faible dose pour produire des images des tissus mammaires.',
+                    components: ['Source de rayons X', 'Détecteur numérique', 'Système de compression', 'Console d\'analyse'],
+                    maintenance: ['Vérifier la source de rayons X', 'Nettoyer le système de compression', 'Calibrer le détecteur', 'Mettre à jour le logiciel'],
+                    brands: ['Hologic Inc', 'GE Healthcare'],
+                    normes: ['Installation dans une salle avec blindage au plomb (1-2 mm)', 'Conformité aux normes CEI 60601-2-45', 'Formation des techniciens']
                 }
             ],
             neurologie: [
@@ -987,6 +1017,16 @@
                     maintenance: ['Vérifier les électrodes', 'Nettoyer l\'amplificateur', 'Tester le logiciel', 'Calibrer l\'appareil'],
                     brands: ['Nihon Kohden', 'Philips Healthcare'],
                     normes: ['Installation dans une salle sans interférences électromagnétiques', 'Conformité aux normes CEI 60601-2-26', 'Mise à la terre obligatoire']
+                },
+                {
+                    name: 'Doppler Transcrânien',
+                    image: 'https://via.placeholder.com/400x250?text=Doppler+Transcrânien',
+                    role: 'Évaluation du flux sanguin cérébral.',
+                    principle: 'Utilise des ultrasons pour mesurer la vitesse du flux sanguin dans les artères cérébrales.',
+                    components: ['Sonde à ultrasons', 'Écran de visualisation', 'Système Doppler', 'Logiciel d\'analyse'],
+                    maintenance: ['Vérifier la sonde', 'Nettoyer l\'écran', 'Calibrer le Doppler', 'Mettre à jour le logiciel'],
+                    brands: ['Nicolet Biomedical', 'Philips Healthcare'],
+                    normes: ['Installation dans une salle sans interférences', 'Conformité aux normes CEI 60601-2-37', 'Formation des utilisateurs']
                 }
             ],
             orthopedie: [
@@ -999,6 +1039,16 @@
                     maintenance: ['Vérifier la source de rayons X', 'Nettoyer la table', 'Calibrer le détecteur', 'Mettre à jour le logiciel'],
                     brands: ['Hologic Inc', 'GE Healthcare'],
                     normes: ['Installation dans une salle avec blindage au plomb (1-2 mm)', 'Conformité aux normes CEI 60601-2-54', 'Ventilation adéquate']
+                },
+                {
+                    name: 'Arthroscope',
+                    image: 'https://via.placeholder.com/400x250?text=Arthroscope',
+                    role: 'Exploration visuelle des articulations pour diagnostic et traitement.',
+                    principle: 'Utilise une caméra à fibre optique pour visualiser l\'intérieur des articulations.',
+                    components: ['Endoscope articulaire', 'Caméra HD', 'Source lumineuse', 'Système de contrôle'],
+                    maintenance: ['Désinfecter l\'endoscope', 'Vérifier la caméra', 'Tester la source lumineuse', 'Inspecter les canaux'],
+                    brands: ['Stryker', 'Arthrex'],
+                    normes: ['Installation dans une salle opératoire stérile', 'Conformité aux normes ISO 13485', 'Stockage dans un espace stérile']
                 }
             ],
             gastroenterologie: [
@@ -1011,6 +1061,16 @@
                     maintenance: ['Désinfecter l\'endoscope', 'Vérifier la caméra', 'Tester la source lumineuse', 'Inspecter les canaux'],
                     brands: ['Olympus Medical', 'Fujifilm'],
                     normes: ['Installation dans une salle d\'endoscopie propre', 'Conformité aux normes ISO 13485', 'Stockage dans un espace stérile']
+                },
+                {
+                    name: 'Endoscope Digestif',
+                    image: 'https://via.placeholder.com/400x250?text=Endoscope+Digestif',
+                    role: 'Exploration visuelle de l\'œsophage, de l\'estomac et du duodénum.',
+                    principle: 'Utilise un endoscope flexible avec caméra pour diagnostiquer les pathologies digestives hautes.',
+                    components: ['Endoscope flexible', 'Caméra HD', 'Source lumineuse', 'Système d\'aspiration'],
+                    maintenance: ['Désinfecter l\'endoscope', 'Vérifier la caméra', 'Tester l\'aspiration', 'Inspecter les canaux'],
+                    brands: ['Olympus Medical', 'Pentax Medical'],
+                    normes: ['Installation dans une salle d\'endoscopie stérile', 'Conformité aux normes ISO 13485', 'Stockage dans un espace stérile']
                 }
             ],
             oncologie: [
@@ -1033,6 +1093,16 @@
                     maintenance: ['Vérifier le collimator', 'Calibrer l\'accélérateur', 'Inspecter la table', 'Tester le logiciel'],
                     brands: ['Varian Medical', 'Elekta'],
                     normes: ['Installation dans un bunker avec blindage au plomb (4-6 mm)', 'Conformité aux normes CEI 60601-2-1', 'Système de refroidissement haute capacité']
+                },
+                {
+                    name: 'Gamma Knife',
+                    image: 'https://via.placeholder.com/400x250?text=Gamma+Knife',
+                    role: 'Traitement stéréotaxique non invasif pour les tumeurs cérébrales.',
+                    principle: 'Utilise des faisceaux gamma focalisés pour traiter les lésions cérébrales.',
+                    components: ['Source de cobalt-60', 'Système de ciblage stéréotaxique', 'Cadre de fixation', 'Console de planification'],
+                    maintenance: ['Vérifier la source gamma', 'Calibrer le système de ciblage', 'Tester le cadre', 'Mettre à jour le logiciel'],
+                    brands: ['Elekta', 'Varian Medical'],
+                    normes: ['Installation dans un bunker avec blindage au plomb (4-6 mm)', 'Conformité aux normes CEI 60601-2-1', 'Formation spécialisée des opérateurs']
                 }
             ],
             sterilisation: [
@@ -1055,6 +1125,16 @@
                     maintenance: ['Vérifier les cartouches', 'Nettoyer la chambre', 'Tester le générateur', 'Calibrer le système'],
                     brands: ['Sterrad', 'Getinge'],
                     normes: ['Installation dans une salle propre avec alimentation stable', 'Conformité aux normes ISO 14937', 'Ventilation pour évacuation des gaz']
+                },
+                {
+                    name: 'Stérilisateur UV',
+                    image: 'https://via.placeholder.com/400x250?text=Stérilisateur+UV',
+                    role: 'Stérilisation de surfaces et petits instruments par rayonnement UV.',
+                    principle: 'Utilise des rayons ultraviolets pour détruire l\'ADN des micro-organismes.',
+                    components: ['Lampe UV-C', 'Chambre de stérilisation', 'Système de contrôle', 'Capteurs de sécurité'],
+                    maintenance: ['Vérifier la lampe UV', 'Nettoyer la chambre', 'Tester les capteurs', 'Remplacer la lampe selon le cycle'],
+                    brands: ['Getinge', 'Steris'],
+                    normes: ['Installation dans une salle propre', 'Conformité aux normes ISO 14937', 'Protection contre l\'exposition UV']
                 }
             ],
             bloc_operatoire: [
@@ -1087,6 +1167,16 @@
                     maintenance: ['Vérifier les bras robotisés', 'Calibrer la caméra', 'Tester la console', 'Mettre à jour le logiciel'],
                     brands: ['Intuitive Surgical', 'Medtronic'],
                     normes: ['Installation dans un bloc opératoire dédié', 'Conformité aux normes CEI 60601-1', 'Formation obligatoire pour les opérateurs']
+                },
+                {
+                    name: 'Système de Navigation Chirurgicale',
+                    image: 'https://via.placeholder.com/400x250?text=Navigation+Chirurgicale',
+                    role: 'Guidage précis pour les interventions chirurgicales complexes.',
+                    principle: 'Utilise l\'imagerie 3D en temps réel pour guider les instruments chirurgicaux.',
+                    components: ['Caméra infrarouge', 'Écran de navigation', 'Logiciel de cartographie', 'Capteurs de suivi'],
+                    maintenance: ['Calibrer les capteurs', 'Vérifier la caméra', 'Tester le logiciel', 'Nettoyer l\'écran'],
+                    brands: ['Medtronic', 'Stryker'],
+                    normes: ['Installation dans un bloc opératoire stérile', 'Conformité aux normes CEI 60601-1', 'Formation spécialisée des opérateurs']
                 }
             ],
             reanimation: [
@@ -1119,6 +1209,16 @@
                     maintenance: ['Vérifier les tubulures', 'Nettoyer la pompe', 'Tester les alarmes', 'Calibrer le débit'],
                     brands: ['B. Braun', 'Medtronic'],
                     normes: ['Installation dans une unité de soins intensifs', 'Conformité aux normes CEI 60601-2-24', 'Stockage des tubulures stériles']
+                },
+                {
+                    name: 'Appareil d\'ECMO',
+                    image: 'https://via.placeholder.com/400x250?text=ECMO',
+                    role: 'Support cardio-respiratoire pour patients en insuffisance grave.',
+                    principle: 'Oxygène le sang et soutient la circulation en cas de défaillance cardiaque ou pulmonaire.',
+                    components: ['Pompe centrifuge', 'Oxygénateur', 'Canules', 'Système de contrôle'],
+                    maintenance: ['Vérifier les canules', 'Nettoyer l\'oxygénateur', 'Tester la pompe', 'Calibrer le système'],
+                    brands: ['Maquet', 'Medtronic'],
+                    normes: ['Installation dans une unité de réanimation', 'Conformité aux normes CEI 60601-1', 'Formation spécialisée des opérateurs']
                 }
             ]
         };
@@ -1444,7 +1544,7 @@
             });
         };
 
-                // Search handling
+        // Search handling
         const handleSearch = (query) => {
             query = query.trim().toLowerCase(); // Normalize query
             if (!query) {
@@ -1533,364 +1633,240 @@
         };
 
         const addChatMessage = (message, isUser, suggestions = []) => {
-            const chatbotBody = $('#chatbotBody');
-            if (!chatbotBody) return;
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
-            messageDiv.innerHTML = `<p>${message}</p>`;
-            if (!isUser && suggestions.length > 0) {
-                const suggestionsDiv = document.createElement('div');
-                suggestionsDiv.className = 'chatbot-suggestions';
-                suggestions.forEach(suggestion => {
-                    const button = document.createElement('button');
-                    button.className = 'suggestion-btn';
-                    button.textContent = suggestion.text;
-                    button.addEventListener('click', () => {
-                        addChatMessage(suggestion.text, true);
-                        showTypingAnimation(true);
-                        setTimeout(() => {
-                            showTypingAnimation(false);
-                            const response = suggestion.action();
-                            addChatMessage(response, false);
-                        }, 1000);
-                    });
-                    suggestionsDiv.appendChild(button);
-                });
-                messageDiv.appendChild(suggestionsDiv);
-            }
-            chatbotBody.appendChild(messageDiv);
-            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+    const chatbotBody = $('#chatbotBody');
+    if (!chatbotBody) return;
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
+    messageDiv.innerHTML = `<p>${message}</p>`;
+    if (!isUser && suggestions.length > 0) {
+        const suggestionsDiv = document.createElement('div');
+        suggestionsDiv.className = 'chatbot-suggestions';
+        suggestions.forEach(suggestion => {
+            const button = document.createElement('button');
+            button.className = 'suggestion-btn';
+            button.textContent = suggestion.text;
+            button.addEventListener('click', () => {
+                addChatMessage(suggestion.text, true);
+                showTypingAnimation(true);
+                setTimeout(() => {
+                    showTypingAnimation(false);
+                    const response = suggestion.action();
+                    addChatMessage(response, false);
+                }, 1000);
+            });
+            suggestionsDiv.appendChild(button);
+        });
+        messageDiv.appendChild(suggestionsDiv);
+    }
+    chatbotBody.appendChild(messageDiv);
+    chatbotBody.scrollTop = chatbotBody.scrollHeight;
+    state.chatHistory.push({ message, isUser });
+};
+
+const showTypingAnimation = (show) => {
+    const typingIndicator = $('#chatbotTyping');
+    if (typingIndicator) {
+        typingIndicator.style.display = show ? 'block' : 'none';
+    }
+};
+
+const processChatbotQuery = (query) => {
+    query = query.toLowerCase().trim();
+    const device = findDeviceByName(query);
+    if (device) {
+        return {
+            response: `Vous avez demandé des informations sur "${device.name}". Voulez-vous voir les détails ?`,
+            suggestions: [
+                { text: `Détails de ${device.name}`, action: () => { showDeviceDetails(device.name); return `Affichage des détails de ${device.name}.`; } }
+            ]
         };
-
-        const showTypingAnimation = (show) => {
-            const typing = $('#chatbotTyping');
-            if (typing) {
-                typing.style.display = show ? 'block' : 'none';
-            }
+    }
+    const serviceKey = findServiceByName(query);
+    if (serviceKey) {
+        return {
+            response: `Vous avez demandé des informations sur "${services[serviceKey].name}". Voulez-vous voir les dispositifs associés ?`,
+            suggestions: [
+                { text: `Dispositifs de ${services[serviceKey].name}`, action: () => { showDevices(serviceKey); return `Affichage des dispositifs pour ${services[serviceKey].name}.`; } }
+            ]
         };
+    }
+    return `Désolé, je n'ai pas trouvé de correspondance pour "${query}". Essayez un autre dispositif ou spécialité, ou reformulez votre question.`;
+};
 
-        const processChatbotQuery = (query) => {
-            try {
-                if (!devices || !services) {
-                    throw new Error('Données des dispositifs ou services non disponibles.');
-                }
-                const normalizedQuery = query.toLowerCase().trim();
-                state.chatHistory.push({ query: normalizedQuery, timestamp: Date.now() });
-                let response = 'Désolé, je n\'ai pas compris votre question. Essayez de demander quelque chose sur les dispositifs, les marques ou les spécialités médicales.';
-                let suggestions = [];
-
-                // Check for service match
-                for (const serviceKey in services) {
-                    const service = services[serviceKey];
-                    if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
-                        return `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
+// Quiz Generation
+const generateQuiz = () => {
+    const devicesList = Object.values(devices).flat();
+    const randomDevice = devicesList[Math.floor(Math.random() * devicesList.length)];
+    const question = `Quel est le rôle principal de "${randomDevice.name}" ?`;
+    const correctAnswer = randomDevice.role;
+    const incorrectAnswers = devicesList
+        .filter(d => d.name !== randomDevice.name)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3)
+        .map(d => d.role);
+    const answers = [correctAnswer, ...incorrectAnswers].sort(() => Math.random() - 0.5);
+    
+    const quizContainer = document.createElement('div');
+    quizContainer.className = 'quiz-container';
+    quizContainer.innerHTML = `
+        <h3>${question}</h3>
+        <div class="quiz-options">
+            ${answers.map((answer, index) => `
+                <button class="quiz-option" data-index="${index}">${answer}</button>
+            `).join('')}
+        </div>
+        <p class="quiz-feedback" id="quizFeedback"></p>
+    `;
+    const heroSection = $('.hero-section');
+    if (heroSection) {
+        const existingQuiz = heroSection.querySelector('.quiz-container');
+        if (existingQuiz) existingQuiz.remove();
+        heroSection.appendChild(quizContainer);
+        const options = quizContainer.querySelectorAll('.quiz-option');
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                const feedback = $('#quizFeedback');
+                if (feedback) {
+                    if (option.textContent === correctAnswer) {
+                        feedback.textContent = 'Correct ! Bien joué.';
+                        feedback.style.color = 'var(--primary-color)';
+                    } else {
+                        feedback.textContent = `Incorrect. Le rôle correct est : ${correctAnswer}`;
+                        feedback.style.color = '#f56565';
                     }
+                    options.forEach(opt => opt.disabled = true);
                 }
+            });
+        });
+    }
+};
 
-                // Check for device match and provide suggestions
-                let foundDevice = null;
-                for (const serviceKey in devices) {
-                    const deviceList = devices[serviceKey];
-                    for (const device of deviceList) {
-                        const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                        if (deviceSynonyms.some(s => normalizedQuery.includes(s))) {
-                            foundDevice = device;
-                            suggestions = [
-                                { text: `Quel est le rôle du ${device.name} ?`, action: () => `Le rôle du ${device.name} est : ${device.role}` },
-                                { text: `Quel est le principe de fonctionnement du ${device.name} ?`, action: () => `Le principe de fonctionnement du ${device.name} est : ${device.principle}` },
-                                { text: `Quels sont les composants du ${device.name} ?`, action: () => `Les composants principaux du ${device.name} sont : ${device.components.join(', ')}` },
-                                { text: `Quelle est la maintenance du ${device.name} ?`, action: () => `La checklist pour la maintenance du ${device.name} est : ${device.maintenance.join(', ')}` },
-                                { text: `Quelles sont les marques du ${device.name} ?`, action: () => `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}` },
-                                { text: `Quelles sont les normes du ${device.name} ?`, action: () => `Les normes pour ${device.name} sont : ${device.normes.join(', ')}` }
-                            ];
-                            response = `Vous avez demandé des informations sur ${device.name}. Voici quelques suggestions :`;
-                            return { response, suggestions };
-                        }
-                    }
-                }
+// Theme Toggle
+const toggleTheme = () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    const themeToggle = $('#themeToggle');
+    if (themeToggle) {
+        themeToggle.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+        themeToggle.setAttribute('aria-label', `Basculer vers le thème ${newTheme === 'dark' ? 'clair' : 'sombre'}`);
+    }
+    localStorage.setItem('theme', newTheme);
+};
 
-                // Handle specific device attribute queries
-                let contextDevice = state.chatHistory.length > 1 ? findDeviceByName(state.chatHistory[state.chatHistory.length - 2].query) : null;
-                for (const serviceKey in devices) {
-                    const deviceList = devices[serviceKey];
-                    for (const device of deviceList) {
-                        if (normalizedQuery.includes('rôle') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            return `Le rôle du ${device.name} est : ${device.role}`;
-                        }
-                        if (normalizedQuery.includes('principe') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            return `Le principe de fonctionnement du ${device.name} est : ${device.principle}`;
-                        }
-                        if (normalizedQuery.includes('composants') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            return `Les composants principaux du ${device.name} sont : ${device.components.join(', ')}`;
-                        }
-                        if (normalizedQuery.includes('maintenance') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            return `La checklist pour la maintenance du ${device.name} est : ${device.maintenance.join(', ')}`;
-                        }
-                        if (normalizedQuery.includes('marques') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            return `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
-                        }
-                        if (normalizedQuery.includes('normes') && (normalizedQuery.includes(normalizedQuery)) || (contextDevice && contextDevice.name === device.name)) {
-                            return `Les normes pour ${device.name} sont : ${device.normes.join(', ')}`;
-                        }
-                    }
-                }
-
-                // Check for comparison
-                if (normalizedQuery.includes('comparer') || normalizedQuery.includes('compare')) {
-                    const deviceNames = Object.values(devices).flat().map(d => d.name.toLowerCase());
-                    const foundDevices = deviceNames.filter(name => normalizedQuery.includes(name));
-                    if (foundDevices.length >= 2) {
-                        const device1 = findDeviceByName(foundDevices[0]);
-                        const device2 = findDeviceByName(foundDevices[1]);
-                        if (device1 && device2) {
-                            return `Comparaison entre ${device1.name} et ${device2.name} :\n` +
-                                `- **Rôle** : ${device1.name} : ${device1.role} | ${device2.name} : ${device2.role}\n` +
-                                `- **Principe** : ${device1.name} : ${device1.principle} | ${device2.name} : ${device2.principle}\n` +
-                                `- **Marques** : ${device1.name} : ${device1.brands.join(', ')} | ${device2.name} : ${device2.brands.join(', ')}\n` +
-                                `- **Normes** : ${device1.name} : ${device1.normes.join(', ')} | ${device2.name} : ${device2.normes.join(', ')}`;
-                        }
-                    }
-                }
-
-                // Check for general queries
-                if (normalizedQuery.includes('spécialités') || normalizedQuery.includes('specialties')) {
-                    return `MediTech propose des équipements pour : ${Object.values(services).map(s => s.name).join(', ')}`;
-                }
-                if (normalizedQuery.includes('dispositifs') || normalizedQuery.includes('devices')) {
-                    const allDevices = Object.values(devices).flat().map(d => d.name);
-                    return `MediTech propose : ${allDevices.join(', ')}`;
-                }
-                if (normalizedQuery.includes('marques') || normalizedQuery.includes('brands')) {
-                    const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
-                    return `Marques disponibles : ${allBrands.join(', ')}`;
-                }
-
-                // Check for brand-specific queries
-                const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
-                for (const brand of allBrands) {
-                    if (brand.toLowerCase().indexOf(normalizedQuery) !== -1) {
-                        const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
-                        return `La marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand.map(device => device.name).join(', ')}`;
-                    }
-                }
-
-                return response;
-            } catch (error) {
-                console.error('Error processing chatbot query:', error);
-                showNotification('Une erreur est survenue lors du traitement de votre question.', 'error');
-                return 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
-            }
-        };
-
-        // Generate Quiz
-        const generateQuiz = () => {
-            const allDevices = Object.values(devices).flat();
-            if (allDevices.length < 4) {
-                showNotification('Pas assez de dispositifs pour générer un quiz.', 'error');
-                return;
-            }
-            const shuffledDevices = allDevices.sort(() => Math.random() - 0.5).slice(0, 4);
-            const correctDevice = shuffledDevices[Math.floor(Math.random() * 4)];
-            const question = `Quel dispositif est utilisé pour : ${correctDevice.role}?`;
-            const options = shuffledDevices.map(device => device.name);
-            const quizHTML = `
-                <h2>Quiz sur les Technologies Médicales</h2>
-                <p>${question}</p>
-                <div class="quiz-options">
-                    ${options.map((option, index) => `
-                        <button class="btn-primary quiz-option" data-correct="${option === correctDevice.name}" aria-label="${option}">${option}</button>
-                    `).join('')}
-                </div>
-            `;
-            const quizSection = document.createElement('section');
-            quizSection.id = 'quiz-page';
-            quizSection.className = 'content-section';
-            quizSection.innerHTML = `
-                <button class="back-btn" id="quizBackBtn" aria-label="Retour à l'accueil"><i class="fas fa-arrow-left"></i> Retour</button>
-                <h1 class="page-title">Quiz MediTech</h1>
-                ${quizHTML}
-            `;
-            hideAllPages();
-            document.querySelector('main').appendChild(quizSection);
-            showPage('quiz-page', 'Quiz MediTech', [
-                { text: 'Quiz MediTech', action: generateQuiz }
-            ]);
-            state.navigationHistory = [{ text: 'Quiz MediTech', action: generateQuiz }];
-
-            // Ensure DOM is updated before attaching event listeners
-            setTimeout(() => {
-                $$('.quiz-option').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const isCorrect = button.getAttribute('data-correct') === 'true';
-                        const feedback = document.createElement('p');
-                        feedback.className = 'quiz-feedback';
-                        feedback.style.color = isCorrect ? '#28a745' : '#f56565';
-                        feedback.textContent = isCorrect 
-                            ? 'Correct ! Bien joué !' 
-                            : `Incorrect. La bonne réponse était : ${correctDevice.name}.`;
-                        quizSection.appendChild(feedback);
-
-                        // Disable all buttons after selection
-                        $$('.quiz-option').forEach(btn => {
-                            btn.disabled = true;
-                            btn.style.cursor = 'not-allowed';
-                            btn.style.opacity = '0.6';
-                        });
-
-                        // Add a "Try Again" button
-                        const tryAgainBtn = document.createElement('button');
-                        tryAgainBtn.className = 'btn-primary';
-                        tryAgainBtn.textContent = 'Rejouer';
-                        tryAgainBtn.style.marginTop = '20px';
-                        tryAgainBtn.setAttribute('aria-label', 'Rejouer le quiz');
-                        tryAgainBtn.addEventListener('click', () => {
-                            quizSection.remove();
-                            generateQuiz();
-                        });
-                        quizSection.appendChild(tryAgainBtn);
-
-                        showNotification(isCorrect ? 'Bonne réponse !' : 'Mauvaise réponse.', isCorrect ? 'success' : 'error');
-                    });
-                });
-            }, 0); // Delay to ensure DOM update
-
-            // Add event listener for quiz back button
-            const quizBackBtn = $('#quizBackBtn');
-            if (quizBackBtn) {
-                quizBackBtn.addEventListener('click', () => {
-                    quizSection.remove();
-                    showHome();
-                });
-            }
-        };
-
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            showHome();
-
-            // Theme Toggle
-            const themeToggle = $('#themeToggle');
-            if (themeToggle) {
-                themeToggle.addEventListener('click', () => {
-                    const currentTheme = document.documentElement.getAttribute('data-theme');
-                    document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
-                    themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
-                    showNotification('Thème changé avec succès.', 'success');
-                });
-            }
-
-            // Search
-            const searchBox = $('#searchBox');
-            if (searchBox) {
-                searchBox.addEventListener('input', debounce(() => handleSearch(searchBox.value), 300));
-                searchBox.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        handleSearch(searchBox.value);
-                    }
-                });
-            }
-
-            // Navigation Buttons
-            const exploreServicesBtn = $('#exploreServicesBtn');
-            if (exploreServicesBtn) {
-                exploreServicesBtn.addEventListener('click', () => showServices());
-            }
-
-            const chatGuideBtn = $('#chatGuideBtn');
-            if (chatGuideBtn) {
-                chatGuideBtn.addEventListener('click', showChatbotPage);
-            }
-
-            const homeBackBtn = $('#homeBackBtn');
-            if (homeBackBtn) {
-                homeBackBtn.addEventListener('click', showHome);
-            }
-
-            const servicesBackBtn = $('#servicesBackBtn');
-            if (servicesBackBtn) {
-                servicesBackBtn.addEventListener('click', () => {
-                    showServices(state.currentService || '');
-                    state.currentDevice = '';
-                });
-            }
-
-            const devicesBackBtn = $('#devicesBackBtn');
-            if (devicesBackBtn) {
-                devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
-            }
-
-            const chatbotBackBtn = $('#chatbotBackBtn');
-            if (chatbotBackBtn) {
-                chatbotBackBtn.addEventListener('click', () => {
-                    state.navigationHistory.pop();
-                    const previous = state.navigationHistory[state.navigationHistory.length - 1]?.action || showHome;
-                    previous();
-                });
-            }
-
-            const sortSelect = $('#sortSelect');
-            if (sortSelect) {
-                sortSelect.addEventListener('change', () => {
-                    if (state.currentService) {
-                        showDevices(state.currentService);
-                    }
-                });
-            }
-
-            // Chatbot Input
-            const chatbotSend = $('#chatbotSend');
-            const chatbotInput = $('#chatbotInput');
-            if (chatbotSend && chatbotInput) {
-                chatbotSend.addEventListener('click', () => {
-                    const query = chatbotInput.value.trim();
-                    if (query) {
-                        addChatMessage(query, true);
-                        chatbotInput.value = '';
-                        showTypingAnimation(true);
-                        setTimeout(() => {
-                            showTypingAnimation(false);
-                            const response = processChatbotQuery(query);
-                            if (typeof response === 'object') {
-                                addChatMessage(response.response, false, response.suggestions);
-                            } else {
-                                addChatMessage(response, false);
-                            }
-                        }, 1000);
-                    }
-                });
-                chatbotInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        chatbotSend.click();
-                    }
-                });
-            }
-
-            // Quiz Button
-            const generateQuizBtn = $('#generateQuizBtn');
-            if (generateQuizBtn) {
-                generateQuizBtn.addEventListener('click', generateQuiz);
+// Event Listeners
+const initEventListeners = () => {
+    // Search
+    const searchBox = $('#searchBox');
+    if (searchBox) {
+        searchBox.addEventListener('input', debounce((e) => handleSearch(e.target.value), 300));
+        searchBox.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSearch(e.target.value);
             }
         });
+    }
 
-        // Accessibility Enhancements
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                const activeElement = document.activeElement;
-                if (activeElement.tagName === 'INPUT') {
-                    activeElement.blur();
-                } else if (state.currentPage !== 'home-page') {
-                    const backBtn = $(`#${state.currentPage.replace('-page', 'BackBtn')}`);
-                    if (backBtn) backBtn.click();
-                }
+    // Navigation Buttons
+    const exploreServicesBtn = $('#exploreServicesBtn');
+    if (exploreServicesBtn) {
+        exploreServicesBtn.addEventListener('click', () => showServices());
+    }
+    const homeBackBtn = $('#homeBackBtn');
+    if (homeBackBtn) {
+        homeBackBtn.addEventListener('click', showHome);
+    }
+    const servicesBackBtn = $('#servicesBackBtn');
+    if (servicesBackBtn) {
+        servicesBackBtn.addEventListener('click', () => showServices());
+    }
+    const devicesBackBtn = $('#devicesBackBtn');
+    if (devicesBackBtn) {
+        devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
+    }
+    const chatbotBackBtn = $('#chatbotBackBtn');
+    if (chatbotBackBtn) {
+        chatbotBackBtn.addEventListener('click', () => {
+            const previousPage = state.navigationHistory[state.navigationHistory.length - 2];
+            if (previousPage) {
+                previousPage.action();
+                state.navigationHistory.pop();
+            } else {
+                showHome();
             }
         });
+    }
 
-        // Initial Data Check
-        if (!services || !devices) {
-            console.error('Services or devices data is missing');
-            showNotification('Erreur : Données des services ou dispositifs manquantes.', 'error');
-        }
+    // Chatbot
+    const chatGuideBtn = $('#chatGuideBtn');
+    if (chatGuideBtn) {
+        chatGuideBtn.addEventListener('click', showChatbotPage);
+    }
+    const chatbotSend = $('#chatbotSend');
+    const chatbotInput = $('#chatbotInput');
+    if (chatbotSend && chatbotInput) {
+        chatbotSend.addEventListener('click', () => {
+            const query = chatbotInput.value.trim();
+            if (query) {
+                addChatMessage(query, true);
+                showTypingAnimation(true);
+                setTimeout(() => {
+                    showTypingAnimation(false);
+                    const response = processChatbotQuery(query);
+                    if (typeof response === 'object') {
+                        addChatMessage(response.response, false, response.suggestions);
+                    } else {
+                        addChatMessage(response, false);
+                    }
+                    chatbotInput.value = '';
+                }, 1000);
+            }
+        });
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                chatbotSend.click();
+            }
+        });
+    }
+
+    // Sorting
+    const sortSelect = $('#sortSelect');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+            if (state.currentService) {
+                showDevices(state.currentService);
+            }
+        });
+    }
+
+    // Theme Toggle
+    const themeToggle = $('#themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+
+    // Quiz
+    const generateQuizBtn = $('#generateQuizBtn');
+    if (generateQuizBtn) {
+        generateQuizBtn.addEventListener('click', generateQuiz);
+    }
+};
+
+// Initialization
+const init = () => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const themeToggle = $('#themeToggle');
+    if (themeToggle) {
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        themeToggle.setAttribute('aria-label', `Basculer vers le thème ${savedTheme === 'dark' ? 'clair' : 'sombre'}`);
+    }
+    showHome();
+    initEventListeners();
+    showNotification('Bienvenue sur MediTech !', 'success');
+};
+
+window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
-</xaiArtifact>
