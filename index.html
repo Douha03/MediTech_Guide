@@ -100,7 +100,8 @@
         }
 
         .search-container {
-            display: flex;
+            display: var(--secondary-color);
+            flex-direction: row;
             align-items: center;
             gap: 10px;
         }
@@ -108,10 +109,10 @@
         .search-box {
             background: var(--bg-light);
             border: 2px solid var(--border-light);
-            padding: 10px 15px;
+            padding: 10px;
             border-radius: 8px;
             width: 280px;
-            font-size: 0.9rem;
+            font-size: 14px;
             transition: var(--transition);
         }
 
@@ -128,7 +129,7 @@
             padding: 8px 12px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 12px;
             transition: var(--transition);
         }
 
@@ -138,7 +139,7 @@
 
         .nav-breadcrumb {
             margin-top: 10px;
-            font-size: 0.85rem;
+            font-size: 14px;
             color: var(--text-light);
             display: flex;
             gap: 8px;
@@ -168,21 +169,21 @@
             transition: opacity 0.5s ease;
         }
 
-        .content-section:not(.hidden) {
-            opacity: 1;
-            animation: slideIn 0.5conyis0;
-        }
-
-        .content-section.hidden {
+        .content-section {
             display: none;
         }
 
+        .content-section:not(.hidden) {
+            opacity: 1;
+            animation: slideIn 0.5s ease;
+        }
+
         .page-title {
-            font-size: 2.5;
-            font-weight: 600;
+            font-size: 2.5rem;
+            font-weight: bold;
             text-align: center;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(135deg, var(--primary-color));
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -203,7 +204,7 @@
             font-size: 1.1rem;
             color: var(--text-light);
             max-width: 600px;
-            margin: 0 auto 30px;
+            margin: 30px auto;
         }
 
         .btn-primary {
@@ -214,7 +215,7 @@
             border-radius: 8px;
             font-size: 1rem;
             cursor: pointer;
-            transition: var(--transition-color);
+            transition: var(--transition);
             box-shadow: var(--shadow-sm);
         }
 
@@ -231,7 +232,7 @@
             border-radius: 8px;
             font-size: 1rem;
             cursor: pointer;
-            transition: var(--primary-color);
+            transition: var(--transition);
             box-shadow: var(--shadow-sm);
             margin-left: 10px;
         }
@@ -251,13 +252,12 @@
 
         .service-card, .device-card {
             background: var(--white);
-            padding: 25px;
-            border-radius: 20px;
+            padding: 20px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: var(--transition-color);
+            transition: var(--transition);
             box-shadow: var(--shadow-sm);
-            border: var(--border-light);
-            border-width: 1px;
+            border: 1px solid var(--border-light);
         }
 
         .service-card:hover, .device-card:hover {
@@ -267,7 +267,7 @@
         }
 
         .card-icon {
-            font-size: 2.5;
+            font-size: 2.5rem;
             color: var(--primary-color);
             text-align: center;
             margin-bottom: 15px;
@@ -295,13 +295,13 @@
 
         .card-title {
             font-size: 1.3rem;
-            font-weight: 600;
+            font-weight: bold;
             margin-bottom: 15px;
         }
 
         .card-description {
             color: var(--text-light);
-            font-size: 0.9rem;
+            font-size: 14px;
         }
 
         .device-details {
@@ -341,7 +341,7 @@
 
         .device-info h3 {
             font-size: 1.3rem;
-            font-weight: 600;
+            font-weight: bold;
             margin-bottom: 15px;
             color: var(--primary-color);
             display: flex;
@@ -405,7 +405,7 @@
             border: 1px solid var(--border-light);
             padding: 8px;
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 14px;
         }
 
         .sort-select:focus {
@@ -425,7 +425,8 @@
         .footer a {
             color: var(--primary-color);
             text-decoration: none;
-            margin: 0 8px;
+            margin-left: 8px;
+            margin-right: 8px;
             transition: var(--transition);
         }
 
@@ -434,39 +435,20 @@
             text-decoration: underline;
         }
 
-        .chatbot-container {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 320px;
-            max-height: 450px;
-            background: var(--white);
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
-            z-index: 1100;
-            overflow: hidden;
-        }
-
         .chatbot-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: var(--white);
             padding: 12px;
             font-size: 1.1rem;
-            font-weight: 600;
+            font-weight: bold;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .chatbot-close {
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-
         .chatbot-body {
             padding: 12px;
-            max-height: 350px;
+            max-height: 500px;
             overflow-y: auto;
             background: var(--bg-light);
         }
@@ -490,7 +472,7 @@
             max-width: 80%;
             padding: 8px 12px;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 14px;
         }
 
         .chat-message.user p {
@@ -516,7 +498,7 @@
             padding: 8px;
             border: 1px solid var(--border-light);
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 14px;
         }
 
         .chatbot-input input:focus {
@@ -541,7 +523,7 @@
 
         .chatbot-typing {
             display: none;
-            font-size: 0.85rem;
+            font-size: 14px;
             color: var(--text-light);
             padding: 8px;
         }
@@ -558,33 +540,12 @@
             animation-delay: 0.4s;
         }
 
-        .chatbot-suggestions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .suggestion-btn {
-            background: var(--border-light);
-            color: var(--text-dark);
-            padding: 6px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: var(--transition);
-        }
-
-        .suggestion-btn:hover {
-            background: var(--primary-color);
-            color: var(--white);
-        }
-
         .stats-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
-            margin: 30px 0;
+            margin-top: 30px;
+            margin-bottom: 30px;
         }
 
         .stat-card {
@@ -602,13 +563,13 @@
 
         .stat-number {
             font-size: 2rem;
-            font-weight: 700;
+            font-weight: bold;
             color: var(--primary-color);
             margin-bottom: 8px;
         }
 
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 14px;
             color: var(--text-light);
         }
 
@@ -618,7 +579,7 @@
             text-align: center;
             padding: 8px;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 14px;
         }
 
         .no-js {
@@ -638,7 +599,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             z-index: 1200;
-            font-size: 0.9rem;
+            font-size: 14px;
         }
 
         .notification-success {
@@ -657,7 +618,10 @@
 
         @media (max-width: 768px) {
             .container {
-                padding: 80px 10px 15px;
+                padding-top: 80px;
+                padding-right: 10px;
+                padding-bottom: 15px;
+                padding-left: 10px;
             }
 
             .content-section {
@@ -675,11 +639,6 @@
 
             .search-box {
                 width: 100%;
-            }
-
-            .chatbot-container {
-                width: 90%;
-                bottom: 20px;
             }
 
             .hero-section .btn-primary, .hero-section .btn-chatguide {
@@ -758,7 +717,7 @@
                         <div class="stat-label">Dispositifs</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">9</div>
+                        <div class="stat-number">10</div>
                         <div class="stat-label">Spécialités</div>
                     </div>
                     <div class="stat-card">
@@ -793,23 +752,24 @@
                 <button class="back-btn" id="devicesBackBtn" aria-label="Retour aux dispositifs">← Retour</button>
                 <div class="device-details" id="deviceDetailsContent" aria-live="polite"></div>
             </section>
-        </main>
 
-        <div class="chatbot-container" id="chatbotContainer">
-            <div class="chatbot-header">
-                <span>MediTech Assistant</span>
-                <button class="chatbot-close" id="chatbotClose" aria-label="Fermer le chatbot">×</button>
-            </div>
-            <div class="chatbot-body" id="chatbotBody" aria-live="polite">
-                <div class="chatbot-typing" id="chatbotTyping">
-                    <span>.</span><span>.</span><span>.</span>
+            <section id="chatbot-page" class="content-section hidden" aria-labelledby="chatbot-title">
+                <button class="back-btn" id="chatbotBackBtn" aria-label="Retour à la page précédente">← Retour</button>
+                <h1 class="page-title" id="chatbot-title">MediTech Assistant</h1>
+                <div class="chatbot-header">
+                    <span>MediTech Assistant</span>
                 </div>
-            </div>
-            <div class="chatbot-input">
-                <input type="text" id="chatbotInput" placeholder="Posez une question..." aria-label="Saisir une question pour le chatbot">
-                <button id="chatbotSend" aria-label="Envoyer la question">➤</button>
-            </div>
-        </div>
+                <div class="chatbot-body" id="chatbotBody" aria-live="polite">
+                    <div class="chatbot-typing" id="chatbotTyping">
+                        <span>.</span><span>.</span><span>.</span>
+                    </div>
+                </div>
+                <div class="chatbot-input">
+                    <input type="text" id="chatbotInput" placeholder="Posez une question..." aria-label="Saisir une question pour le chatbot">
+                    <button id="chatbotSend" aria-label="Envoyer la question">➤</button>
+                </div>
+            </section>
+        </main>
 
         <footer class="footer" role="contentinfo">
             <p>© 2025 MediTech. Tous droits réservés.</p>
@@ -858,7 +818,7 @@
                 icon: '🦴',
                 image: 'https://via.placeholder.com/300x150?text=Orthopédie'
             },
-            gastroentérologie: {
+            gastroenterologie: {
                 name: 'Gastro-entérologie',
                 description: 'Équipements pour l\'exploration du système digestif et des organes associés.',
                 examples: ['Endoscopie avancée', 'Coloscopie haute définition', 'pH-métrie 24h'],
@@ -899,7 +859,7 @@
             pediatrie: [
                 {
                     name: 'Échographe Pédiatrique',
-                    image: 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/ecoped.png',
+                    image: 'https://via.placeholder.com/400x250?text=Échographe+Pédiatrique',
                     role: 'Diagnostic par imagerie pour enfants et nourrissons.',
                     principle: 'Utilise des ultrasons pour produire des images des organes internes en temps réel.',
                     components: ['Sonde à ultrasons', 'Écran Full HD', 'Système de traitement d\'image', 'Clavier de commande'],
@@ -986,7 +946,7 @@
                     normes: ['Installation dans une salle avec blindage au plomb (1-2 mm)', 'Conformité aux normes CEI 60601-2-54', 'Ventilation adéquate']
                 }
             ],
-            gastroentérologie: [
+            gastroenterologie: [
                 {
                     name: 'Coloscope',
                     image: 'https://via.placeholder.com/400x250?text=Coloscope',
@@ -1195,49 +1155,68 @@
         };
 
         const showServices = (highlightService = '') => {
-            showPage('services-page', 'Spécialités Médicales', [
-                { text: 'Spécialités Médicales', action: showServices }
-            ]);
-            const servicesGrid = $('#servicesGrid');
-            if (servicesGrid) {
+            try {
+                showPage('services-page', 'Spécialités Médicales', [
+                    { text: 'Spécialités Médicales', action: showServices }
+                ]);
+                const servicesGrid = $('#servicesGrid');
+                if (!servicesGrid) {
+                    console.error('servicesGrid element not found');
+                    showNotification('Erreur de chargement des services.', 'error');
+                    return;
+                }
                 servicesGrid.innerHTML = '';
                 const fragment = document.createDocumentFragment();
                 Object.entries(services).forEach(([key, service]) => {
-                    const card = document.createElement('div');
-                    card.className = 'service-card';
-                    card.setAttribute('data-service', key);
-                    card.setAttribute('tabindex', '0');
-                    card.setAttribute('role', 'button');
-                    card.setAttribute('aria-label', `Voir les dispositifs pour ${service.name}`);
-                    card.innerHTML = `
-                        <img src="${service.image}" alt="${service.name}" class="service-image" loading="lazy" onerror="this.nextElementSibling.style.display='block'; this.style.display='none'">
-                        <p class="image-error" style="display: none;">Image non disponible</p>
-                        <div class="card-icon" aria-hidden="true">${service.icon}</div>
-                        <div class="card-content">
-                            <h3 class="card-title">${service.name}</h3>
-                            <p class="card-description">${service.description}</p>
-                            <ul style="margin-top: 10px; color: var(--text-light);">
-                                ${service.examples.map(ex => `<li>${ex}</li>`).join('')}
-                            </ul>
-                        </div>
-                    `;
-                    if (highlightService && (key === highlightService || service.name.toLowerCase() === highlightService.toLowerCase())) {
-                        card.style.border = `2px solid var(--primary-color)`;
-                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                    card.addEventListener('click', () => showDevices(key));
-                    card.addEventListener('keypress', (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            showDevices(key);
+                    try {
+                        const card = document.createElement('div');
+                        card.className = 'service-card';
+                        card.setAttribute('data-service', key);
+                        card.setAttribute('tabindex', '0');
+                        card.setAttribute('role', 'button');
+                        card.setAttribute('aria-label', `Voir les dispositifs pour ${service.name}`);
+                        card.innerHTML = `
+                            <img src="${service.image}" alt="${service.name}" class="service-image" loading="lazy" onerror="this.nextElementSibling.style.display='block'; this.style.display='none'">
+                            <p class="image-error" style="display: none;">Image non disponible</p>
+                            <div class="card-icon" aria-hidden="true">${service.icon}</div>
+                            <div class="card-content">
+                                <h3 class="card-title">${service.name}</h3>
+                                <p class="card-description">${service.description}</p>
+                                <ul style="margin-top: 10px; color: var(--text-light);">
+                                    ${service.examples.map(ex => `<li>${ex}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                        if (highlightService && (key === highlightService || service.name.toLowerCase() === highlightService.toLowerCase())) {
+                            card.style.border = `2px solid var(--primary-color)`;
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         }
-                    });
-                    fragment.appendChild(card);
+                        card.addEventListener('click', () => showDevices(key));
+                        card.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                showDevices(key);
+                            }
+                        });
+                        fragment.appendChild(card);
+                    } catch (error) {
+                        console.error(`Error creating card for service ${key}:`, error);
+                        showNotification(`Erreur lors du rendu du service ${service.name}.`, 'error');
+                    }
                 });
                 servicesGrid.appendChild(fragment);
+                if (servicesGrid.children.length === 0) {
+                    servicesGrid.innerHTML = '<p class="image-error">Aucun service disponible.</p>';
+                    showNotification('Aucun service trouvé.', 'error');
+                } else {
+                    showNotification('Spécialités chargées avec succès.', 'success');
+                }
+                state.currentService = '';
+                state.currentDevice = '';
+                state.navigationHistory = [{ text: 'Spécialités Médicales', action: showServices }];
+            } catch (error) {
+                console.error('Error in showServices:', error);
+                showNotification('Erreur lors du chargement des services.', 'error');
             }
-            state.currentService = '';
-            state.currentDevice = null;
-            state.navigationHistory = [{ text: 'Spécialités Médicales', action: showServices }];
         };
 
         const showDevices = (service) => {
@@ -1264,6 +1243,10 @@
                     fragment.appendChild(createDeviceCard(device));
                 });
                 devicesGrid.appendChild(fragment);
+                if (devicesGrid.children.length === 0) {
+                    devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif disponible.</p>';
+                    showNotification('Aucun dispositif trouvé.', 'error');
+                }
             }
             state.navigationHistory = [
                 { text: 'Spécialités Médicales', action: showServices },
@@ -1293,6 +1276,17 @@
                 { text: services[state.currentService].name, action: () => showDevices(state.currentService) },
                 { text: device.name, action: () => showDeviceDetails(deviceName) }
             ];
+        };
+
+        const showChatbotPage = () => {
+            showPage('chatbot-page', 'MediTech Assistant', [
+                { text: 'MediTech Assistant', action: showChatbotPage }
+            ]);
+            state.navigationHistory.push({ text: 'MediTech Assistant', action: showChatbotPage });
+            const chatbotInput = $('#chatbotInput');
+            if (chatbotInput) {
+                chatbotInput.focus();
+            }
         };
 
         // Device handling
@@ -1438,12 +1432,12 @@
                 filterDevices(normalizedQuery);
             } else {
                 // Fallback to chatbot
-                const { response, suggestions } = processChatbotQuery(normalizedQuery);
                 addChatMessage(query, true);
                 showTypingAnimation(true);
                 setTimeout(() => {
                     showTypingAnimation(false);
-                    addChatMessage(response, false, suggestions);
+                    const response = processChatbotQuery(normalizedQuery);
+                    addChatMessage(response, false);
                 }, 1000);
             }
         };
@@ -1467,32 +1461,12 @@
             'robot chirurgical': ['robot chirurgical', 'robot chirurgie']
         };
 
-        const addChatMessage = (message, isUser, suggestions = []) => {
+        const addChatMessage = (message, isUser) => {
             const chatbotBody = $('#chatbotBody');
             if (!chatbotBody) return;
             const messageDiv = document.createElement('div');
             messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
             messageDiv.innerHTML = `<p>${message}</p>`;
-            if (!isUser && suggestions.length) {
-                const suggestionsDiv = document.createElement('div');
-                suggestionsDiv.className = 'chatbot-suggestions';
-                suggestions.forEach(suggestion => {
-                    const button = document.createElement('button');
-                    button.className = 'suggestion-btn';
-                    button.textContent = suggestion.text;
-                    button.setAttribute('aria-label', `Poser la question : ${suggestion.text}`);
-                    button.addEventListener('click', () => {
-                        const chatbotInput = $('#chatbotInput');
-                        const chatbotSend = $('#chatbotSend');
-                        if (chatbotInput && chatbotSend) {
-                            chatbotInput.value = suggestion.query;
-                            chatbotSend.click();
-                        }
-                    });
-                    suggestionsDiv.appendChild(button);
-                });
-                messageDiv.appendChild(suggestionsDiv);
-            }
             chatbotBody.appendChild(messageDiv);
             chatbotBody.scrollTop = chatbotBody.scrollHeight;
         };
@@ -1506,21 +1480,18 @@
 
         const processChatbotQuery = (query) => {
             try {
+                if (!devices || !services) {
+                    throw new Error('Données des dispositifs ou services non disponibles.');
+                }
                 const normalizedQuery = query.toLowerCase().trim();
                 state.chatHistory.push({ query: normalizedQuery, timestamp: Date.now() });
                 let response = 'Désolé, je n\'ai pas compris votre question. Essayez de demander quelque chose sur les dispositifs, les marques ou les spécialités médicales.';
-                let suggestions = [];
 
                 // Check for service match
                 for (const serviceKey in services) {
                     const service = services[serviceKey];
                     if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
-                        response = `${service.name} : ${service.description} Exemples : ${service.examples.join(', ')}`;
-                        suggestions = [
-                            { text: 'Voir les dispositifs', query: `Dispositifs de ${service.name}` },
-                            { text: 'En savoir plus', query: `Détails sur ${service.name}` }
-                        ];
-                        return { response, suggestions };
+                        return `${service.name} : ${service.description} Exemples : ${service.examples.join(', ')}`;
                     }
                 }
 
@@ -1531,44 +1502,25 @@
                     for (const device of deviceList) {
                         const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
                         if (deviceSynonyms.some(s => normalizedQuery.includes(s))) {
-                            response = `${device.name} (${services[serviceKey].name}) :\n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}\n- Normes : ${device.normes.join(', ')}`;
-                            suggestions = [
-                                { text: 'Composants', query: `Composants de ${device.name}` },
-                                { text: 'Maintenance', query: `Maintenance de ${device.name}` },
-                                { text: 'Marques', query: `Marques de ${device.name}` },
-                                { text: 'Normes', query: `Normes de ${device.name}` }
-                            ];
-                            return { response, suggestions };
+                            return `${device.name} (${services[serviceKey].name}) :\n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}\n- Normes : ${device.normes.join(', ')}`;
                         }
                         if (normalizedQuery.includes('rôle') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            response = `Le rôle de ${device.name} est : ${device.role}`;
-                            suggestions = [{ text: 'Principe', query: `Principe de ${device.name}` }];
-                            return { response, suggestions };
+                            return `Le rôle de ${device.name} est : ${device.role}`;
                         }
                         if (normalizedQuery.includes('principe') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            response = `Le principe de fonctionnement de ${device.name} est : ${device.principle}`;
-                            suggestions = [{ text: 'Composants', query: `Composants de ${device.name}` }];
-                            return { response, suggestions };
+                            return `Le principe de fonctionnement de ${device.name} est : ${device.principle}`;
                         }
                         if (normalizedQuery.includes('composants') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            response = `Les composants principaux de ${device.name} sont : ${device.components.join(', ')}`;
-                            suggestions = [{ text: 'Maintenance', query: `Maintenance de ${device.name}` }];
-                            return { response, suggestions };
+                            return `Les composants principaux de ${device.name} sont : ${device.components.join(', ')}`;
                         }
                         if (normalizedQuery.includes('maintenance') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            response = `La checklist pour la maintenance de ${device.name} est : ${device.maintenance.join(', ')}`;
-                            suggestions = [{ text: 'Marques', query: `Marques de ${device.name}` }];
-                            return { response, suggestions };
+                            return `La checklist pour la maintenance de ${device.name} est : ${device.maintenance.join(', ')}`;
                         }
                         if (normalizedQuery.includes('marques') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            response = `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
-                            suggestions = [{ text: 'Normes', query: `Normes de ${device.name}` }];
-                            return { response, suggestions };
+                            return `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
                         }
                         if (normalizedQuery.includes('normes') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            response = `Les normes pour ${device.name} sont : ${device.normes.join(', ')}`;
-                            suggestions = [{ text: 'Rôle', query: `Rôle de ${device.name}` }];
-                            return { response, suggestions };
+                            return `Les normes pour ${device.name} sont : ${device.normes.join(', ')}`;
                         }
                     }
                 }
@@ -1581,46 +1533,26 @@
                         const device1 = findDeviceByName(foundDevices[0]);
                         const device2 = findDeviceByName(foundDevices[1]);
                         if (device1 && device2) {
-                            response = `Comparaison entre ${device1.name} et ${device2.name} :\n` +
+                            return `Comparaison entre ${device1.name} et ${device2.name} :\n` +
                                 `- **Rôle** : ${device1.name} : ${device1.role} | ${device2.name} : ${device2.role}\n` +
                                 `- **Principe** : ${device1.name} : ${device1.principle} | ${device2.name} : ${device2.principle}\n` +
                                 `- **Marques** : ${device1.name} : ${device1.brands.join(', ')} | ${device2.name} : ${device2.brands.join(', ')}\n` +
                                 `- **Normes** : ${device1.name} : ${device1.normes.join(', ')} | ${device2.name} : ${device2.normes.join(', ')}`;
-                            suggestions = [
-                                { text: `Composants de ${device1.name}`, query: `Composants de ${device1.name}` },
-                                { text: `Composants de ${device2.name}`, query: `Composants de ${device2.name}` }
-                            ];
-                            return { response, suggestions };
                         }
                     }
                 }
 
                 // Check for general queries
                 if (normalizedQuery.includes('spécialités') || normalizedQuery.includes('specialties')) {
-                    response = `MediTech propose des équipements pour : ${Object.values(services).map(s => s.name).join(', ')}`;
-                    suggestions = Object.keys(services).slice(0, 3).map(key => ({
-                        text: services[key].name,
-                        query: services[key].name
-                    }));
-                    return { response, suggestions };
+                    return `MediTech propose des équipements pour : ${Object.values(services).map(s => s.name).join(', ')}`;
                 }
                 if (normalizedQuery.includes('dispositifs') || normalizedQuery.includes('devices')) {
                     const allDevices = Object.values(devices).flat().map(d => d.name);
-                    response = `MediTech propose : ${allDevices.join(', ')}`;
-                    suggestions = allDevices.slice(0, 3).map(name => ({
-                        text: `Détails sur ${name}`,
-                        query: name
-                    }));
-                    return { response, suggestions };
+                    return `MediTech propose : ${allDevices.join(', ')}`;
                 }
                 if (normalizedQuery.includes('marques') || normalizedQuery.includes('brands')) {
                     const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
-                    response = `Marques disponibles : ${allBrands.join(', ')}`;
-                    suggestions = allBrands.slice(0, 3).map(brand => ({
-                        text: `Dispositifs de ${brand}`,
-                        query: brand
-                    }));
-                    return { response, suggestions };
+                    return `Marques disponibles : ${allBrands.join(', ')}`;
                 }
 
                 // Check for brand-specific queries
@@ -1628,34 +1560,23 @@
                 for (const brand of allBrands) {
                     if (brand.toLowerCase().indexOf(normalizedQuery) !== -1) {
                         const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
-                        response = `La marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand.map(device => device.name).join(', ')}`;
-                        suggestions = devicesWithBrand.slice(0, 2).map(device => ({
-                            text: `Détails sur ${device.name}`,
-                            query: device.name
-                        }));
-                        return { response, suggestions };
+                        return `La marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand.map(device => device.name).join(', ')}`;
                     }
                 }
 
-                return { response, suggestions: [{ text: 'Liste des spécialités', query: 'Spécialités' }] };
+                return response;
             } catch (error) {
                 console.error('Error processing chatbot query:', error);
-                return {
-                    response: 'Une erreur est survenue. Veuillez réessayer.',
-                    suggestions: [{ text: 'Liste des spécialités', query: 'Spécialités' }]
-                };
+                showNotification('Une erreur est survenue lors du traitement de votre question.', 'error');
+                return 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
             }
         };
 
         // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
-            // Navigation buttons
-            $('#exploreServicesBtn')?.addEventListener('click', showServices);
-            $('#homeBackBtn')?.addEventListener('click', showHome);
-            $('#servicesBackBtn')?.addEventListener('click', showServices);
-            $('#devicesBackBtn')?.addEventListener('click', () => showDevices(state.currentService));
+            showHome();
 
-            // Search functionality
+            // Search
             const searchBox = $('#searchBox');
             if (searchBox) {
                 searchBox.addEventListener('input', debounce((e) => handleSearch(e.target.value), 300));
@@ -1666,87 +1587,78 @@
                 });
             }
 
-            // Chat
-                    // Chatbot functionality
-        const chatbotContainer = $('#chatbotContainer');
-        const chatbotClose = $('#chatbotClose');
-        const chatbotSend = $('#chatbotSend');
-        const chatbotInput = $('#chatbotInput');
-        const chatGuideBtn = $('#chatGuideBtn');
+            // Navigation
+            const exploreServicesBtn = $('#exploreServicesBtn');
+            if (exploreServicesBtn) {
+                exploreServicesBtn.addEventListener('click', () => showServices());
+            }
 
-        if (chatGuideBtn) {
-            chatGuideBtn.addEventListener('click', () => {
-                if (chatbotContainer) {
-                    chatbotContainer.style.display = 'block';
-                    chatbotInput?.focus();
-                    showNotification('ChatGuide IA ouvert.', 'success');
-                }
-            });
-        }
+            const homeBackBtn = $('#homeBackBtn');
+            if (homeBackBtn) {
+                homeBackBtn.addEventListener('click', showHome);
+            }
 
-        if (chatbotClose) {
-            chatbotClose.addEventListener('click', () => {
-                if (chatbotContainer) {
-                    chatbotContainer.style.display = 'none';
-                    showNotification('ChatGuide IA fermé.', 'success');
-                }
-            });
-        }
+                        const servicesBackBtn = $('#servicesBackBtn');
+            if (servicesBackBtn) {
+                servicesBackBtn.addEventListener('click', showServices);
+            }
 
-        if (chatbotSend && chatbotInput) {
-            chatbotSend.addEventListener('click', () => {
-                const query = chatbotInput.value.trim();
-                if (query) {
-                    handleSearch(query); // Reuse search handler for consistency
-                    chatbotInput.value = '';
-                }
-            });
+            const devicesBackBtn = $('#devicesBackBtn');
+            if (devicesBackBtn) {
+                devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
+            }
 
-            chatbotInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
+            const chatbotBackBtn = $('#chatbotBackBtn');
+            if (chatbotBackBtn) {
+                chatbotBackBtn.addEventListener('click', () => {
+                    const previousPage = state.navigationHistory[state.navigationHistory.length - 2];
+                    if (previousPage) {
+                        previousPage.action();
+                        state.navigationHistory.pop();
+                    } else {
+                        showHome();
+                    }
+                });
+            }
+
+            const chatGuideBtn = $('#chatGuideBtn');
+            if (chatGuideBtn) {
+                chatGuideBtn.addEventListener('click', showChatbotPage);
+            }
+
+            const chatbotSend = $('#chatbotSend');
+            const chatbotInput = $('#chatbotInput');
+            if (chatbotSend && chatbotInput) {
+                const sendMessage = () => {
                     const query = chatbotInput.value.trim();
                     if (query) {
-                        handleSearch(query); // Reuse search handler
-                        chatbotInput.value = '';
+                        addChatMessage(query, true);
+                        showTypingAnimation(true);
+                        setTimeout(() => {
+                            showTypingAnimation(false);
+                            const response = processChatbotQuery(query);
+                            addChatMessage(response, false);
+                            chatbotInput.value = '';
+                        }, 1000);
                     }
-                }
-            });
-        }
-
-        // Theme toggle
-        const themeToggle = $('#themeToggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
-                themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
-                localStorage.setItem('theme', currentTheme === 'dark' ? 'light' : 'dark');
-                showNotification(`Thème ${currentTheme === 'dark' ? 'clair' : 'sombre'} activé.`, 'success');
-            });
-
-            // Load saved theme
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                document.documentElement.setAttribute('data-theme', savedTheme);
-                themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+                };
+                chatbotSend.addEventListener('click', sendMessage);
+                chatbotInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
             }
-        }
 
-        // Sort devices
-        const sortSelect = $('#sortSelect');
-        if (sortSelect) {
-            sortSelect.addEventListener('change', () => {
-                if (state.currentPage === 'devices-page' && state.currentService) {
-                    showDevices(state.currentService);
-                }
-            });
-        }
-
-        // Initialize
-        showHome();
-    });
+            const sortSelect = $('#sortSelect');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', () => {
+                    if (state.currentPage === 'devices-page') {
+                        showDevices(state.currentService);
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
-</xaiArtifact>
-
