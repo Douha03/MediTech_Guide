@@ -669,6 +669,13 @@
             opacity: 1;
         }
 
+        .quiz-feedback {
+            font-size: 1rem;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 160px 10px 15px;
@@ -1428,69 +1435,76 @@
 
         const sortDevices = (deviceList) => {
             const sortSelect = $('#sortSelect');
-            if (!sortSelect) return deviceList;
+            if (!sortSelect) return deviceList; // Return unsorted list if sortSelect is missing
             const sortValue = sortSelect.value;
             return [...deviceList].sort((a, b) => {
-                return sortValue === 'name-asc' ?
-                    a.name.localeCompare(b.name)
-                    : b.name.localeCompare(b.name);
+                return sortValue === 'name-asc' 
+                    ? a.name.localeCompare(b.name) 
+                    : b.name.localeCompare(a.name);
             });
         };
 
         const filterDevices = (query) => {
             const devicesGrid = $('#devicesGrid');
-            if (!devicesGrid || state.currentPage !== 'devices-page') return;
-            const deviceList = devices[state.currentService] || [];
-            devicesGrid.innerHTML = '';
+            if (!devicesGrid || state.currentPage !== 'devices-page') {
+                return;
+            }
+
+            devicesWithQuery = state.devicesGrid;
+
             const fragment = document.createDocumentFragment();
-            const filteredDevices = sortDevices(deviceList).filter(device => 
+            const filteredDevices = sortDevices(devices[state.currentService]).filter(device => 
                 device.name.toLowerCase().includes(query.toLowerCase())
             );
+
             if (filteredDevices.length === 0) {
-                devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour cette recherche.</p>';
+                devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour ce filtre.</p>';
                 showNotification('Aucun résultat trouvé.', 'error');
             } else {
                 filteredDevices.forEach(device => {
                     fragment.appendChild(createDeviceCard(device));
                 });
-                devicesGrid.appendChild(fragment);
-                showNotification(`${filteredDevices.length} dispositif(s) trouvé(s).`, 'success');
+                devicesWithQuery.appendChild(fragment);
+                showNotification(`${filteredDevices.length} dispositif(s) trouvés.`, 'success');
             }
-        };
+        }
 
-        const handleSearch = (query) => {
-            if (!query.trim()) return;
-            const normalizedQuery = query.toLowerCase().trim();
+        const handleSearch = () => {
+            const query = query.toLowerCase().trim();
+
+            if (!query) {
+                return;
+            }
 
             // Search for device match
-            const device = findDeviceByName(normalizedQuery);
+            const device = findDeviceByName(query);
             if (device) {
                 showDeviceDetails(device.name);
-                showNotification(`Dispositif trouvé : ${device.name}`, 'success');
+                showNotification(`Found device: ${device.name}`, 'success');
                 return;
             }
 
             // Search for service match
-            const serviceKey = findServiceByName(normalizedQuery);
+            const serviceKey = findServiceByName(query);
             if (serviceKey) {
                 showServices(serviceKey);
                 return;
             }
 
-            // If on devices page, filter devices
+            // Filter devices if on devices page
             if (state.currentPage === 'devices-page') {
-                filterDevices(normalizedQuery);
+                filterDevices(query);
             } else {
                 // Fallback to chatbot
                 addChatMessage(query, true);
                 showTypingAnimation(true);
                 setTimeout(() => {
                     showTypingAnimation(false);
-                    const response = processChatbotQuery(normalizedQuery);
-                    addChatMessage(response, false);
-                }, 1000);
+                    const response = processChatbotQuery(query);
+                    addChatResponse(response);
+                }, 500);
             }
-        };
+        }
 
         const updateStats = () => {
             const deviceCount = Object.values(devices).flat().length;
@@ -1498,7 +1512,7 @@
             if (deviceCountElement) {
                 deviceCountElement.textContent = deviceCount;
             }
-        };
+        }
 
         // Chatbot
         const synonyms = {
@@ -1608,7 +1622,7 @@
                         if (normalizedQuery.includes('marques') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
                             return `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
                         }
-                        if (normalizedQuery.includes('normes') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
+                        if (normalizedQuery.includes('normes') && (normalizedQuery.includes(normalizedQuery)) || (contextDevice && contextDevice.name === device.name)) {
                             return `Les normes pour ${device.name} sont : ${device.normes.join(', ')}`;
                         }
                     }
@@ -1677,214 +1691,199 @@
                 <p>${question}</p>
                 <div class="quiz-options">
                     ${options.map((option, index) => `
-                        <button class="btn-primary quiz-option" data-correct="${option === correctDevice.name}">${option}</button>
+                        <button class="btn-primary quiz-option" data-correct="${option === correctDevice.name}" aria-label="${option}">${option}</button>
                     `).join('')}
                 </div>
             `;
-            const generateQuiz = () => {
-    const allDevices = Object.values(devices).flat();
-    if (allDevices.length < 4) {
-        showNotification('Pas assez de dispositifs pour générer un quiz.', 'error');
-        return;
-    }
-    const shuffledDevices = allDevices.sort(() => Math.random() - 0.5).slice(0, 4);
-    const correctDevice = shuffledDevices[Math.floor(Math.random() * 4)];
-    const question = `Quel dispositif est utilisé pour : ${correctDevice.role}?`;
-    const options = shuffledDevices.map(device => device.name);
-    const quizHTML = `
-        <h2>Quiz sur les Technologies Médicales</h2>
-        <p>${question}</p>
-        <div class="quiz-options">
-            ${options.map((option, index) => `
-                <button class="btn-primary quiz-option" data-correct="${option === correctDevice.name}">${option}</button>
-            `).join('')}
-        </div>
-    `;
-    const quizSection = document.createElement('section');
-    quizSection.id = 'quiz-page';
-    quizSection.className = 'content-section';
-    quizSection.innerHTML = `
-        <button class="back-btn" id="quizBackBtn" aria-label="Retour à l'accueil"><i class="fas fa-arrow-left"></i> Retour</button>
-        <h1 class="page-title">Quiz MediTech</h1>
-        ${quizHTML}
-    `;
-    hideAllPages();
-    document.querySelector('main').appendChild(quizSection);
-    showPage('quiz-page', 'Quiz MediTech', [
-        { text: 'Quiz MediTech', action: generateQuiz }
-    ]);
-    state.navigationHistory = [{ text: 'Quiz MediTech', action: generateQuiz }];
+            const quizSection = document.createElement('section');
+            quizSection.id = 'quiz-page';
+            quizSection.className = 'content-section';
+            quizSection.innerHTML = `
+                <button class="back-btn" id="quizBackBtn" aria-label="Retour à l'accueil"><i class="fas fa-arrow-left"></i> Retour</button>
+                <h1 class="page-title">Quiz MediTech</h1>
+                ${quizHTML}
+            `;
+            hideAllPages();
+            document.querySelector('main').appendChild(quizSection);
+            showPage('quiz-page', 'Quiz MediTech', [
+                { text: 'Quiz MediTech', action: generateQuiz }
+            ]);
+            state.navigationHistory = [{ text: 'Quiz MediTech', action: generateQuiz }];
 
-    // Add event listeners for quiz options
-    $$('.quiz-option').forEach(button => {
-        button.addEventListener('click', () => {
-            const isCorrect = button.getAttribute('data-correct') === 'true';
-            const feedback = document.createElement('p');
-            feedback.className = 'quiz-feedback';
-            feedback.style.color = isCorrect ? '#28a745' : '#f56565';
-            feedback.textContent = isCorrect 
-                ? 'Correct ! Bien joué !' 
-                : `Incorrect. La bonne réponse était : ${correctDevice.name}.`;
-            quizSection.appendChild(feedback);
+            // Ensure DOM is updated before attaching event listeners
+            setTimeout(() => {
+                $$('.quiz-option').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const isCorrect = button.getAttribute('data-correct') === 'true';
+                        const feedback = document.createElement('p');
+                        feedback.className = 'quiz-feedback';
+                        feedback.style.color = isCorrect ? '#28a745' : '#f56565';
+                        feedback.textContent = isCorrect 
+                            ? 'Correct ! Bien joué !' 
+                            : `Incorrect. La bonne réponse était : ${correctDevice.name}.`;
+                        quizSection.appendChild(feedback);
 
-            // Disable all buttons after selection
-            $$('.quiz-option').forEach(btn => {
-                btn.disabled = true;
-                btn.style.cursor = 'not-allowed';
-                btn.style.opacity = '0.6';
-            });
+                        // Disable all buttons after selection
+                        $$('.quiz-option').forEach(btn => {
+                            btn.disabled = true;
+                            btn.style.cursor = 'not-allowed';
+                            btn.style.opacity = '0.6';
+                        });
 
-            // Add a "Try Again" button
-            const tryAgainBtn = document.createElement('button');
-            tryAgainBtn.className = 'btn-primary';
-            tryAgainBtn.textContent = 'Rejouer';
-            tryAgainBtn.style.marginTop = '20px';
-            tryAgainBtn.addEventListener('click', () => {
-                quizSection.remove();
-                generateQuiz();
-            });
-            quizSection.appendChild(tryAgainBtn);
+                        // Add a "Try Again" button
+                        const tryAgainBtn = document.createElement('button');
+                        tryAgainBtn.className = 'btn-primary';
+                        tryAgainBtn.textContent = 'Rejouer';
+                        tryAgainBtn.style.marginTop = '20px';
+                        tryAgainBtn.setAttribute('aria-label', 'Rejouer le quiz');
+                        tryAgainBtn.addEventListener('click', () => {
+                            quizSection.remove();
+                            generateQuiz();
+                        });
+                        quizSection.appendChild(tryAgainBtn);
 
-            showNotification(isCorrect ? 'Bonne réponse !' : 'Mauvaise réponse.', isCorrect ? 'success' : 'error');
-        });
-    });
+                        showNotification(isCorrect ? 'Bonne réponse !' : 'Mauvaise réponse.', isCorrect ? 'success' : 'error');
+                    });
+                });
+            }, 0); // Delay to ensure DOM update
 
-    // Add event listener for quiz back button
-    const quizBackBtn = $('#quizBackBtn');
-    if (quizBackBtn) {
-        quizBackBtn.addEventListener('click', () => {
-            quizSection.remove();
+            // Add event listener for quiz back button
+            const quizBackBtn = $('#quizBackBtn');
+            if (quizBackBtn) {
+                quizBackBtn.addEventListener('click', () => {
+                    quizSection.remove();
+                    showHome();
+                });
+            }
+        };
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
             showHome();
-        });
-    }
-};
 
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-    showHome();
-
-    // Theme Toggle
-    const themeToggle = $('#themeToggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            document.documentElement.setAttribute('data-theme', 
-                document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
-            );
-            themeToggle.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
-            showNotification('Thème changé avec succès.', 'success');
-        });
-    }
-
-    // Search
-    const searchBox = $('#searchBox');
-    if (searchBox) {
-        searchBox.addEventListener('input', debounce(() => handleSearch(searchBox.value), 300));
-        searchBox.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleSearch(searchBox.value);
+            // Theme Toggle
+            const themeToggle = $('#themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+                    themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+                    showNotification('Thème changé avec succès.', 'success');
+                });
             }
-        });
-    }
 
-    // Navigation Buttons
-    const exploreServicesBtn = $('#exploreServicesBtn');
-    if (exploreServicesBtn) {
-        exploreServicesBtn.addEventListener('click', () => showServices());
-    }
-
-    const chatGuideBtn = $('#chatGuideBtn');
-    if (chatGuideBtn) {
-        chatGuideBtn.addEventListener('click', showChatbotPage);
-    }
-
-    const homeBackBtn = $('#homeBackBtn');
-    if (homeBackBtn) {
-        homeBackBtn.addEventListener('click', showHome);
-    }
-
-    const servicesBackBtn = $('#servicesBackBtn');
-    if (servicesBackBtn) {
-        servicesBackBtn.addEventListener('click', () => {
-            showServices(state.currentService || '');
-            state.currentDevice = '';
-        });
-    }
-
-    const devicesBackBtn = $('#devicesBackBtn');
-    if (devicesBackBtn) {
-        devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
-    }
-
-    const chatbotBackBtn = $('#chatbotBackBtn');
-    if (chatbotBackBtn) {
-        chatbotBackBtn.addEventListener('click', () => {
-            showPage(state.navigationHistory[state.navigationHistory.length - 2]?.action || showHome);
-            state.navigationHistory.pop();
-        });
-    }
-
-    const sortSelect = $('#sortSelect');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', () => {
-            if (state.currentService) {
-                showDevices(state.currentService);
-            }
-        });
-    }
-
-    // Chatbot Input
-    const chatbotSend = $('#chatbotSend');
-    const chatbotInput = $('#chatbotInput');
-    if (chatbotSend && chatbotInput) {
-        chatbotSend.addEventListener('click', () => {
-            const query = chatbotInput.value.trim();
-            if (query) {
-                addChatMessage(query, true);
-                chatbotInput.value = '';
-                showTypingAnimation(true);
-                setTimeout(() => {
-                    showTypingAnimation(false);
-                    const response = processChatbotQuery(query);
-                    if (typeof response === 'object') {
-                        addChatMessage(response.response, false, response.suggestions);
-                    } else {
-                        addChatMessage(response, false);
+            // Search
+            const searchBox = $('#searchBox');
+            if (searchBox) {
+                searchBox.addEventListener('input', debounce(() => handleSearch(searchBox.value), 300));
+                searchBox.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        handleSearch(searchBox.value);
                     }
-                }, 1000);
+                });
+            }
+
+            // Navigation Buttons
+            const exploreServicesBtn = $('#exploreServicesBtn');
+            if (exploreServicesBtn) {
+                exploreServicesBtn.addEventListener('click', () => showServices());
+            }
+
+            const chatGuideBtn = $('#chatGuideBtn');
+            if (chatGuideBtn) {
+                chatGuideBtn.addEventListener('click', showChatbotPage);
+            }
+
+            const homeBackBtn = $('#homeBackBtn');
+            if (homeBackBtn) {
+                homeBackBtn.addEventListener('click', showHome);
+            }
+
+            const servicesBackBtn = $('#servicesBackBtn');
+            if (servicesBackBtn) {
+                servicesBackBtn.addEventListener('click', () => {
+                    showServices(state.currentService || '');
+                    state.currentDevice = '';
+                });
+            }
+
+            const devicesBackBtn = $('#devicesBackBtn');
+            if (devicesBackBtn) {
+                devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
+            }
+
+            const chatbotBackBtn = $('#chatbotBackBtn');
+            if (chatbotBackBtn) {
+                chatbotBackBtn.addEventListener('click', () => {
+                    state.navigationHistory.pop();
+                    const previous = state.navigationHistory[state.navigationHistory.length - 1]?.action || showHome;
+                    previous();
+                });
+            }
+
+            const sortSelect = $('#sortSelect');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', () => {
+                    if (state.currentService) {
+                        showDevices(state.currentService);
+                    }
+                });
+            }
+
+            // Chatbot Input
+            const chatbotSend = $('#chatbotSend');
+            const chatbotInput = $('#chatbotInput');
+            if (chatbotSend && chatbotInput) {
+                chatbotSend.addEventListener('click', () => {
+                    const query = chatbotInput.value.trim();
+                    if (query) {
+                        addChatMessage(query, true);
+                        chatbotInput.value = '';
+                        showTypingAnimation(true);
+                        setTimeout(() => {
+                            showTypingAnimation(false);
+                            const response = processChatbotQuery(query);
+                            if (typeof response === 'object') {
+                                addChatMessage(response.response, false, response.suggestions);
+                            } else {
+                                addChatMessage(response, false);
+                            }
+                        }, 1000);
+                    }
+                });
+                chatbotInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        chatbotSend.click();
+                    }
+                });
+            }
+
+            // Quiz Button
+            const generateQuizBtn = $('#generateQuizBtn');
+            if (generateQuizBtn) {
+                generateQuizBtn.addEventListener('click', generateQuiz);
             }
         });
-        chatbotInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                chatbotSend.click();
+
+        // Accessibility Enhancements
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const activeElement = document.activeElement;
+                if (activeElement.tagName === 'INPUT') {
+                    activeElement.blur();
+                } else if (state.currentPage !== 'home-page') {
+                    const backBtn = $(`#${state.currentPage.replace('-page', 'BackBtn')}`);
+                    if (backBtn) backBtn.click();
+                }
             }
         });
-    }
 
-    // Quiz Button
-    const generateQuizBtn = $('#generateQuizBtn');
-    if (generateQuizBtn) {
-        generateQuizBtn.addEventListener('click', generateQuiz);
-    }
-});
-
-// Accessibility Enhancements
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        const activeElement = document.activeElement;
-        if (activeElement.tagName === 'INPUT') {
-            activeElement.blur();
-        } else if (state.currentPage !== 'home-page') {
-            const backBtn = $(`#${state.currentPage.replace('-page', 'BackBtn')}`);
-            if (backBtn) backBtn.click();
+        // Initial Data Check
+        if (!services || !devices) {
+            console.error('Services or devices data is missing');
+            showNotification('Erreur : Données des services ou dispositifs manquantes.', 'error');
         }
-    }
-});
-
-// Initial Data Check
-if (!services || !devices) {
-    console.error('Services or devices data is missing');
-    showNotification('Erreur : Données des services ou dispositifs manquantes.', 'error');
-}
     </script>
 </body>
 </html>
+</xaiArtifact>
