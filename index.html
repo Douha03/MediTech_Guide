@@ -1513,7 +1513,7 @@
                     for (const device of deviceList) {
                         const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
                         if (deviceSynonyms.some(s => normalizedQuery.includes(s))) {
-                            return `${device.name} (${services[serviceKey].name}) :\n- Rôle} : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}\n- Normes : ${device.normes.join(', ')}`;
+                            return `${device.name} (${services[serviceKey].name}) :\n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}\n- Normes : ${device.normes.join(', ')}`;
                         }
                         if (normalizedQuery.includes('rôle') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
                             return `Le rôle du ${device.name} est : ${device.role}`;
@@ -1632,6 +1632,8 @@
                     document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
                     themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
                 });
+            }
+
             // Sort Devices
             const sortSelect = $('#sortSelect');
             if (sortSelect) {
@@ -1676,7 +1678,7 @@
                 });
             }
 
-                        const chatGuideBtn = $('#chatGuideBtn');
+            const chatGuideBtn = $('#chatGuideBtn');
             if (chatGuideBtn) {
                 chatGuideBtn.addEventListener('click', showChatbotPage);
             }
@@ -1713,10 +1715,10 @@
 
             // Save initial state to history
             history.replaceState({ page: 'home-page' }, '', '');
-        };
 
-        // Accessibility: Focus management for keyboard navigation
-        document.addEventListener('keydown', (event) => {
+            // Accessibility: Focus management for keyboard navigation
+                        // Accessibility: Focus management for keyboard navigation
+            document.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape') {
                     const searchBox = $('#searchBox');
                     if (searchBox && document.activeElement === searchBox) {
@@ -1736,7 +1738,13 @@
                     logoImg.style.display = 'block';
                     logoImg.nextElementSibling.style.display = 'none';
                 });
+                logoImg.addEventListener('error', () => {
+                    logoImg.style.display = 'none';
+                    logoImg.nextElementSibling.style.display = 'block';
+                });
             }
-        </script>
-    </body>
+        });
+    </script>
+</body>
 </html>
+</xaiArtifact>
