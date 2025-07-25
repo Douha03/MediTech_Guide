@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -162,7 +161,7 @@
         .content-section {
             background: var(--white);
             padding: 30px;
-            border-radius: 16px;
+            border-radius: 12px;
             box-shadow: var(--shadow-md);
             min-height: 500px;
             opacity: 0;
@@ -1101,7 +1100,7 @@
 
         // Utility functions
         const $ = (selector, context = document) => context.querySelector(selector);
-        const $$ = (selector, context = document) => context.querySelectorAll(selector);
+        const $$ = (selector, context = document) => Array.from(context.querySelectorAll(selector));
 
         const debounce = (func, delay) => {
             let timeout;
@@ -1132,6 +1131,8 @@
                 section.classList.add('hidden');
                 section.style.display = 'none';
             });
+        };
+
         const updateBreadcrumb = (items) => {
             const breadcrumb = $('#breadcrumb');
             if (!breadcrumb) return;
@@ -1147,7 +1148,7 @@
                 breadcrumb.appendChild(button);
                 if (index < items.length - 1) {
                     breadcrumb.appendChild(document.createTextNode(' > '));
-                });
+                }
             });
         };
 
@@ -1274,13 +1275,10 @@
         const findDeviceByName = (name) => {
             const normalizedName = name.toLowerCase().trim();
             for (const service in devices) {
-                const deviceList = devices[service];
-                for (const device of deviceList) {
-                    const deviceSynonyms = Object.keys(synonyms).find(key => synonyms[key].includes(device.name.toLowerCase())) || device.name.toLowerCase();
-                    if (normalizedName === device.name.toLowerCase() || synonyms[deviceSynonyms]?.some(s => normalizedName.includes(s))) {
-                        state.currentService = service;
-                        return device;
-                    }
+                const device = devices[service].find(d => d.name.toLowerCase() === normalizedName || synonyms[d.name.toLowerCase()]?.includes(normalizedName));
+                if (device) {
+                    state.currentService = service;
+                    return device;
                 }
             }
             return null;
@@ -1412,7 +1410,7 @@
 
         // Chatbot
         const synonyms = {
-            scanner: ['scanner', 'timodensitomètre', 'ct'],
+            scanner: ['scanner', 'tomodensitomètre', 'ct'],
             irm: ['irm', 'résonance magnétique', 'mri'],
             ecg: ['électrocardiographe', 'ecg'],
             eeg: ['électroencéphalographe', 'eeg'],
@@ -1465,30 +1463,26 @@
                 let response = 'Désolé, je n\'ai pas compris votre question. Essayez de demander quelque chose sur les dispositifs, les marques ou les spécialités médicales.';
                 let suggestions = [];
 
-                let contextDevice = state.chatHistory.length > 1 ? findDeviceByName(state.chatHistory[state.chatHistory.length - 2].query) : null;
-                let matchedDevice = null;
-                let matchedService = null;
-
+                // Check for service match
                 for (const serviceKey in services) {
                     const service = services[serviceKey];
                     if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
-                        matchedService = serviceKey;
-                        response = `${service.name} : ${service.description} Exemples : ${service.exemples.join(', ')}`;
+                        response = `${service.name} : ${service.description} Exemples : ${service.examples.join(', ')}`;
                         suggestions = [
                             { text: 'Voir les dispositifs', query: `Dispositifs de ${service.name}` },
                             { text: 'En savoir plus', query: `Détails sur ${service.name}` }
                         ];
-                        break;
+                        return { response, suggestions };
                     }
                 }
 
+                // Check for device match
+                let contextDevice = state.chatHistory.length > 1 ? findDeviceByName(state.chatHistory[state.chatHistory.length - 2].query) : null;
                 for (const serviceKey in devices) {
                     const deviceList = devices[serviceKey];
                     for (const device of deviceList) {
-                        const deviceSynonyms = Object.keys(synonyms).find(key => synonyms[key].includes(device.name.toLowerCase())) || device.name.toLowerCase();
-                        const synonymMatch = synonyms[deviceSynonyms]?.some(s => normalizedQuery.includes(s));
-                        if (normalizedQuery.includes(device.name.toLowerCase()) || synonymMatch) {
-                            matchedDevice = device;
+                        const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
+                        if (deviceSynonyms.some(s => normalizedQuery.includes(s))) {
                             response = `${device.name} (${services[serviceKey].name}) :\n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}\n- Maintenance : ${device.maintenance.join(', ')}\n- Marques : ${device.brands.join(', ')}\n- Normes : ${device.normes.join(', ')}`;
                             suggestions = [
                                 { text: 'Composants', query: `Composants de ${device.name}` },
@@ -1496,48 +1490,42 @@
                                 { text: 'Marques', query: `Marques de ${device.name}` },
                                 { text: 'Normes', query: `Normes de ${device.name}` }
                             ];
-                            break;
+                            return { response, suggestions };
                         }
                         if (normalizedQuery.includes('rôle') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            matchedDevice = device;
                             response = `Le rôle de ${device.name} est : ${device.role}`;
                             suggestions = [{ text: 'Principe', query: `Principe de ${device.name}` }];
-                            break;
+                            return { response, suggestions };
                         }
                         if (normalizedQuery.includes('principe') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            matchedDevice = device;
                             response = `Le principe de fonctionnement de ${device.name} est : ${device.principle}`;
                             suggestions = [{ text: 'Composants', query: `Composants de ${device.name}` }];
-                            break;
+                            return { response, suggestions };
                         }
                         if (normalizedQuery.includes('composants') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            matchedDevice = device;
                             response = `Les composants principaux de ${device.name} sont : ${device.components.join(', ')}`;
                             suggestions = [{ text: 'Maintenance', query: `Maintenance de ${device.name}` }];
-                            break;
+                            return { response, suggestions };
                         }
                         if (normalizedQuery.includes('maintenance') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            matchedDevice = device;
                             response = `La checklist pour la maintenance de ${device.name} est : ${device.maintenance.join(', ')}`;
-                            suggestions = [{ text: 'Marques', query: `Marques de ${device.name}` }],
-                            break;
+                            suggestions = [{ text: 'Marques', query: `Marques de ${device.name}` }];
+                            return { response, suggestions };
                         }
                         if (normalizedQuery.includes('marques') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            matchedDevice = device;
                             response = `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
-                            suggestions = [{ text: 'Normes', query: `Normes de ${device.name}` }],
-                            break;
+                            suggestions = [{ text: 'Normes', query: `Normes de ${device.name}` }];
+                            return { response, suggestions };
                         }
                         if (normalizedQuery.includes('normes') && (normalizedQuery.includes(device.name.toLowerCase()) || (contextDevice && contextDevice.name === device.name))) {
-                            matchedDevice = device;
                             response = `Les normes pour ${device.name} sont : ${device.normes.join(', ')}`;
-                            suggestions = [{ text: 'Rôle', query: `Rôle de ${device.name}` }],
-                            break;
+                            suggestions = [{ text: 'Rôle', query: `Rôle de ${device.name}` }];
+                            return { response, suggestions };
                         }
                     }
-                    if (matchedDevice) break;
                 }
 
+                // Check for comparison
                 if (normalizedQuery.includes('comparer') || normalizedQuery.includes('compare')) {
                     const deviceNames = Object.values(devices).flat().map(d => d.name.toLowerCase());
                     const foundDevices = deviceNames.filter(name => normalizedQuery.includes(name));
@@ -1549,73 +1537,61 @@
                                 `- **Rôle** : ${device1.name} : ${device1.role} | ${device2.name} : ${device2.role}\n` +
                                 `- **Principe** : ${device1.name} : ${device1.principle} | ${device2.name} : ${device2.principle}\n` +
                                 `- **Marques** : ${device1.name} : ${device1.brands.join(', ')} | ${device2.name} : ${device2.brands.join(', ')}\n` +
-                                `- **Normes** : ${device1.name} : ${device1.normes.join(', ')} | ${device2.name} : ${device2.normes.join(', ')}\n`;
+                                `- **Normes** : ${device1.name} : ${device1.normes.join(', ')} | ${device2.name} : ${device2.normes.join(', ')}`;
                             suggestions = [
                                 { text: `Composants de ${device1.name}`, query: `Composants de ${device1.name}` },
                                 { text: `Composants de ${device2.name}`, query: `Composants de ${device2.name}` }
                             ];
+                            return { response, suggestions };
                         }
                     }
                 }
 
-                if (/^(what is|what\'s|tell me about)/i.test(normalizedQuery)) {
-                    for (const serviceKey in devices) {
-                        const deviceList = devices[serviceKey];
-                        for (const device of deviceList) {
-                            const deviceSynonyms = Object.keys(synonyms).find(key => synonyms[key].includes(device.name.toLowerCase())) || device.name.toLowerCase();
-                            if (normalizedQuery.includes(device.name.toLowerCase()) || (synonyms[deviceSynonyms]?.some(s => normalizedQuery.includes(s)))) {
-                                matchedDevice = {
-                                    response: `${device.name} (${services[serviceKey].name}) :\n- Rôle : ${device.role}\n- Principe : ${device.principle}\n- Composants : ${device.components.join(', ')}`;
-                                    suggestions = [
-                                        { text: 'Composants', query: `Composants de ${device.name}` },
-                                        { text: 'Maintenance', query: `Maintenance de ${device.name}` },
-                                        { text: 'Marques', query: `Marques de ${device.name}` },
-                                        { text: 'Normes', query: `Normes de ${device.name}` }
-                                    ];
-                                break;
-                            }
-                        }
-                        if (matchedDevice) break;
-                    }
-                }
-
-                const allBrands = [...new Set(Object.values(devices)).flat().flatMap(device => device.brands)];
-                for (const brand of allBrands) {
-                    if (normalizedQuery.toLowerCase(brand.toLowerCase())) {
-                        const devicesWithBrand = Object.values(devices)).flat().filter(device => device.brands.contains(brand));
-                        response = `Le marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand}.map(device => device.name)).join(', ')}`;
-                        suggestions = devicesWithBrand.slice(0, 2)).map(device => ({
-                            text: `Détails sur ${device.name}`,
-                            query: device.name
-                        }));
-                        break;
-                    }
-                }
-
-                if (normalizedQuery.contains('spécialités') || normalizedQuery.contains('specialties')) {
-                    response = `MediTech propose des équipements pour : ${Object.values(services)).map(s => s.name)).join(', ')}`;
-                    suggestions = Object.keys(services)).slice(0, 3).map(key => ({
+                // Check for general queries
+                if (normalizedQuery.includes('spécialités') || normalizedQuery.includes('specialties')) {
+                    response = `MediTech propose des équipements pour : ${Object.values(services).map(s => s.name).join(', ')}`;
+                    suggestions = Object.keys(services).slice(0, 3).map(key => ({
                         text: services[key].name,
                         query: services[key].name
                     }));
-                } else if (normalizedQuery.contains('dispositifs') || normalizedQuery.contains('devices')) {
-                    const allDevices = Object.values(devices)).flat().map(d => d.name));
-                    response = `MediTech propose : ${allDevices.join(', ')}`.`;
-                    suggestions = allDevices.slice(0, 3)).map(name => ({
+                    return { response, suggestions };
+                }
+                if (normalizedQuery.includes('dispositifs') || normalizedQuery.includes('devices')) {
+                    const allDevices = Object.values(devices).flat().map(d => d.name);
+                    response = `MediTech propose : ${allDevices.join(', ')}`;
+                    suggestions = allDevices.slice(0, 3).map(name => ({
                         text: `Détails sur ${name}`,
                         query: name
                     }));
-                } else if (normalizedQuery.contains('marques')) || normalizedQuery.contains('brands')) {
-                    response = `Marques disponibles : ${allBrands.join(', ')}`.`;
-                    suggestions = allBrands.slice(0, 3)).map(brand => ({
+                    return { response, suggestions };
+                }
+                if (normalizedQuery.includes('marques') || normalizedQuery.includes('brands')) {
+                    const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
+                    response = `Marques disponibles : ${allBrands.join(', ')}`;
+                    suggestions = allBrands.slice(brand2, 3).map(brand => ({
                         text: `Dispositifs de ${brand}`,
                         query: brand
                     }));
+                    return { response, suggestions };
                 }
 
-                return { response, suggestions };
+                // Check for brand-specific queries
+                const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
+                for (const brand of allBrands) {
+                    if (normalizedQuery.includes(brand.toLowerCase())) {
+                        const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
+                        response = `La marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand.map(device => device.name).join(', ')}`;
+                        suggestions = devicesWithBrand.slice(0, 2).map(device => ({
+                            text: `Détails sur ${device.name}`,
+                            query: device.name
+                        }));
+                        return { response, suggestions };
+                    }
+                }
+
+                return { response, suggestions: [{ text: 'Liste des spécialités', query: 'Spécialités' }] };
             } catch (error) {
-                console.error('Error Chatbot:', error);
+                console.error('Error processing chatbot query:', error);
                 return {
                     response: 'Une erreur est survenue. Veuillez réessayer.',
                     suggestions: [{ text: 'Liste des spécialités', query: 'Spécialités' }]
@@ -1625,36 +1601,16 @@
 
         // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
-            // Initialize home page
-            showHome();
-
             // Navigation buttons
-            const exploreServicesBtn = $('#exploreServicesBtn');
-            if (exploreServicesBtn) {
-                exploreServicesBtn.addEventListener('click', showServices);
-            }
-
-            const homeBackBtn = $('#homeBackBtn');
-            if (homeBackBtn) {
-                homeBackBtn.addEventListener('click', showHome);
-            }
-
-            const servicesBackBtn = $('#servicesBackBtn');
-            if (servicesBackBtn) {
-                servicesBackBtn.addEventListener('click', showServices);
-            }
-
-            const devicesBackBtn = $('#devicesBackBtn');
-            if (devicesBackBtn) {
-                devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
-            }
+            $('#exploreServicesBtn')?.addEventListener('click', showServices);
+            $('#homeBackBtn')?.addEventListener('click', showHome);
+            $('#servicesBackBtn')?.addEventListener('click', showServices);
+            $('#devicesBackBtn')?.addEventListener('click', () => showDevices(state.currentService));
 
             // Search functionality
             const searchBox = $('#searchBox');
             if (searchBox) {
-                searchBox.addEventListener('input', debounce((e) => {
-                    handleSearch(e.target.value);
-                }, 300));
+                searchBox.addEventListener('input', debounce((e) => handleSearch(e.target.value), 300));
                 searchBox.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         handleSearch(e.target.value);
@@ -1674,8 +1630,8 @@
                     chatbotContainer.style.display = chatbotContainer.style.display === 'block' ? 'none' : 'block';
                     if (chatbotContainer.style.display === 'block' && !state.chatHistory.length) {
                         addChatMessage('Bonjour ! Je suis MediTech Assistant. Posez-moi une question sur les dispositifs médicaux ou les spécialités.', false, [
-                            { text: 'Liste des spécialités', query: 'Spécialités' },
-                            { text: 'Dispositifs disponibles', query: 'Dispositifs' }
+                            { text: 'Liste des spécialités', query: 'spécialités' },
+                            { text: 'Dispositifs disponibles', query: 'dispositifs' }
                         ]);
                     }
                     if (chatbotInput) {
@@ -1725,7 +1681,6 @@
                     themeToggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
                     localStorage.setItem('theme', newTheme); // Save theme preference
                     showNotification(`Thème ${newTheme === 'light' ? 'clair' : 'sombre'} activé.`, 'success');
-                
                 });
             }
 
