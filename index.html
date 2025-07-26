@@ -28,6 +28,11 @@
             --transition: all 0.3s ease;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         [data-theme="dark"] {
             --primary-color: #7f9cf5;
             --secondary-color: #9f7aea;
@@ -1834,7 +1839,7 @@
             'tableau chirurgical': ['tableau chirurgical', 'table chirurgicale', 'surgical table', 'tableau opératoire'],
             'appareil d\'ecmo': ['appareil d\'ecmo', 'ecmo', 'ecmo device', 'oxygénation extracorporelle'],
             'moniteur multiparamètre': ['moniteur multiparamètre', 'moniteur multi-paramètre', 'moniteur multi paramètre', 'multiparameter monitor', 'multi monitor'],
-            'pompe à perfusion': ['pompe à perfusion', 'perfuseur', 'infuseur', 'infusion pump', 'pompe perfusion'],
+            'pompe à perfusion': ['pompe à perfusion', 'perfuseur','perf','pompe', 'infuseur', 'infusion pump', 'pompe perfusion'],
             'Ventilateur Intensif': ['venti', 'Venti intensif', 'ventilateur intensif']
         };
 
@@ -2129,80 +2134,103 @@ const processChatbotQuery = async (query) => {
     }
 };
 // Quiz Generation
-const generateQuiz = () => {
+// Quiz Generation
+const generateQuiz = async () => {
     const devicesList = Object.values(devices).flat();
     const quizQuestions = [];
-    const questionTypes = [
-        {
-            type: 'role',
-            question: device => `Quel est le rôle principal de "${device.name}" ?`,
-            correct: device => device.role,
-            incorrects: () => devicesList
-                .filter(d => d.role) // Ensure role exists
-                .sort(() => Math.random() - 0.5)
-                .slice(0, 3)
-                .map(d => d.role)
-        },
-        {
-            type: 'components',
-            question: device => `Quel est un composant principal de "${device.name}" ?`,
-            correct: device => device.components[Math.floor(Math.random() * device.components.length)],
-            incorrects: (device) => {
-                const otherDevices = devicesList
-                    .filter(d => d.name !== device.name && d.components.length > 0)
-                    .sort(() => Math.random() - 0.5)
-                    .slice(0, 3);
-                return otherDevices.map(d => d.components[Math.floor(Math.random() * d.components.length)]);
+    
+    // Generate 10 unique questions using Gemini API
+    try {
+        showTypingAnimation(true);
+        const prompt = `Génère 10 questions à choix multiples sur les technologies médicales (dispositifs médicaux, leur rôle, principe, composants, marques, normes). Chaque question doit avoir 4 options (1 correcte, 3 incorrectes) et une explication détaillée. Format JSON : {questions: [{text: string, correctAnswer: string, answers: [string], explanation: string}]} `;
+        const geminiResponse = await callGemini(prompt);
+        const parsedResponse = typeof geminiResponse === 'string' ? JSON.parse(geminiResponse) : geminiResponse;
+        quizQuestions.push(...parsedResponse.questions.map(q => ({
+            text: q.text,
+            correctAnswer: q.correctAnswer,
+            answers: q.answers.sort(() => Math.random() - 0.5),
+            explanation: q.explanation
+        })));
+        showTypingAnimation(false);
+    } catch (error) {
+        console.error('Error generating quiz with Gemini:', error);
+        showNotification('Erreur lors de la génération du quiz.', 'error');
+        showTypingAnimation(false);
+        // Fallback to local question generation
+        const questionTypes = [
+            {
+                type: 'role',
+                question: device => `Quel est le rôle principal de "${device.name}" ?`,
+                correct: device => device.role,
+                incorrects: () => devicesList.filter(d => d.role).sort(() => Math.random() - 0.5).slice(0, 3).map(d => d.role),
+                explanation: device => `Le ${device.name} est utilisé pour : ${device.role}.`
+            },
+            {
+                type: 'components',
+                question: device => `Quel est un composant principal de "${device.name}" ?`,
+                correct: device => device.components[Math.floor(Math.random() * device.components.length)],
+                incorrects: (device) => devicesList.filter(d => d.name !== device.name && d.components.length > 0).sort(() => Math.random() - 0.5).slice(0, 3).map(d => d.components[Math.floor(Math.random() * d.components.length)]),
+                explanation: device => `Les composants principaux du ${device.name} incluent : ${device.components.join(', ')}.`
+            },
+            {
+                type: 'brands',
+                question: device => `Quelle marque fabrique "${device.name}" ?`,
+                correct: device => device.brands[Math.floor(Math.random() * device.brands.length)],
+                incorrects: () => [...new Set(devicesList.flatMap(d => d.brands))].sort(() => Math.random() - 0.5).slice(0, 3),
+                explanation: device => `Les marques associées au ${device.name} sont : ${device.brands.join(', ')}.`
             }
-        },
-        {
-            type: 'brands',
-            question: device => `Quelle marque fabrique "${device.name}" ?`,
-            correct: device => device.brands[Math.floor(Math.random() * device.brands.length)],
-            incorrects: () => devicesList
-                .flatMap(d => d.brands)
-                .filter((brand, idx, arr) => arr.indexOf(brand) === idx) // Remove duplicates
-                .sort(() => Math.random() - 0.5)
-                .slice(0, 3)
-        }
-    ];
-
-    // Generate 5 unique questions
-    const selectedDevices = [];
-    while (quizQuestions.length < 5) {
-        const device = devicesList[Math.floor(Math.random() * devicesList.length)];
-        if (!selectedDevices.includes(device) && device.components.length > 0 && device.brands.length > 0) {
-            const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
-            const correctAnswer = questionType.correct(device);
-            const incorrectAnswers = questionType.incorrects(device).filter(ans => ans && ans !== correctAnswer);
-            if (incorrectAnswers.length >= 3) {
-                const question = {
-                    device: device.name,
-                    type: questionType.type,
-                    text: questionType.question(device),
-                    correctAnswer,
-                    answers: [correctAnswer, ...incorrectAnswers.slice(0, 3)].sort(() => Math.random() - 0.5)
-                };
-                quizQuestions.push(question);
-                selectedDevices.push(device);
+        ];
+        const selectedDevices = [];
+        while (quizQuestions.length < 10) {
+            const device = devicesList[Math.floor(Math.random() * devicesList.length)];
+            if (!selectedDevices.includes(device) && device.components.length > 0 && device.brands.length > 0) {
+                const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+                const correctAnswer = questionType.correct(device);
+                const incorrectAnswers = questionType.incorrects(device).filter(ans => ans && ans !== correctAnswer);
+                if (incorrectAnswers.length >= 3) {
+                    quizQuestions.push({
+                        device: device.name,
+                        type: questionType.type,
+                        text: questionType.question(device),
+                        correctAnswer,
+                        answers: [correctAnswer, ...incorrectAnswers.slice(0, 3)].sort(() => Math.random() - 0.5),
+                        explanation: questionType.explanation(device)
+                    });
+                    selectedDevices.push(device);
+                }
             }
         }
     }
 
     let currentQuestionIndex = 0;
     let score = 0;
+    let timerId = null;
+    const timeLimit = 30; // 30 seconds per question
 
     const showQuizPage = () => {
-        if (typeof showPage !== 'function') {
-            console.error('showPage function is not defined');
-            showNotification('Erreur : Impossible d\'afficher la page du quiz.', 'error');
-            return;
-        }
         showPage('quiz-page', 'Quiz sur les Technologies Médicales', [
             { text: 'Quiz', action: showQuizPage }
         ]);
         state.navigationHistory.push({ text: 'Quiz', action: showQuizPage });
         renderQuizQuestion();
+    };
+
+    const startTimer = (callback) => {
+        let timeLeft = timeLimit;
+        const timerDisplay = $('#quizTimer');
+        if (timerDisplay) {
+            timerDisplay.textContent = `Temps restant : ${timeLeft}s`;
+        }
+        timerId = setInterval(() => {
+            timeLeft -= 1;
+            if (timerDisplay) {
+                timerDisplay.textContent = `Temps restant : ${timeLeft}s`;
+            }
+            if (timeLeft <= 0) {
+                clearInterval(timerId);
+                callback();
+            }
+        }, 1000);
     };
 
     const renderQuizQuestion = () => {
@@ -2214,6 +2242,7 @@ const generateQuiz = () => {
         }
 
         if (currentQuestionIndex >= quizQuestions.length) {
+            clearInterval(timerId);
             renderQuizResults();
             return;
         }
@@ -2225,6 +2254,7 @@ const generateQuiz = () => {
             <div class="quiz-progress">
                 <span>Question ${currentQuestionIndex + 1} sur ${quizQuestions.length}</span>
                 <span>Score: ${score}</span>
+                <span id="quizTimer">Temps restant : ${timeLimit}s</span>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" style="width: ${progress}%"></div>
@@ -2235,23 +2265,44 @@ const generateQuiz = () => {
                     <button class="quiz-option" data-index="${index}">${answer}</button>
                 `).join('')}
             </div>
+            <button class="btn-primary" id="showCorrectionBtn" style="margin-top: 10px;">Voir la correction</button>
             <p class="quiz-feedback" id="quizFeedback"></p>
         `;
+
+        clearInterval(timerId);
+        startTimer(() => {
+            const feedback = $('#quizFeedback');
+            feedback.textContent = `Temps écoulé ! La réponse correcte était : ${question.correctAnswer}. Explication : ${question.explanation}`;
+            feedback.style.color = 'var(--error-color)';
+            feedback.style.animation = 'fadeIn 0.5s';
+            const options = quizContainer.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.disabled = true;
+                if (opt.textContent === question.correctAnswer) {
+                    opt.classList.add('correct');
+                }
+            });
+            setTimeout(() => {
+                currentQuestionIndex += 1;
+                renderQuizQuestion();
+            }, 2000);
+        });
 
         const options = quizContainer.querySelectorAll('.quiz-option');
         options.forEach(option => {
             option.addEventListener('click', () => {
+                clearInterval(timerId);
                 const feedback = $('#quizFeedback');
                 const selectedAnswer = option.textContent;
                 const isCorrect = selectedAnswer === question.correctAnswer;
 
                 if (isCorrect) {
                     score += 1;
-                    feedback.textContent = 'Correct ! Bien joué.';
+                    feedback.textContent = `Correct ! ${question.explanation}`;
                     feedback.style.color = 'var(--success-color)';
                     option.classList.add('correct');
                 } else {
-                    feedback.textContent = `Incorrect. La réponse correcte est : ${question.correctAnswer}`;
+                    feedback.textContent = `Incorrect. La réponse correcte était : ${question.correctAnswer}. Explication : ${question.explanation}`;
                     feedback.style.color = 'var(--error-color)';
                     option.classList.add('incorrect');
                     options.forEach(opt => {
@@ -2260,14 +2311,36 @@ const generateQuiz = () => {
                         }
                     });
                 }
-
+                feedback.style.animation = 'fadeIn 0.5s';
                 options.forEach(opt => opt.disabled = true);
+
                 setTimeout(() => {
                     currentQuestionIndex += 1;
                     renderQuizQuestion();
-                }, 1500);
+                }, 2000);
             });
         });
+
+        const correctionBtn = $('#showCorrectionBtn');
+        if (correctionBtn) {
+            correctionBtn.addEventListener('click', () => {
+                clearInterval(timerId);
+                const feedback = $('#quizFeedback');
+                feedback.textContent = `Réponse correcte : ${question.correctAnswer}. Explication : ${question.explanation}`;
+                feedback.style.color = 'var(--primary-color)';
+                feedback.style.animation = 'fadeIn 0.5s';
+                options.forEach(opt => {
+                    opt.disabled = true;
+                    if (opt.textContent === question.correctAnswer) {
+                        opt.classList.add('correct');
+                    }
+                });
+                setTimeout(() => {
+                    currentQuestionIndex += 1;
+                    renderQuizQuestion();
+                }, 2000);
+            });
+        }
     };
 
     const renderQuizResults = () => {
@@ -2306,7 +2379,6 @@ const generateQuiz = () => {
 
     showQuizPage();
 };
-
 // Levenshtein distance function for fuzzy matching
 const levenshteinDistance = (a, b) => {
     const matrix = Array(b.length + 1).fill().map(() => Array(a.length + 1).fill(0));
