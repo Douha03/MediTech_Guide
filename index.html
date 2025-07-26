@@ -114,6 +114,43 @@
             align-items: center;
             gap: 10px;
         }
+        
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1100;
+            box-shadow: var(--shadow-sm);
+            margin-top: 5px;
+        }
+
+        .search-suggestions .suggestion-item {
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-dark);
+        }
+
+        .search-suggestions .suggestion-item:hover,
+        .search-suggestions .suggestion-item:focus,
+        .search-suggestions .suggestion-item.selected {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        @media (max-width: 768px) {
+            .search-suggestions {
+                width: 100%;
+            }
+        }
 
         .search-box {
             background: var(--bg-light);
@@ -892,7 +929,8 @@
                     <span class="logo-text">MediTech</span>
                 </div>
                 <div class="search-container">
-                    <input type="text" class="search-box" id="searchBox" placeholder="Rechercher des dispositifs ou spécialités..." aria-label="Rechercher des dispositifs ou spécialités">
+                    <input type="text" class="search-box" id="searchBox" placeholder="Rechercher des dispositifs, spécialités ou abréviations..." aria-label="Rechercher des dispositifs, spécialités ou abréviations">
+                    <div class="search-suggestions" id="searchSuggestions" style="display: none;"></div>
                     <button class="theme-toggle" id="themeToggle" aria-label="Basculer entre thème clair et sombre">🌙</button>
                 </div>
             </div>
@@ -1683,24 +1721,118 @@
         };
 
         // Search handling
+                const showSearchSuggestions = (query) => {
+            const suggestionsContainer = $('#searchSuggestions');
+            if (!suggestionsContainer) return;
+
+            suggestionsContainer.innerHTML = '';
+            suggestionsContainer.style.display = 'none';
+
+            if (!query.trim()) return;
+
+            const normalizedQuery = query.toLowerCase().trim();
+            const allDeviceNames = Object.values(devices).flat().map(d => d.name);
+            const allServiceNames = Object.values(services).map(s => s.name);
+            const allSynonyms = Object.entries(synonyms).flatMap(([deviceName, syns]) => 
+                syns.map(syn => ({ term: syn, target: deviceName }))
+            );
+
+            // Collecter toutes les correspondances possibles
+            const matches = [];
+            
+            // Correspondances pour les services
+            allServiceNames.forEach(name => {
+                if (name.toLowerCase().includes(normalizedQuery) || fuzzyMatch(normalizedQuery, [name.toLowerCase()], 3)) {
+                    matches.push({ text: name, type: 'service', target: Object.keys(services).find(key => services[key].name === name) });
+                }
+            });
+
+            // Correspondances pour les dispositifs et leurs synonymes
+            allDeviceNames.forEach(name => {
+                const deviceSynonyms = synonyms[name.toLowerCase()] || [name.toLowerCase()];
+                const matchedSynonym = deviceSynonyms.find(syn => 
+                    syn.includes(normalizedQuery) || fuzzyMatch(normalizedQuery, [syn], 3)
+                );
+                if (matchedSynonym) {
+                    matches.push({ text: name, type: 'device', target: name });
+                }
+            });
+
+            allSynonyms.forEach(({ term, target }) => {
+                if (term.includes(normalizedQuery) || fuzzyMatch(normalizedQuery, [term], 3)) {
+                    matches.push({ text: target, type: 'device', target });
+                }
+            });
+
+            // Limiter à 5 suggestions et supprimer les doublons
+            const uniqueMatches = [...new Map(matches.map(m => [m.text, m])).values()].slice(0, 5);
+
+            if (uniqueMatches.length > 0) {
+                suggestionsContainer.style.display = 'block';
+                uniqueMatches.forEach(match => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'suggestion-item';
+                    suggestionItem.setAttribute('tabindex', '0');
+                    suggestionItem.textContent = match.text;
+                    suggestionItem.addEventListener('click', () => {
+                        $('#searchBox').value = match.text;
+                        suggestionsContainer.style.display = 'none';
+                        if (match.type === 'device') {
+                            showDeviceDetails(match.target);
+                        } else if (match.type === 'service') {
+                            showServices(match.target);
+                        }
+                        showNotification(`Résultat trouvé : ${match.text}`, 'success');
+                    });
+                    suggestionItem.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            suggestionItem.click();
+                        }
+                    });
+                    suggestionsContainer.appendChild(suggestionItem);
+                });
+            }
+        };
+
+        // Replace the existing handleSearch with this updated version
         const handleSearch = (query) => {
-            query = query.trim().toLowerCase(); // Normalize query
+            query = query.trim().toLowerCase();
+            const suggestionsContainer = $('#searchSuggestions');
+            if (suggestionsContainer) {
+                suggestionsContainer.style.display = 'none';
+            }
+
             if (!query) {
                 if (state.currentPage === 'devices-page' && state.currentService) {
-                    showDevices(state.currentService); // Reset devices grid if on devices page
+                    showDevices(state.currentService);
                 }
                 return;
             }
 
-            // Search for device match
-            const device = findDeviceByName(query);
-            if (device) {
-                showDeviceDetails(device.name);
-                showNotification(`Dispositif trouvé : ${device.name}`, 'success');
+            // Recherche dans les dispositifs avec synonymes
+            let foundDevice = null;
+            let matchedDeviceName = null;
+            for (const serviceKey in devices) {
+                const deviceList = devices[serviceKey];
+                for (const device of deviceList) {
+                    const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
+                    if (deviceSynonyms.some(syn => syn === query || fuzzyMatch(query, [syn], 3))) {
+                        foundDevice = device;
+                        matchedDeviceName = device.name;
+                        state.currentService = serviceKey;
+                        break;
+                    }
+                }
+                if (foundDevice) break;
+            }
+
+            if (foundDevice) {
+                showDeviceDetails(matchedDeviceName);
+                showNotification(`Dispositif trouvé : ${matchedDeviceName}`, 'success');
                 return;
             }
 
-            // Search for service match
+            // Recherche dans les services
             const serviceKey = findServiceByName(query);
             if (serviceKey) {
                 showServices(serviceKey);
@@ -1708,11 +1840,11 @@
                 return;
             }
 
-            // Filter devices if on devices page
+            // Filtrer les dispositifs si sur la page des dispositifs
             if (state.currentPage === 'devices-page' && state.currentService) {
                 filterDevices(query);
             } else {
-                // Fallback to chatbot
+                // Fallback au chatbot
                 addChatMessage(query, true);
                 showTypingAnimation(true);
                 setTimeout(() => {
@@ -1724,30 +1856,6 @@
                         addChatMessage(response, false);
                     }
                 }, 500);
-            }
-        };
-
-        const filterDevices = (query) => {
-            const devicesGrid = $('#devicesGrid');
-            if (!devicesGrid || state.currentPage !== 'devices-page' || !state.currentService) {
-                return;
-            }
-
-            const fragment = document.createDocumentFragment();
-            const filteredDevices = sortDevices(devices[state.currentService]).filter(device => 
-                device.name.toLowerCase().includes(query.toLowerCase())
-            );
-
-            devicesGrid.innerHTML = ''; // Clear the grid
-            if (filteredDevices.length === 0) {
-                devicesGrid.innerHTML = '<p class="image-error">Aucun dispositif trouvé pour ce filtre.</p>';
-                showNotification('Aucun résultat trouvé.', 'error');
-            } else {
-                filteredDevices.forEach(device => {
-                    fragment.appendChild(createDeviceCard(device));
-                });
-                devicesGrid.appendChild(fragment);
-                showNotification(`${filteredDevices.length} dispositif(s) trouvés.`, 'success');
             }
         };
 
@@ -1764,7 +1872,7 @@
             'irm': ['irm', 'résonance magnétique', 'mri', 'irmm', 'resonance magnetique', 'mrii', 'aoi femeini', 'mri scan', 'résonnance', 'imagérie magnétique', 'rmi'],
             'ecg': ['électrocardiographe', 'ecg', 'ekg', 'electrocardiographe', 'elctrocardiographe', 'cardiographe', 'electrocardio', 'ekg cardio'],
             'eeg': ['électroencéphalographe', 'eeg', 'electroencephalographe', 'eeeg', 'elctroencephalo', 'encephalo', 'electroencephalo'],
-            'mammographe numérique': ['mammographe numérique', 'mammographie numérique', 'mammographe', 'mammographie', 'mammograph', 'mammo'],
+            'mammographe numérique': ['mammographe numérique', 'mammographie numérique', 'mammographe', 'mammo', 'mammographie', 'mammograph', 'mammo'],
             'échographe pédiatrique': ['échographe pédiatrique','echo', 'échographe pediatrique', 'échographe', 'ultrason pédiatrique', 'ultrasons pédiatriques', 'ultrasound pediatric', 'echo pediatrique', 'echo', 'écho', 'echo pédiatrique', 'ultrason pediatrique'],
             'incubateur neonatal': ['incubateur néonatal', 'incubateur neonatal', 'incubator neonatal', 'berceau chauffant néonatal', 'neonatal incubator'],
             'moniteur neonatal': ['moniteur néonatal', 'moniteur neonatal', 'monitor neonatal', 'moniteur bébé', 'moniteur nourrisson', 'neonatal monitor'],
@@ -2221,8 +2329,15 @@ const fuzzyMatch = (query, candidates, threshold = 3) => {
     let bestMatch = { name: '', score: Infinity };
     candidates.forEach(candidate => {
         const distance = levenshteinDistance(query.toLowerCase(), candidate.toLowerCase());
-        if (distance < bestMatch.score) {
+        // Ajuster le score pour les abréviations courtes
+        const isShortQuery = query.length <= 4;
+        const adjustedThreshold = isShortQuery ? Math.min(threshold, 2) : threshold;
+        if (distance < bestMatch.score && distance <= adjustedThreshold) {
             bestMatch = { name: candidate, score: distance };
+        }
+        // Vérifier les correspondances exactes pour les abréviations
+        if (query.toLowerCase() === candidate.toLowerCase()) {
+            bestMatch = { name: candidate, score: 0 };
         }
     });
     return bestMatch.score <= threshold ? bestMatch.name : null;
@@ -2243,13 +2358,43 @@ const toggleTheme = () => {
 
 // Event Listeners
 const initEventListeners = () => {
-    // Search
     const searchBox = $('#searchBox');
     if (searchBox) {
-        searchBox.addEventListener('input', debounce((e) => handleSearch(e.target.value), 300));
+        searchBox.addEventListener('input', debounce((e) => {
+            showSearchSuggestions(e.target.value);
+            handleSearch(e.target.value);
+        }, 300));
         searchBox.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 handleSearch(e.target.value);
+            }
+        });
+        // Navigation au clavier pour les suggestions
+        searchBox.addEventListener('keydown', (e) => {
+            const suggestionsContainer = $('#searchSuggestions');
+            const suggestionItems = $$('.suggestion-item', suggestionsContainer);
+            if (!suggestionItems.length) return;
+
+            let selectedIndex = suggestionItems.findIndex(item => item.classList.contains('selected'));
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (selectedIndex < suggestionItems.length - 1) {
+                    if (selectedIndex >= 0) suggestionItems[selectedIndex].classList.remove('selected');
+                    selectedIndex += 1;
+                    suggestionItems[selectedIndex].classList.add('selected');
+                    suggestionItems[selectedIndex].focus();
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (selectedIndex > 0) {
+                    suggestionItems[selectedIndex].classList.remove('selected');
+                    selectedIndex -= 1;
+                    suggestionItems[selectedIndex].classList.add('selected');
+                    suggestionItems[selectedIndex].focus();
+                }
+            } else if (e.key === 'Enter' && selectedIndex >= 0) {
+                e.preventDefault();
+                suggestionItems[selectedIndex].click();
             }
         });
     }
@@ -2285,44 +2430,43 @@ const initEventListeners = () => {
     }
 
     // Chatbot
-// Chatbot
-// Chatbot
-const chatGuideBtn = $('#chatGuideBtn');
-if (chatGuideBtn) {
-    chatGuideBtn.addEventListener('click', showChatbotPage);
-}
+    const chatGuideBtn = $('#chatGuideBtn');
+    if (chatGuideBtn) {
+        chatGuideBtn.addEventListener('click', showChatbotPage);
+    }
 
-const chatbotSend = $('#chatbotSend');
-const chatbotInput = $('#chatbotInput');
-if (chatbotSend && chatbotInput) {
-    chatbotSend.addEventListener('click', async () => {
-        const query = chatbotInput.value.trim();
-        if (!query) return;
-        addChatMessage(query, true);
-        showTypingAnimation(true);
-        try {
-            const response = await processChatbotQuery(query);
-            showTypingAnimation(false);
-            if (typeof response === 'object') {
-                addChatMessage(response.response, false, response.suggestions);
-            } else {
-                addChatMessage(response, false);
+    const chatbotSend = $('#chatbotSend');
+    const chatbotInput = $('#chatbotInput');
+    if (chatbotSend && chatbotInput) {
+        chatbotSend.addEventListener('click', async () => {
+            const query = chatbotInput.value.trim();
+            if (!query) return;
+            addChatMessage(query, true);
+            showTypingAnimation(true);
+            try {
+                const response = await processChatbotQuery(query);
+                showTypingAnimation(false);
+                if (typeof response === 'object') {
+                    addChatMessage(response.response, false, response.suggestions);
+                } else {
+                    addChatMessage(response, false);
+                }
+                chatbotInput.value = '';
+            } catch (error) {
+                showTypingAnimation(false);
+                console.error('Error in chatbot query:', error);
+                showNotification('Erreur lors du traitement de la question.', 'error');
+                addChatMessage('Désolé, une erreur est survenue. Essayez de reformuler votre question.', false);
+                chatbotInput.value = '';
             }
-            chatbotInput.value = '';
-        } catch (error) {
-            showTypingAnimation(false);
-            console.error('Error in chatbot query:', error);
-            showNotification('Erreur lors du traitement de la question.', 'error');
-            addChatMessage('Désolé, une erreur est survenue. Essayez de reformuler votre question.', false);
-            chatbotInput.value = '';
-        }
-    });
-    chatbotInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            chatbotSend.click();
-        }
-    });
-}
+        });
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                chatbotSend.click();
+            }
+        });
+    }
+
     // Sorting
     const sortSelect = $('#sortSelect');
     if (sortSelect) {
@@ -2357,7 +2501,6 @@ const init = () => {
     }
     showHome();
     initEventListeners();
-
 };
 
 window.addEventListener('DOMContentLoaded', init);
