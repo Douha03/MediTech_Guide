@@ -1001,7 +1001,7 @@
             imagerie_medicale: {
                 name: 'Imagerie Médicale',
                 description: 'Technologies d\'imagerie médicale pour un diagnostic précis et non invasif.',
-                examples: ['Scanners haute résolution', 'IRM 3 Tesla', 'Mammographie numérique'],
+                examples: ['Scanners ', 'IRM', 'Mammographie'],
                 icon: '📡'
             },
             neurologie: {
@@ -1135,7 +1135,7 @@
                     normes: ['Installation dans une cage de Faraday', 'Conformité aux normes CEI 60601-2-33', 'Zone de sécurité magnétique délimitée']
                 },
                 {
-                    name: 'Mammographe Numérique',
+                    name: 'Mammographe ',
                     image: 'https://via.placeholder.com/400x250?text=Mammographe',
                     role: 'Dépistage et diagnostic du cancer du sein par imagerie.',
                     principle: 'Utilise des rayons X à faible dose pour produire des images des tissus mammaires.',
@@ -1760,14 +1760,38 @@
         }
 
         const synonyms = {
-            'scanner': ['scanner', 'tomodensitomètre', 'ct', 'scaner', 'scannr', 'tomodensitometre'],
+        
+           'scanner': ['scanner', 'tomodensitomètre', 'ct', 'scaner', 'scannr', 'tomodensitometre'],
             'irm': ['irm', 'résonance magnétique', 'mri', 'irmm', 'resonance magnetique', 'mrii'],
             'ecg': ['électrocardiographe', 'ecg', 'ekg', 'electrocardiographe', 'elctrocardiographe'],
             'eeg': ['électroencéphalographe', 'eeg', 'electroencephalographe', 'eeeg', 'elctroencephalo'],
-            'ventilateur': ['ventilateur', 'respirateur', 'ventilator', 'ventillateur', 'respirator'],
+            'mammographe numérique': ['mammographe numérique', 'mammographie numérique', 'mammographe', 'mammographie', 'mammograph'],
+            'échographe pédiatrique': ['échographe pédiatrique', 'échographe pediatrique', 'échographe', 'ultrason pédiatrique', 'ultrasons pédiatriques', 'ultrasound pediatric'],
+            'incubateur neonatal': ['incubateur néonatal', 'incubateur neonatal', 'incubator neonatal', 'berceau chauffant néonatal'],
+            'moniteur neonatal': ['moniteur néonatal', 'moniteur neonatal', 'monitor neonatal', 'moniteur bébé', 'moniteur nourrisson'],
+            'défibrillateur automatique': ['défibrillateur automatique', 'défibrillateur', 'defibrillateur', 'defibrillator automatique', 'defib automatique'],
+            'échocardiographe': ['échocardiographe', 'échocardiogramme', 'echo coeur', 'échographie cardiaque', 'echocardiogram'],
+            'électrocardiographe': ['électrocardiographe', 'ecg', 'ekg', 'electrocardiographe', 'elctrocardiographe'],
+            'doppler transcranienne': ['doppler transcranienne', 'doppler transcranien', 'doppler cerebral', 'doppler', 'ultrason doppler'],
+            'électroencéphalographe': ['électroencéphalographe', 'eeg', 'electroencephalographe', 'eeeg', 'elctroencephalo'],
+            'arthroscope d entomètre osseux': ['arthroscope', 'arthroscope osseux', 'arthroscope d entomètre', 'arthroscope d’encytomètre osseux'],
+            'coloscope endoscope digestif': ['coloscope', 'endoscope digestif', 'coloscopie', 'endoscope', 'coloscopy', 'digestive endoscope'],
+            'gamma knife': ['gamma knife', 'gamma knife radiothérapie', 'radiothérapie gamma knife'],
+            'pet scanner': ['pet scanner', 'pet scan', 'scanner pet', 'pet ct', 'tomographie par émission de positons'],
+            'radiothérapie linac': ['linac', 'radiothérapie linac', 'accelerateur linéaire', 'linear accelerator'],
             'autoclave': ['autoclave', 'stérilisateur vapeur', 'autoclav', 'sterilisateur vapeur'],
-            'robot chirurgical': ['robot chirurgical', 'robot chirurgie', 'surgical robot', 'robot chirurgicale', 'robot surgery']
+            'stérilisateur plasma': ['stérilisateur plasma', 'sterilisateur plasma', 'plasma sterilizer'],
+            'stérilisateur uv': ['stérilisateur uv', 'sterilisateur uv', 'uv sterilizer', 'stérilisateur ultraviolets'],
+            'lampe opératoire': ['lampe opératoire', 'lampe chirurgicale', 'lampe operation', 'surgical lamp'],
+            'robot chirurgical': ['robot chirurgical', 'robot chirurgie', 'surgical robot', 'robot chirurgicale', 'robot surgery'],
+            'système de navigation chirurgical': ['système de navigation chirurgical', 'navigation chirurgicale', 'surgical navigation system'],
+            'tableau chirurgical': ['tableau chirurgical', 'table chirurgicale', 'surgical table'],
+            'appareil desmo': ['appareil desmo', 'desmo device'],
+            'moniteur multiparamètre': ['moniteur multiparamètre', 'moniteur multi-paramètre', 'moniteur multi paramètre', 'multiparameter monitor'],
+            'pompe à perfusion': ['pompe à perfusion', 'perfuseur', 'infuseur', 'infusion pump'],
+            
         };
+
 
         const addChatMessage = (message, isUser, suggestions = []) => {
     const chatbotBody = $('#chatbotBody');
