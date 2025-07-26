@@ -1616,6 +1616,18 @@
             }
         };
 
+        // Device handling
+        const findDeviceByName = (name) => {
+            const normalizedName = name.toLowerCase().trim();
+            for (const service in devices) {
+                const device = devices[service].find(d => d.name.toLowerCase() === normalizedName || synonyms[d.name.toLowerCase()]?.includes(normalizedName));
+                if (device) {
+                    state.currentService = service;
+                    return device;
+                }
+            }
+            return null;
+        };
 
         const findServiceByName = (name) => {
             const normalizedName = name.toLowerCase().trim();
@@ -1701,7 +1713,6 @@
         };
 
         // Search handling
-        
         const handleSearch = (query) => {
             query = query.trim().toLowerCase();
             const suggestionsContainer = $('#searchSuggestions');
@@ -1723,7 +1734,7 @@
                 for (const serviceKey in devices) {
                     devices[serviceKey].forEach(dev => {
                         const deviceSynonyms = synonyms[dev.name.toLowerCase()] || [dev.name.toLowerCase()];
-                        const match = queryWords.some(word => deviceSynonyms.includes(word.toLowerCase()) || fuzzyMatch(word, deviceSynonyms, 3));
+                        const match = queryWords.some(word => deviceSynonyms.some(syn => syn.includes(word)) || fuzzyMatch(word, deviceSynonyms, 3));
                         if (match) {
                             device = dev;
                             state.currentService = serviceKey;
@@ -1751,91 +1762,18 @@
             if (state.currentPage === 'devices-page' && state.currentService) {
                 filterDevices(query);
             } else {
-                showNotification('Aucun dispositif ou spécialité trouvé. Essayez une autre recherche.', 'error');
-            }
-        };
-
-        const showSearchSuggestions = (query) => {
-            const suggestionsContainer = $('#searchSuggestions');
-            if (!suggestionsContainer) return;
-
-            suggestionsContainer.innerHTML = '';
-            if (!query.trim()) {
-                suggestionsContainer.classList.remove('show');
-                return;
-            }
-
-            const normalizedQuery = query.toLowerCase().trim();
-            const suggestions = [];
-            const queryWords = normalizedQuery.split(/\s+/);
-
-            // Search devices
-            for (const serviceKey in devices) {
-                devices[serviceKey].forEach(device => {
-                    const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                    const match = queryWords.some(word => deviceSynonyms.includes(word.toLowerCase()) || fuzzyMatch(word, deviceSynonyms, 3));
-                    if (match && !suggestions.some(s => s.name === device.name)) {
-                        suggestions.push({ name: device.name, type: 'device', service: serviceKey });
-                    }
-                });
-            }
-
-            // Search services
-            for (const serviceKey in services) {
-                const service = services[serviceKey];
-                if (serviceKey.includes(normalizedQuery) || service.name.toLowerCase().includes(normalizedQuery)) {
-                    suggestions.push({ name: service.name, type: 'service', key: serviceKey });
-                }
-            }
-
-            if (suggestions.length === 0) {
-                suggestionsContainer.classList.remove('show');
-                return;
-            }
-
-            suggestions.slice(0, 5).forEach(suggestion => {
-                const item = document.createElement('div');
-                item.className = 'suggestion-item';
-                item.setAttribute('tabindex', '0');
-                item.textContent = suggestion.name;
-                item.setAttribute('role', 'option');
-                item.setAttribute('aria-label', `Naviguer vers ${suggestion.name}`);
-                item.addEventListener('click', () => {
-                    $('#searchBox').value = suggestion.name;
-                    suggestionsContainer.classList.remove('show');
-                    if (suggestion.type === 'device') {
-                        state.currentService = suggestion.service;
-                        showDeviceDetails(suggestion.name);
-                        showNotification(`Dispositif trouvé : ${suggestion.name}`, 'success');
+                addChatMessage(query, true);
+                showTypingAnimation(true);
+                setTimeout(() => {
+                    showTypingAnimation(false);
+                    const response = processChatbotQuery(query);
+                    if (typeof response === 'object') {
+                        addChatMessage(response.response, false, response.suggestions);
                     } else {
-                        showServices(suggestion.key);
-                        showNotification(`Spécialité trouvée : ${suggestion.name}`, 'success');
+                        addChatMessage(response, false);
                     }
-                });
-                item.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        item.click();
-                    }
-                });
-                suggestionsContainer.appendChild(item);
-            });
-
-            suggestionsContainer.classList.add('show');
-        };
-
-        const findDeviceByName = (name) => {
-            const normalizedName = name.toLowerCase().trim();
-            for (const service in devices) {
-                const device = devices[service].find(d => {
-                    const deviceSynonyms = synonyms[d.name.toLowerCase()] || [d.name.toLowerCase()];
-                    return deviceSynonyms.includes(normalizedName) || fuzzyMatch(normalizedName, deviceSynonyms, 3) !== null;
-                });
-                if (device) {
-                    state.currentService = service;
-                    return device;
-                }
+                }, 500);
             }
-            return null;
         };
 
         const filterDevices = (query) => {
@@ -1875,7 +1813,7 @@
             'irm': ['irm', 'résonance magnétique', 'mri', 'irmm', 'resonance magnetique', 'mrii', 'aoi femeini', 'mri scan', 'résonnance', 'imagérie magnétique', 'rmi'],
             'ecg': ['électrocardiographe', 'ecg', 'ekg', 'electrocardiographe', 'elctrocardiographe', 'cardiographe', 'electrocardio', 'ekg cardio'],
             'eeg': ['électroencéphalographe', 'eeg', 'electroencephalographe', 'eeeg', 'elctroencephalo', 'encephalo', 'electroencephalo'],
-            'mammographe': ['mammographe numérique', 'mammographie numérique', 'mammographe', 'mammographie', 'mammograph', 'mammo', 'mamo'],
+            'mammographe numérique': ['mammographe numérique', 'mammographie numérique', 'mammographe', 'mammographie', 'mammograph', 'mammo'],
             'échographe pédiatrique': ['échographe pédiatrique','echo', 'échographe pediatrique', 'échographe', 'ultrason pédiatrique', 'ultrasons pédiatriques', 'ultrasound pediatric', 'echo pediatrique', 'echo', 'écho', 'echo pédiatrique', 'ultrason pediatrique'],
             'incubateur neonatal': ['incubateur néonatal', 'incubateur neonatal', 'incubator neonatal', 'berceau chauffant néonatal', 'neonatal incubator'],
             'moniteur neonatal': ['moniteur néonatal', 'moniteur neonatal', 'monitor neonatal', 'moniteur bébé', 'moniteur nourrisson', 'neonatal monitor'],
@@ -1952,7 +1890,15 @@ async function callGemini(query) {
         throw new Error('Erreur lors de la communication avec l\'API.');
     }
 }
+const showSearchSuggestions = (query) => {
+    const suggestionsContainer = $('#searchSuggestions');
+    if (!suggestionsContainer) return;
 
+    suggestionsContainer.innerHTML = '';
+    if (!query.trim()) {
+        suggestionsContainer.classList.remove('show');
+        return;
+    }
 
     const normalizedQuery = query.toLowerCase().trim();
     const suggestions = [];
@@ -1962,7 +1908,7 @@ async function callGemini(query) {
     for (const serviceKey in devices) {
         devices[serviceKey].forEach(device => {
             const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-            const match = queryWords.some(word => deviceSynonyms.includes(word.toLowerCase()) || fuzzyMatch(word, deviceSynonyms, 3));
+            const match = queryWords.some(word => deviceSynonyms.some(syn => syn.includes(word)) || fuzzyMatch(word, deviceSynonyms, 3));
             if (match && !suggestions.some(s => s.name === device.name)) {
                 suggestions.push({ name: device.name, type: 'device', service: serviceKey });
             }
@@ -1995,22 +1941,15 @@ async function callGemini(query) {
             if (suggestion.type === 'device') {
                 state.currentService = suggestion.service;
                 showDeviceDetails(suggestion.name);
-                showNotification(`Dispositif trouvé : ${suggestion.name}`, 'success');
             } else {
                 showServices(suggestion.key);
-                showNotification(`Spécialité trouvée : ${suggestion.name}`, 'success');
-            }
-        });
-        item.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                item.click();
             }
         });
         suggestionsContainer.appendChild(item);
     });
 
     suggestionsContainer.classList.add('show');
-
+};
 const processChatbotQuery = async (query) => {
     try {
         if (!devices || !services) {
@@ -2434,25 +2373,21 @@ const initEventListeners = () => {
                 e.preventDefault();
                 if (selectedIndex < suggestionItems.length - 1) {
                     if (selectedIndex >= 0) suggestionItems[selectedIndex].classList.remove('selected');
-                    selectedIndex++;
+                    selectedIndex += 1;
                     suggestionItems[selectedIndex].classList.add('selected');
-                    suggestionItems[selectedIndex].scrollIntoView({ block: 'nearest' });
+                    suggestionItems[selectedIndex].focus();
                 }
             } else if (e.key === 'ArrowUp') {
                 e.preventDefault();
                 if (selectedIndex > 0) {
                     suggestionItems[selectedIndex].classList.remove('selected');
-                    selectedIndex--;
+                    selectedIndex -= 1;
                     suggestionItems[selectedIndex].classList.add('selected');
-                    suggestionItems[selectedIndex].scrollIntoView({ block: 'nearest' });
+                    suggestionItems[selectedIndex].focus();
                 }
             } else if (e.key === 'Enter' && selectedIndex >= 0) {
                 e.preventDefault();
                 suggestionItems[selectedIndex].click();
-                searchBox.focus(); // Retain focus on search box
-            } else if (e.key === 'Escape') {
-                suggestionsContainer.classList.remove('show');
-                searchBox.focus();
             }
         });
     }
