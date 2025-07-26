@@ -1832,7 +1832,6 @@ const showTypingAnimation = (show) => {
 };
 async function callGemini(query) {
     try {
-        // Placeholder: Replace with actual API call
         const response = await fetch('/.netlify/functions/callGemini', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1845,7 +1844,7 @@ async function callGemini(query) {
         throw new Error('Erreur lors de la communication avec l\'API.');
     }
 }
-const processChatbotQuery = (query) => {
+const processChatbotQuery = async (query) => {
     try {
         if (!devices || !services) {
             throw new Error('Données des dispositifs ou services non disponibles.');
@@ -1870,8 +1869,8 @@ const processChatbotQuery = (query) => {
         const allSynonyms = Object.values(synonyms).flat();
         const allCandidates = [...allDeviceNames, ...allSynonyms];
 
-        // Find the closest match
-        const bestMatch = fuzzyMatch(normalizedQuery, allCandidates);
+        // Find the closest match with a more lenient threshold
+        const bestMatch = fuzzyMatch(normalizedQuery, allCandidates, 5); // Increased threshold to 5
         if (bestMatch) {
             // Check if the match is a synonym or a device name
             for (const serviceKey in devices) {
@@ -1889,7 +1888,7 @@ const processChatbotQuery = (query) => {
             }
         }
 
-        // If a device is found, prepare response and suggestions
+        // If a device is found, prepare response and suggestions without navigation
         if (foundDevice) {
             suggestions = [
                 { text: `Quel est le rôle du ${foundDevice.name} ?`, action: () => `Le rôle du ${foundDevice.name} est : ${foundDevice.role}` },
@@ -1900,8 +1899,6 @@ const processChatbotQuery = (query) => {
                 { text: `Quelles sont les normes du ${foundDevice.name} ?`, action: () => `Les normes pour ${foundDevice.name} sont : ${foundDevice.normes.join(', ')}` }
             ];
             response = `Vous avez demandé des informations sur ${foundDevice.name}. Voici quelques suggestions :`;
-            // Navigate to device details page
-            showDeviceDetails(foundDevice.name);
             return { response, suggestions };
         }
 
@@ -1911,8 +1908,8 @@ const processChatbotQuery = (query) => {
             const deviceList = devices[serviceKey];
             for (const device of deviceList) {
                 const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                const queryMatchesDevice = deviceSynonyms.some(syn => normalizedQuery.includes(syn)) || fuzzyMatch(normalizedQuery, deviceSynonyms) !== null;
-                if ((queryMatchesDevice || (contextDevice && contextDevice.name === device.name))) {
+                const queryMatchesDevice = deviceSynonyms.some(syn => normalizedQuery.includes(syn)) || fuzzyMatch(normalizedQuery, deviceSynonyms, 5) !== null;
+                if (queryMatchesDevice || (contextDevice && contextDevice.name === device.name)) {
                     if (normalizedQuery.includes('rôle')) {
                         return `Le rôle du ${device.name} est : ${device.role}`;
                     }
@@ -1939,7 +1936,7 @@ const processChatbotQuery = (query) => {
         if (normalizedQuery.includes('comparer') || normalizedQuery.includes('compare')) {
             const foundDevices = [];
             allCandidates.forEach(candidate => {
-                const match = fuzzyMatch(normalizedQuery, [candidate]);
+                const match = fuzzyMatch(normalizedQuery, [candidate], 5);
                 if (match && !foundDevices.includes(match)) {
                     const device = findDeviceByName(match);
                     if (device) foundDevices.push(device);
@@ -1980,17 +1977,16 @@ const processChatbotQuery = (query) => {
 
         // If no match found, call Gemini API
         showTypingAnimation(true);
-        return callGemini(`Réponds comme un assistant médical expert : ${query}`)
-            .then(reply => {
-                showTypingAnimation(false);
-                return reply;
-            })
-            .catch(error => {
-                console.error('Error calling Gemini API:', error);
-                showTypingAnimation(false);
-                showNotification('Erreur lors de la communication avec l\'API.', 'error');
-                return 'Désolé, une erreur est survenue. Essayez de reformuler votre question.';
-            });
+        try {
+            const reply = await callGemini(`Réponds comme un assistant médical expert : ${query}`);
+            showTypingAnimation(false);
+            return reply;
+        } catch (error) {
+            console.error('Error calling Gemini API:', error);
+            showTypingAnimation(false);
+            showNotification('Erreur lors de la communication avec l\'API.', 'error');
+            return 'Désolé, une erreur est survenue. Essayez de reformuler votre question.';
+        }
     } catch (error) {
         console.error('Error processing chatbot query:', error);
         showNotification('Une erreur est survenue lors du traitement de votre question.', 'error');
@@ -2263,7 +2259,8 @@ const initEventListeners = () => {
     }
 
     // Chatbot
-    const chatGuideBtn = $('#chatGuideBtn');
+// Chatbot
+const chatGuideBtn = $('#chatGuideBtn');
 if (chatGuideBtn) {
     chatGuideBtn.addEventListener('click', showChatbotPage);
 }
