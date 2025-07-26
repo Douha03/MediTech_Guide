@@ -1760,36 +1760,32 @@
         }
 
         const synonyms = {
-        
-           'scanner': ['scanner', 'tomodensitomètre', 'ct', 'scaner', 'scannr', 'tomodensitometre'],
-            'irm': ['irm', 'résonance magnétique', 'mri', 'irmm', 'resonance magnetique', 'mrii'],
-            'ecg': ['électrocardiographe', 'ecg', 'ekg', 'electrocardiographe', 'elctrocardiographe'],
-            'eeg': ['électroencéphalographe', 'eeg', 'electroencephalographe', 'eeeg', 'elctroencephalo'],
-            'mammographe numérique': ['mammographe numérique', 'mammographie numérique', 'mammographe', 'mammographie', 'mammograph'],
-            'échographe pédiatrique': ['échographe pédiatrique', 'échographe pediatrique', 'échographe', 'ultrason pédiatrique', 'ultrasons pédiatriques', 'ultrasound pediatric'],
-            'incubateur neonatal': ['incubateur néonatal', 'incubateur neonatal', 'incubator neonatal', 'berceau chauffant néonatal'],
-            'moniteur neonatal': ['moniteur néonatal', 'moniteur neonatal', 'monitor neonatal', 'moniteur bébé', 'moniteur nourrisson'],
-            'défibrillateur automatique': ['défibrillateur automatique', 'défibrillateur', 'defibrillateur', 'defibrillator automatique', 'defib automatique'],
-            'échocardiographe': ['échocardiographe', 'échocardiogramme', 'echo coeur', 'échographie cardiaque', 'echocardiogram'],
-            'électrocardiographe': ['électrocardiographe', 'ecg', 'ekg', 'electrocardiographe', 'elctrocardiographe'],
-            'doppler transcranienne': ['doppler transcranienne', 'doppler transcranien', 'doppler cerebral', 'doppler', 'ultrason doppler'],
-            'électroencéphalographe': ['électroencéphalographe', 'eeg', 'electroencephalographe', 'eeeg', 'elctroencephalo'],
-            'arthroscope d entomètre osseux': ['arthroscope', 'arthroscope osseux', 'arthroscope d entomètre', 'arthroscope d’encytomètre osseux'],
-            'coloscope endoscope digestif': ['coloscope', 'endoscope digestif', 'coloscopie', 'endoscope', 'coloscopy', 'digestive endoscope'],
-            'gamma knife': ['gamma knife', 'gamma knife radiothérapie', 'radiothérapie gamma knife'],
-            'pet scanner': ['pet scanner', 'pet scan', 'scanner pet', 'pet ct', 'tomographie par émission de positons'],
-            'radiothérapie linac': ['linac', 'radiothérapie linac', 'accelerateur linéaire', 'linear accelerator'],
-            'autoclave': ['autoclave', 'stérilisateur vapeur', 'autoclav', 'sterilisateur vapeur'],
+            'scanner': ['scanner', 'tomodensitomètre', 'ct', 'scaner', 'scannr', 'tomodensitometre', 'ct scanner', 'tomo'],
+            'irm': ['irm', 'résonance magnétique', 'mri', 'irmm', 'resonance magnetique', 'mrii', 'aoi femeini', 'mri scan', 'résonnance', 'imagérie magnétique', 'rmi'],
+            'ecg': ['électrocardiographe', 'ecg', 'ekg', 'electrocardiographe', 'elctrocardiographe', 'cardiographe', 'electrocardio', 'ekg cardio'],
+            'eeg': ['électroencéphalographe', 'eeg', 'electroencephalographe', 'eeeg', 'elctroencephalo', 'encephalo', 'electroencephalo'],
+            'mammographe numérique': ['mammographe numérique', 'mammographie numérique', 'mammographe', 'mammographie', 'mammograph', 'mammo'],
+            'échographe pédiatrique': ['échographe pédiatrique','echo', 'échographe pediatrique', 'échographe', 'ultrason pédiatrique', 'ultrasons pédiatriques', 'ultrasound pediatric', 'echo pediatrique', 'echo', 'écho', 'echo pédiatrique', 'ultrason pediatrique'],
+            'incubateur neonatal': ['incubateur néonatal', 'incubateur neonatal', 'incubator neonatal', 'berceau chauffant néonatal', 'neonatal incubator'],
+            'moniteur neonatal': ['moniteur néonatal', 'moniteur neonatal', 'monitor neonatal', 'moniteur bébé', 'moniteur nourrisson', 'neonatal monitor'],
+            'défibrillateur automatique': ['défibrillateur automatique', 'défibrillateur', 'defibrillateur', 'defibrillator automatique', 'defib automatique', 'defib'],
+            'échocardiographe': ['échocardiographe', 'échocardiogramme', 'echo coeur', 'échographie cardiaque', 'echocardiogram', 'echo cardio', 'écho cardiaque'],
+            'doppler transcranienne': ['doppler transcranienne', 'doppler transcranien', 'doppler cerebral', 'doppler', 'ultrason doppler', 'transcranial doppler'],
+            'arthroscope': ['arthroscope', 'arthroscope osseux', 'arthroscopy', 'arthro'],
+            'coloscope': ['coloscope', 'endoscope digestif', 'coloscopie', 'endoscope', 'coloscopy', 'digestive endoscope', 'colonoscope'],
+            'gamma knife': ['gamma knife', 'gamma knife radiothérapie', 'radiothérapie gamma knife', 'gamma ray'],
+            'pet scanner': ['pet scanner', 'pet scan', 'scanner pet', 'pet ct', 'tomographie par émission de positons', 'pet'],
+            'radiothérapie linac': ['linac', 'radiothérapie linac', 'accélérateur linéaire', 'linear accelerator'],
+            'autoclave': ['autoclave', 'stérilisateur vapeur', 'autoclav', 'sterilisateur vapeur', 'steam sterilizer'],
             'stérilisateur plasma': ['stérilisateur plasma', 'sterilisateur plasma', 'plasma sterilizer'],
             'stérilisateur uv': ['stérilisateur uv', 'sterilisateur uv', 'uv sterilizer', 'stérilisateur ultraviolets'],
             'lampe opératoire': ['lampe opératoire', 'lampe chirurgicale', 'lampe operation', 'surgical lamp'],
-            'robot chirurgical': ['robot chirurgical', 'robot chirurgie', 'surgical robot', 'robot chirurgicale', 'robot surgery'],
-            'système de navigation chirurgical': ['système de navigation chirurgical', 'navigation chirurgicale', 'surgical navigation system'],
-            'tableau chirurgical': ['tableau chirurgical', 'table chirurgicale', 'surgical table'],
-            'appareil desmo': ['appareil desmo', 'desmo device'],
-            'moniteur multiparamètre': ['moniteur multiparamètre', 'moniteur multi-paramètre', 'moniteur multi paramètre', 'multiparameter monitor'],
-            'pompe à perfusion': ['pompe à perfusion', 'perfuseur', 'infuseur', 'infusion pump'],
-            
+            'robot chirurgical': ['robot chirurgical', 'robot chirurgie', 'surgical robot', 'robot chirurgicale', 'robot surgery', 'robot'],
+            'système de navigation chirurgical': ['système de navigation chirurgical', 'navigation chirurgicale', 'surgical navigation system', 'nav chirurgicale'],
+            'tableau chirurgical': ['tableau chirurgical', 'table chirurgicale', 'surgical table', 'tableau opératoire'],
+            'appareil d\'ecmo': ['appareil d\'ecmo', 'ecmo', 'ecmo device', 'oxygénation extracorporelle'],
+            'moniteur multiparamètre': ['moniteur multiparamètre', 'moniteur multi-paramètre', 'moniteur multi paramètre', 'multiparameter monitor', 'multi monitor'],
+            'pompe à perfusion': ['pompe à perfusion', 'perfuseur', 'infuseur', 'infusion pump', 'pompe perfusion']
         };
 
 
@@ -1862,29 +1858,58 @@ const processChatbotQuery = async (query) => {
             }
         }
 
-        // Fuzzy match for device names and synonyms
+        // Split query into words for better matching
+        const queryWords = normalizedQuery.split(/\s+/);
         let foundDevice = null;
         let matchedDeviceName = null;
         const allDeviceNames = Object.values(devices).flat().map(d => d.name);
         const allSynonyms = Object.values(synonyms).flat();
         const allCandidates = [...allDeviceNames, ...allSynonyms];
 
-        // Find the closest match with a more lenient threshold
-        const bestMatch = fuzzyMatch(normalizedQuery, allCandidates, 5); // Increased threshold to 5
-        if (bestMatch) {
-            // Check if the match is a synonym or a device name
-            for (const serviceKey in devices) {
-                const deviceList = devices[serviceKey];
-                for (const device of deviceList) {
-                    const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                    if (device.name.toLowerCase() === bestMatch.toLowerCase() || deviceSynonyms.includes(bestMatch.toLowerCase())) {
-                        foundDevice = device;
-                        matchedDeviceName = device.name;
-                        state.currentService = serviceKey;
-                        break;
-                    }
+        // Prioritize exact synonym matches
+        for (const serviceKey in devices) {
+            const deviceList = devices[serviceKey];
+            for (const device of deviceList) {
+                const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
+                // Check if any query word matches a synonym exactly
+                const exactMatch = queryWords.some(word => deviceSynonyms.includes(word));
+                if (exactMatch) {
+                    foundDevice = device;
+                    matchedDeviceName = device.name;
+                    state.currentService = serviceKey;
+                    break;
                 }
-                if (foundDevice) break;
+            }
+            if (foundDevice) break;
+        }
+
+        // If no exact match, try fuzzy matching
+        if (!foundDevice) {
+            let bestMatch = null;
+            let bestScore = Infinity;
+            allCandidates.forEach(candidate => {
+                queryWords.forEach(word => {
+                    const distance = levenshteinDistance(word, candidate.toLowerCase());
+                    if (distance < bestScore && distance <= 5) {
+                        bestScore = distance;
+                        bestMatch = candidate;
+                    }
+                });
+            });
+            if (bestMatch) {
+                for (const serviceKey in devices) {
+                    const deviceList = devices[serviceKey];
+                    for (const device of deviceList) {
+                        const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
+                        if (device.name.toLowerCase() === bestMatch.toLowerCase() || deviceSynonyms.includes(bestMatch.toLowerCase())) {
+                            foundDevice = device;
+                            matchedDeviceName = device.name;
+                            state.currentService = serviceKey;
+                            break;
+                        }
+                    }
+                    if (foundDevice) break;
+                }
             }
         }
 
@@ -1908,7 +1933,7 @@ const processChatbotQuery = async (query) => {
             const deviceList = devices[serviceKey];
             for (const device of deviceList) {
                 const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                const queryMatchesDevice = deviceSynonyms.some(syn => normalizedQuery.includes(syn)) || fuzzyMatch(normalizedQuery, deviceSynonyms, 5) !== null;
+                const queryMatchesDevice = queryWords.some(word => deviceSynonyms.includes(word)) || fuzzyMatch(normalizedQuery, deviceSynonyms, 5) !== null;
                 if (queryMatchesDevice || (contextDevice && contextDevice.name === device.name)) {
                     if (normalizedQuery.includes('rôle')) {
                         return `Le rôle du ${device.name} est : ${device.role}`;
@@ -2259,6 +2284,7 @@ const initEventListeners = () => {
     }
 
     // Chatbot
+// Chatbot
 // Chatbot
 const chatGuideBtn = $('#chatGuideBtn');
 if (chatGuideBtn) {
