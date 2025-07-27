@@ -1632,7 +1632,12 @@
         const findServiceByName = (name) => {
             const normalizedName = name.toLowerCase().trim();
             for (const serviceKey in services) {
-                if (serviceKey === normalizedName || services[serviceKey].name.toLowerCase() === normalizedName) {
+                const service = services[serviceKey];
+                const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
+                if (serviceKey === normalizedName || 
+                    service.name.toLowerCase() === normalizedName || 
+                    serviceSyns.some(syn => syn.includes(normalizedName)) || 
+                    fuzzyMatch(normalizedName, serviceSyns, 3)) {
                     return serviceKey;
                 }
             }
@@ -1727,6 +1732,14 @@
                 return;
             }
 
+            // Check for service match first
+            const serviceKey = findServiceByName(query);
+            if (serviceKey) {
+                showServices(serviceKey);
+                showNotification(`Spécialité trouvée : ${services[serviceKey].name}`, 'success');
+                return;
+            }
+
             // Check for exact or synonym match for devices
             let device = findDeviceByName(query);
             if (!device) {
@@ -1734,7 +1747,10 @@
                 for (const serviceKey in devices) {
                     devices[serviceKey].forEach(dev => {
                         const deviceSynonyms = synonyms[dev.name.toLowerCase()] || [dev.name.toLowerCase()];
-                        const match = queryWords.some(word => deviceSynonyms.some(syn => syn.includes(word)) || fuzzyMatch(word, deviceSynonyms, 3));
+                        const match = queryWords.some(word => 
+                            deviceSynonyms.some(syn => syn.includes(word)) || 
+                            fuzzyMatch(word, deviceSynonyms, 3)
+                        );
                         if (match) {
                             device = dev;
                             state.currentService = serviceKey;
@@ -1750,18 +1766,11 @@
                 return;
             }
 
-            // Check for service match
-            const serviceKey = findServiceByName(query);
-            if (serviceKey) {
-                showServices(serviceKey);
-                showNotification(`Spécialité trouvée : ${services[serviceKey].name}`, 'success');
-                return;
-            }
-
-            // Filter devices if on devices page
+            // If on devices page, filter devices
             if (state.currentPage === 'devices-page' && state.currentService) {
                 filterDevices(query);
             } else {
+                // Fallback to chatbot if no device or service is found
                 addChatMessage(query, true);
                 showTypingAnimation(true);
                 setTimeout(() => {
@@ -1807,6 +1816,20 @@
                 deviceCountElement.textContent = deviceCount;
             }
         }
+
+
+        const serviceSynonyms = {
+            'pédiatrie': ['pédiatrie', 'pediatrie', 'médecine infantile', 'soins enfants', 'pédiatre'],
+            'cardiologie': ['cardiologie', 'cardio', 'cœur', 'cardiaque'],
+            'imagerie_médicale': ['imagerie médicale', 'imagerie', 'radiologie', 'imagerie medicale'],
+            'neurologie': ['neurologie', 'neuro', 'cerveau', 'système nerveux'],
+            'orthopédie': ['orthopédie', 'orthopedie', 'os', 'articulations'],
+            'gastroentérologie': ['gastro-entérologie', 'gastroenterologie', 'gastro', 'digestion'],
+            'oncologie': ['oncologie', 'cancer', 'tumeur'],
+            'stérilisation': ['stérilisation', 'sterilisation', 'désinfection'],
+            'bloc_opératoire': ['bloc opératoire', 'bloc operatoire', 'chirurgie', 'salle op'],
+            'réanimation': ['réanimation', 'reanimation', 'soins intensifs', 'soins critiques']
+        };
 
         const synonyms = {
             'scanner': ['scanner', 'tomodensitomètre', 'ct', 'scaner', 'scannr', 'tomodensitometre', 'ct scanner', 'tomo'],
@@ -1904,23 +1927,31 @@ const showSearchSuggestions = (query) => {
     const suggestions = [];
     const queryWords = normalizedQuery.split(/\s+/);
 
+    // Search services
+    for (const serviceKey in services) {
+        const service = services[serviceKey];
+        const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
+        const match = queryWords.some(word => 
+            serviceSyns.some(syn => syn.includes(word)) || 
+            fuzzyMatch(word, serviceSyns, 3)
+        );
+        if (match) {
+            suggestions.push({ name: service.name, type: 'service', key: serviceKey });
+        }
+    }
+
     // Search devices
     for (const serviceKey in devices) {
         devices[serviceKey].forEach(device => {
             const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-            const match = queryWords.some(word => deviceSynonyms.some(syn => syn.includes(word)) || fuzzyMatch(word, deviceSynonyms, 3));
+            const match = queryWords.some(word => 
+                deviceSynonyms.some(syn => syn.includes(word)) || 
+                fuzzyMatch(word, deviceSynonyms, 3)
+            );
             if (match && !suggestions.some(s => s.name === device.name)) {
                 suggestions.push({ name: device.name, type: 'device', service: serviceKey });
             }
         });
-    }
-
-    // Search services
-    for (const serviceKey in services) {
-        const service = services[serviceKey];
-        if (serviceKey.includes(normalizedQuery) || service.name.toLowerCase().includes(normalizedQuery)) {
-            suggestions.push({ name: service.name, type: 'service', key: serviceKey });
-        }
     }
 
     if (suggestions.length === 0) {
