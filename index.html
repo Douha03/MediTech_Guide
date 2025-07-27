@@ -14,6 +14,7 @@
     <title>MediTech - Votre Guide Biomédical</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --primary-color: #667eea;
@@ -26,6 +27,8 @@
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.08);
             --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
+            --success-color: #28a745;
+            --error-color: #f56565;
         }
 
         [data-theme="dark"] {
@@ -36,6 +39,8 @@
             --bg-light: #2d3748;
             --border-light: #4a5568;
             --white: #1a202c;
+            --success-color: #48bb78;
+            --error-color: #f87171;
         }
 
         * {
@@ -299,132 +304,235 @@
         }
 
         .quiz-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: var(--white);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md), 0 0 20px rgba(102, 126, 234, 0.2);
+            animation: fadeIn 0.6s ease-in-out;
+            position: relative;
+            overflow: hidden;
         }
 
         .quiz-progress {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
-            font-size: 1rem;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            font-weight: 500;
             color: var(--text-dark);
+            animation: slideUp 0.5s ease-in-out;
         }
 
         .progress-bar {
             width: 100%;
-            height: 10px;
+            height: 12px;
             background: var(--border-light);
-            border-radius: 5px;
-            margin-bottom: 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
             overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .progress-fill {
             height: 100%;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            transition: width 0.3s ease;
+            transition: width 0.5s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
         }
 
         .quiz-question {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 20px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 25px;
             color: var(--text-dark);
+            animation: slideUp 0.5s ease-in-out;
+            line-height: 1.4;
         }
 
         .quiz-options {
             display: grid;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 25px;
+            animation: slideUp 0.5s ease-in-out;
         }
 
         .quiz-option {
             background: var(--bg-light);
-            border: 1px solid var(--border-light);
+            border: 2px solid var(--border-light);
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease, transform 0.2s ease;
+            position: relative;
+            opacity: 0;
+            animation: fadeInOption 0.3s ease-in-out forwards;
         }
+
+        .quiz-option:nth-child(1) { animation-delay: 0.1s; }
+        .quiz-option:nth-child(2) { animation-delay: 0.2s; }
+        .quiz-option:nth-child(3) { animation-delay: 0.3s; }
+        .quiz-option:nth-child(4) { animation-delay: 0.4s; }
 
         .quiz-option:hover {
             background: var(--primary-color);
             color: var(--white);
             border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .quiz-option:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
         }
 
         .quiz-option:disabled {
             cursor: not-allowed;
-            opacity: 0.6;
+            opacity: 0.7;
+            transform: none;
         }
 
         .quiz-option.correct {
             background: var(--success-color);
             color: var(--white);
             border-color: var(--success-color);
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
         }
 
         .quiz-option.incorrect {
             background: var(--error-color);
             color: var(--white);
             border-color: var(--error-color);
+            box-shadow: 0 0 10px rgba(245, 101, 101, 0.5);
         }
 
         .quiz-feedback {
-            font-size: 1rem;
-            margin-bottom: 20px;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
             text-align: center;
             font-weight: 600;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
         .quiz-results {
             text-align: center;
+            animation: fadeIn 0.6s ease-in-out;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 12px;
         }
 
         .quiz-results h3 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .quiz-results p {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--text-dark);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
 
         .btn-restart {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: var(--white);
-            padding: 12px 25px;
+            padding: 14px 30px;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease, transform 0.2s ease;
             box-shadow: var(--shadow-sm);
         }
 
         .btn-restart:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        }
+
+        .btn-restart:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInOption {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         @media (max-width: 768px) {
             .quiz-container {
-                padding: 20px;
+                padding: 25px;
+                margin: 0 10px;
             }
             .quiz-question {
-                font-size: 1.3rem;
+                font-size: 1.4rem;
             }
             .quiz-option {
                 padding: 12px;
+                font-size: 0.95rem;
+            }
+            .quiz-results h3 {
+                font-size: 1.8rem;
+            }
+            .quiz-results p {
+                font-size: 1.1rem;
+            }
+            .btn-restart {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .quiz-container {
+                padding: 20px;
+            }
+            .quiz-question {
+                font-size: 1.2rem;
+            }
+            .quiz-option {
+                padding: 10px;
                 font-size: 0.9rem;
             }
         }
@@ -1639,14 +1747,12 @@
                 const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
                 if (serviceKey === normalizedName || 
                     service.name.toLowerCase() === normalizedName || 
-                    serviceSyns.some(syn => syn.includes(normalizedName)) || 
-                    fuzzyMatch(normalizedName, serviceSyns, 3)) {
+                    serviceSyns.includes(normalizedName)) {
                     return serviceKey;
                 }
             }
             return null;
         };
-
         const createDeviceCard = (device) => {
             const card = document.createElement('div');
             card.className = 'device-card';
@@ -1922,10 +2028,7 @@ const showSearchSuggestions = (query) => {
     for (const serviceKey in services) {
         const service = services[serviceKey];
         const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
-        const match = queryWords.some(word => 
-            serviceSyns.some(syn => syn.includes(word)) || 
-            fuzzyMatch(word, serviceSyns, 3)
-        );
+        const match = queryWords.some(word => serviceSyns.includes(word));
         if (match) {
             suggestions.push({ name: service.name, type: 'service', key: serviceKey });
         }
@@ -1935,10 +2038,7 @@ const showSearchSuggestions = (query) => {
     for (const serviceKey in devices) {
         devices[serviceKey].forEach(device => {
             const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-            const match = queryWords.some(word => 
-                deviceSynonyms.some(syn => syn.includes(word)) || 
-                fuzzyMatch(word, deviceSynonyms, 3)
-            );
+            const match = queryWords.some(word => deviceSynonyms.includes(word));
             if (match && !suggestions.some(s => s.name === device.name)) {
                 suggestions.push({ name: device.name, type: 'device', service: serviceKey });
             }
@@ -1985,7 +2085,8 @@ const processChatbotQuery = async (query) => {
         // Check for service match
         for (const serviceKey in services) {
             const service = services[serviceKey];
-            if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
+            const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
+            if (serviceSyns.includes(normalizedQuery)) {
                 return `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
             }
         }
@@ -1994,16 +2095,12 @@ const processChatbotQuery = async (query) => {
         const queryWords = normalizedQuery.split(/\s+/);
         let foundDevice = null;
         let matchedDeviceName = null;
-        const allDeviceNames = Object.values(devices).flat().map(d => d.name);
-        const allSynonyms = Object.values(synonyms).flat();
-        const allCandidates = [...allDeviceNames, ...allSynonyms];
 
-        // Prioritize exact synonym matches
+        // Check for exact synonym matches
         for (const serviceKey in devices) {
             const deviceList = devices[serviceKey];
             for (const device of deviceList) {
                 const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                // Check if any query word matches a synonym exactly
                 const exactMatch = queryWords.some(word => deviceSynonyms.includes(word));
                 if (exactMatch) {
                     foundDevice = device;
@@ -2015,37 +2112,7 @@ const processChatbotQuery = async (query) => {
             if (foundDevice) break;
         }
 
-        // If no exact match, try fuzzy matching
-        if (!foundDevice) {
-            let bestMatch = null;
-            let bestScore = Infinity;
-            allCandidates.forEach(candidate => {
-                queryWords.forEach(word => {
-                    const distance = levenshteinDistance(word, candidate.toLowerCase());
-                    if (distance < bestScore && distance <= 5) {
-                        bestScore = distance;
-                        bestMatch = candidate;
-                    }
-                });
-            });
-            if (bestMatch) {
-                for (const serviceKey in devices) {
-                    const deviceList = devices[serviceKey];
-                    for (const device of deviceList) {
-                        const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                        if (device.name.toLowerCase() === bestMatch.toLowerCase() || deviceSynonyms.includes(bestMatch.toLowerCase())) {
-                            foundDevice = device;
-                            matchedDeviceName = device.name;
-                            state.currentService = serviceKey;
-                            break;
-                        }
-                    }
-                    if (foundDevice) break;
-                }
-            }
-        }
-
-        // If a device is found, prepare response and suggestions without navigation
+        // If a device is found, prepare response and suggestions
         if (foundDevice) {
             suggestions = [
                 { text: `Quel est le rôle du ${foundDevice.name} ?`, action: () => `Le rôle du ${foundDevice.name} est : ${foundDevice.role}` },
@@ -2065,7 +2132,7 @@ const processChatbotQuery = async (query) => {
             const deviceList = devices[serviceKey];
             for (const device of deviceList) {
                 const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                const queryMatchesDevice = queryWords.some(word => deviceSynonyms.includes(word)) || fuzzyMatch(normalizedQuery, deviceSynonyms, 5) !== null;
+                const queryMatchesDevice = queryWords.some(word => deviceSynonyms.includes(word));
                 if (queryMatchesDevice || (contextDevice && contextDevice.name === device.name)) {
                     if (normalizedQuery.includes('rôle')) {
                         return `Le rôle du ${device.name} est : ${device.role}`;
@@ -2089,27 +2156,6 @@ const processChatbotQuery = async (query) => {
             }
         }
 
-        // Check for comparison
-        if (normalizedQuery.includes('comparer') || normalizedQuery.includes('compare')) {
-            const foundDevices = [];
-            allCandidates.forEach(candidate => {
-                const match = fuzzyMatch(normalizedQuery, [candidate], 5);
-                if (match && !foundDevices.includes(match)) {
-                    const device = findDeviceByName(match);
-                    if (device) foundDevices.push(device);
-                }
-            });
-            if (foundDevices.length >= 2) {
-                const device1 = foundDevices[0];
-                const device2 = foundDevices[1];
-                return `Comparaison entre ${device1.name} et ${device2.name} :\n` +
-                    `- **Rôle** : ${device1.name} : ${device1.role} | ${device2.name} : ${device2.role}\n` +
-                    `- **Principe** : ${device1.name} : ${device1.principle} | ${device2.name} : ${device2.principle}\n` +
-                    `- **Marques** : ${device1.name} : ${device1.brands.join(', ')} | ${device2.name} : ${device2.brands.join(', ')}\n` +
-                    `- **Normes** : ${device1.name} : ${device1.normes.join(', ')} | ${device2.name} : ${device2.normes.join(', ')}`;
-            }
-        }
-
         // Check for general queries
         if (normalizedQuery.includes('spécialités') || normalizedQuery.includes('specialties')) {
             return `MediTech propose des équipements pour : ${Object.values(services).map(s => s.name).join(', ')}`;
@@ -2126,7 +2172,7 @@ const processChatbotQuery = async (query) => {
         // Check for brand-specific queries
         const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
         for (const brand of allBrands) {
-            if (brand.toLowerCase().indexOf(normalizedQuery) !== -1) {
+            if (brand.toLowerCase().includes(normalizedQuery)) {
                 const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
                 return `La marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand.map(device => device.name).join(', ')}`;
             }
@@ -2153,6 +2199,7 @@ const processChatbotQuery = async (query) => {
 // Quiz Generation
 const generateQuiz = () => {
     const devicesList = Object.values(devices).flat();
+    const servicesList = Object.values(services);
     const quizQuestions = [];
     const questionTypes = [
         {
@@ -2160,7 +2207,7 @@ const generateQuiz = () => {
             question: device => `Quel est le rôle principal de "${device.name}" ?`,
             correct: device => device.role,
             incorrects: () => devicesList
-                .filter(d => d.role) // Ensure role exists
+                .filter(d => d.role)
                 .sort(() => Math.random() - 0.5)
                 .slice(0, 3)
                 .map(d => d.role)
@@ -2169,44 +2216,102 @@ const generateQuiz = () => {
             type: 'components',
             question: device => `Quel est un composant principal de "${device.name}" ?`,
             correct: device => device.components[Math.floor(Math.random() * device.components.length)],
-            incorrects: (device) => {
-                const otherDevices = devicesList
-                    .filter(d => d.name !== device.name && d.components.length > 0)
-                    .sort(() => Math.random() - 0.5)
-                    .slice(0, 3);
-                return otherDevices.map(d => d.components[Math.floor(Math.random() * d.components.length)]);
-            }
+            incorrects: (device) => devicesList
+                .filter(d => d.name !== device.name && d.components.length > 0)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3)
+                .map(d => d.components[Math.floor(Math.random() * d.components.length)])
         },
         {
             type: 'brands',
             question: device => `Quelle marque fabrique "${device.name}" ?`,
             correct: device => device.brands[Math.floor(Math.random() * device.brands.length)],
-            incorrects: () => devicesList
-                .flatMap(d => d.brands)
-                .filter((brand, idx, arr) => arr.indexOf(brand) === idx) // Remove duplicates
+            incorrects: () => [...new Set(devicesList
+                .flatMap(d => d.brands))]
                 .sort(() => Math.random() - 0.5)
                 .slice(0, 3)
+        },
+        {
+            type: 'principle',
+            question: device => `Quel est le principe de fonctionnement de "${device.name}" ?`,
+            correct: device => device.principle,
+            incorrects: () => devicesList
+                .filter(d => d.principle)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3)
+                .map(d => d.principle)
+        },
+        {
+            type: 'maintenance',
+            question: device => `Quelle est une tâche de maintenance pour "${device.name}" ?`,
+            correct: device => device.maintenance[Math.floor(Math.random() * device.maintenance.length)],
+            incorrects: (device) => devicesList
+                .filter(d => d.name !== device.name && d.maintenance.length > 0)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3)
+                .map(d => d.maintenance[Math.floor(Math.random() * d.maintenance.length)])
+        },
+        {
+            type: 'normes',
+            question: device => `Quelle norme s'applique à "${device.name}" ?`,
+            correct: device => device.normes[Math.floor(Math.random() * device.normes.length)],
+            incorrects: (device) => devicesList
+                .filter(d => d.name !== device.name && d.normes.length > 0)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3)
+                .map(d => d.normes[Math.floor(Math.random() * d.normes.length)])
+        },
+        {
+            type: 'service_description',
+            question: service => `Quelle est la description de la spécialité "${service.name}" ?`,
+            correct: service => service.description,
+            incorrects: () => servicesList
+                .filter(s => s.description)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3)
+                .map(s => s.description)
+        },
+        {
+            type: 'service_example',
+            question: service => `Quel dispositif est associé à la spécialité "${service.name}" ?`,
+            correct: service => {
+                const serviceKey = Object.keys(services).find(key => services[key].name === service.name);
+                return devices[serviceKey][Math.floor(Math.random() * devices[serviceKey].length)].name;
+            },
+            incorrects: (service) => {
+                const serviceKey = Object.keys(services).find(key => services[key].name === service.name);
+                return devicesList
+                    .filter(d => !devices[serviceKey].some(dev => dev.name === d.name))
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3)
+                    .map(d => d.name);
+            }
         }
     ];
 
-    // Generate 5 unique questions
-    const selectedDevices = [];
-    while (quizQuestions.length < 5) {
-        const device = devicesList[Math.floor(Math.random() * devicesList.length)];
-        if (!selectedDevices.includes(device) && device.components.length > 0 && device.brands.length > 0) {
-            const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
-            const correctAnswer = questionType.correct(device);
-            const incorrectAnswers = questionType.incorrects(device).filter(ans => ans && ans !== correctAnswer);
+    // Generate 6 unique questions (4 device-related, 2 service-related)
+    const selectedItems = [];
+    while (quizQuestions.length < 6) {
+        const isDeviceQuestion = quizQuestions.length < 4;
+        const item = isDeviceQuestion
+            ? devicesList[Math.floor(Math.random() * devicesList.length)]
+            : servicesList[Math.floor(Math.random() * servicesList.length)];
+        if (!selectedItems.includes(item) && item.components?.length > 0 && item.brands?.length > 0 || item.description) {
+            const availableTypes = isDeviceQuestion
+                ? questionTypes.filter(qt => !qt.type.includes('service'))
+                : questionTypes.filter(qt => qt.type.includes('service'));
+            const questionType = availableTypes[Math.floor(Math.random() * availableTypes.length)];
+            const correctAnswer = questionType.correct(item);
+            const incorrectAnswers = questionType.incorrects(item).filter(ans => ans && ans !== correctAnswer);
             if (incorrectAnswers.length >= 3) {
-                const question = {
-                    device: device.name,
+                quizQuestions.push({
+                    item: item.name,
                     type: questionType.type,
-                    text: questionType.question(device),
+                    text: questionType.question(item),
                     correctAnswer,
                     answers: [correctAnswer, ...incorrectAnswers.slice(0, 3)].sort(() => Math.random() - 0.5)
-                };
-                quizQuestions.push(question);
-                selectedDevices.push(device);
+                });
+                selectedItems.push(item);
             }
         }
     }
@@ -2215,11 +2320,6 @@ const generateQuiz = () => {
     let score = 0;
 
     const showQuizPage = () => {
-        if (typeof showPage !== 'function') {
-            console.error('showPage function is not defined');
-            showNotification('Erreur : Impossible d\'afficher la page du quiz.', 'error');
-            return;
-        }
         showPage('quiz-page', 'Quiz sur les Technologies Médicales', [
             { text: 'Quiz', action: showQuizPage }
         ]);
@@ -2244,7 +2344,7 @@ const generateQuiz = () => {
         const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
 
         quizContainer.innerHTML = `
-            <div class="quiz-progress">
+            <div class="quiz-progress" aria-live="polite">
                 <span>Question ${currentQuestionIndex + 1} sur ${quizQuestions.length}</span>
                 <span>Score: ${score}</span>
             </div>
@@ -2252,42 +2352,52 @@ const generateQuiz = () => {
                 <div class="progress-fill" style="width: ${progress}%"></div>
             </div>
             <h3 class="quiz-question">${question.text}</h3>
-            <div class="quiz-options">
+            <div class="quiz-options" role="radiogroup" aria-label="Options de réponse">
                 ${question.answers.map((answer, index) => `
-                    <button class="quiz-option" data-index="${index}">${answer}</button>
+                    <button class="quiz-option" data-index="${index}" role="radio" aria-checked="false">${answer}</button>
                 `).join('')}
             </div>
-            <p class="quiz-feedback" id="quizFeedback"></p>
+            <p class="quiz-feedback" id="quizFeedback" aria-live="assertive"></p>
         `;
 
         const options = quizContainer.querySelectorAll('.quiz-option');
-        options.forEach(option => {
+        options.forEach((option, index) => {
             option.addEventListener('click', () => {
                 const feedback = $('#quizFeedback');
                 const selectedAnswer = option.textContent;
                 const isCorrect = selectedAnswer === question.correctAnswer;
 
+                options.forEach(opt => {
+                    opt.disabled = true;
+                    opt.setAttribute('aria-checked', 'false');
+                    if (opt.textContent === question.correctAnswer) {
+                        opt.classList.add('correct');
+                    } else if (opt.textContent === selectedAnswer && !isCorrect) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+                option.setAttribute('aria-checked', 'true');
+
                 if (isCorrect) {
                     score += 1;
-                    feedback.textContent = 'Correct ! Bien joué.';
+                    feedback.textContent = `Correct ! Bien joué. ${question.type.includes('service') ? `La spécialité "${question.item}" est bien décrite ainsi.` : `Le dispositif "${question.item}" est correct.`}`;
                     feedback.style.color = 'var(--success-color)';
-                    option.classList.add('correct');
                 } else {
                     feedback.textContent = `Incorrect. La réponse correcte est : ${question.correctAnswer}`;
                     feedback.style.color = 'var(--error-color)';
-                    option.classList.add('incorrect');
-                    options.forEach(opt => {
-                        if (opt.textContent === question.correctAnswer) {
-                            opt.classList.add('correct');
-                        }
-                    });
                 }
 
-                options.forEach(opt => opt.disabled = true);
                 setTimeout(() => {
                     currentQuestionIndex += 1;
                     renderQuizQuestion();
                 }, 1500);
+            });
+
+            option.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    option.click();
+                }
             });
         });
     };
@@ -2297,13 +2407,24 @@ const generateQuiz = () => {
         if (!quizContainer) return;
 
         const percentage = (score / quizQuestions.length) * 100;
-        let message;
+        let message, suggestion;
         if (percentage >= 80) {
             message = 'Excellent ! Vous êtes un expert en technologies médicales !';
+            suggestion = 'Continuez à explorer nos spécialités pour approfondir vos connaissances.';
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#667eea', '#764ba2', '#28a745']
+                });
+            }, 500);
         } else if (percentage >= 50) {
-            message = 'Bien joué ! Continuez à explorer pour devenir un pro.';
+            message = 'Bien joué ! Vous avez une bonne maîtrise des technologies médicales.';
+            suggestion = 'Essayez notre ChatGuide IA pour en savoir plus sur des dispositifs spécifiques.';
         } else {
-            message = 'Pas mal, mais il y a encore à découvrir. Essayez encore !';
+            message = 'Pas mal, mais il y a encore à découvrir !';
+            suggestion = 'Consultez nos pages de spécialités ou recommencez le quiz pour améliorer votre score.';
         }
 
         quizContainer.innerHTML = `
@@ -2311,7 +2432,9 @@ const generateQuiz = () => {
                 <h3>Résultats du Quiz</h3>
                 <p>Votre score : ${score} sur ${quizQuestions.length} (${percentage}%)</p>
                 <p>${message}</p>
-                <button class="btn-restart">Recommencer le Quiz</button>
+                <p>${suggestion}</p>
+                <button class="btn-restart" aria-label="Recommencer le quiz">Recommencer le Quiz</button>
+                <button class="btn-primary" id="exploreServicesQuizBtn" aria-label="Retourner aux spécialités">Explorer les Spécialités</button>
             </div>
         `;
 
@@ -2324,39 +2447,14 @@ const generateQuiz = () => {
                 generateQuiz();
             });
         }
+
+        const exploreServicesQuizBtn = quizContainer.querySelector('#exploreServicesQuizBtn');
+        if (exploreServicesQuizBtn) {
+            exploreServicesQuizBtn.addEventListener('click', () => showServices());
+        }
     };
 
     showQuizPage();
-};
-
-// Levenshtein distance function for fuzzy matching
-const levenshteinDistance = (a, b) => {
-    const matrix = Array(b.length + 1).fill().map(() => Array(a.length + 1).fill(0));
-    for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
-    for (let j = 0; j <= b.length; j++) matrix[j][0] = j;
-    for (let j = 1; j <= b.length; j++) {
-        for (let i = 1; i <= a.length; i++) {
-            const indicator = a[i - 1] === b[j - 1] ? 0 : 1;
-            matrix[j][i] = Math.min(
-                matrix[j][i - 1] + 1, // deletion
-                matrix[j - 1][i] + 1, // insertion
-                matrix[j - 1][i - 1] + indicator // substitution
-            );
-        }
-    }
-    return matrix[b.length][a.length];
-};
-
-// Fuzzy match function to find the closest device name
-const fuzzyMatch = (query, candidates, threshold = 3) => {
-    let bestMatch = { name: '', score: Infinity };
-    candidates.forEach(candidate => {
-        const distance = levenshteinDistance(query.toLowerCase(), candidate.toLowerCase());
-        if (distance < bestMatch.score) {
-            bestMatch = { name: candidate, score: distance };
-        }
-    });
-    return bestMatch.score <= threshold ? bestMatch.name : null;
 };
 
 // Theme Toggle
