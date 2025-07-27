@@ -1721,7 +1721,7 @@
         };
 
         // Search handling
-         const handleSearch = (query) => {
+        const handleSearch = (query) => {
             query = query.trim().toLowerCase();
             const suggestionsContainer = $('#searchSuggestions');
             if (suggestionsContainer) {
@@ -1751,14 +1751,12 @@
                 return;
             }
 
-            // Try synonym or fuzzy matching for devices
+            // Try synonym matching for devices
             const queryWords = query.split(/\s+/);
             for (const serviceKey in devices) {
                 for (const dev of devices[serviceKey]) {
                     const deviceSynonyms = synonyms[dev.name.toLowerCase()] || [dev.name.toLowerCase()];
-                    const match = queryWords.some(word => 
-                        deviceSynonyms.some(syn => syn === word || fuzzyMatch(word, [syn], 3))
-                    );
+                    const match = queryWords.some(word => deviceSynonyms.includes(word));
                     if (match) {
                         state.currentService = serviceKey;
                         showDeviceDetails(dev.name);
