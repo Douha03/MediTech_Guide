@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+console.log('GEMINI_API_KEY:', process.env.GEMINI_API_KEY ? 'Set' : 'Not set');
 
 exports.handler = async (event) => {
     // Gérer la requête CORS preflight
