@@ -9,15 +9,16 @@ exports.handler = async (event) => {
                 body: JSON.stringify({ response: 'Query is required' })
             };
         }
+
         const apiKey = process.env.GEMINI_API_KEY;
         if (!apiKey) {
             throw new Error('GEMINI_API_KEY is not set');
         }
-        const response = await fetch('/.netlify/functions/callGemini', { // Replace with actual Gemini API endpoint
+
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 contents: [{
@@ -25,11 +26,14 @@ exports.handler = async (event) => {
                 }]
             })
         });
+
         if (!response.ok) {
             throw new Error(`Gemini API returned status ${response.status}`);
         }
+
         const data = await response.json();
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Aucune réponse disponible.';
+
         return {
             statusCode: 200,
             body: JSON.stringify({ response: text })
@@ -42,3 +46,4 @@ exports.handler = async (event) => {
         };
     }
 };
+
