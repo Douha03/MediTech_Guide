@@ -2001,54 +2001,23 @@ const showTypingAnimation = (show) => {
         typingIndicator.style.display = show ? 'block' : 'none';
     }
 };
-const fetch = require('node-fetch');
-
-exports.handler = async (event) => {
+const callGemini = async (query) => {
     try {
-        console.log('Received event:', event);
-        const { query } = JSON.parse(event.body || '{}');
-        if (!query) {
-            console.warn('Query is missing in request body');
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ response: 'Query is required' })
-            };
-        }
-        const apiKey = process.env.GEMINI_API_KEY;
-        if (!apiKey) {
-            console.error('GEMINI_API_KEY is not set');
-            throw new Error('GEMINI_API_KEY is not set');
-        }
-        console.log('Calling Gemini API with query:', query);
         const response = await fetch('/.netlify/functions/callGemini', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
             },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: `Réponds comme un assistant médical expert en français, spécialisé dans les technologies médicales : ${query}` }]
-                }]
-            })
+            body: JSON.stringify({ query })
         });
-        console.log('Gemini API response status:', response.status);
         if (!response.ok) {
             throw new Error(`Gemini API returned status ${response.status}`);
         }
         const data = await response.json();
-        console.log('Gemini API response data:', JSON.stringify(data, null, 2));
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Aucune réponse disponible.';
-        return {
-            statusCode: 200,
-            body: JSON.stringify({ response: text })
-        };
+        return data.response || 'Aucune réponse disponible.';
     } catch (error) {
-        console.error('Error in callGemini function:', error.message, error.stack);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ response: 'Erreur lors de la communication avec l\'API.' })
-        };
+        console.error('Error calling Gemini API:', error);
+        throw error;
     }
 };
 const showSearchSuggestions = (query) => {
