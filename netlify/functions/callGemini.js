@@ -1,11 +1,27 @@
 const fetch = require('node-fetch');
 
 exports.handler = async (event) => {
+    // Gérer la requête CORS preflight
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*', // Ou restreins à ton domaine
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            },
+            body: 'Preflight OK',
+        };
+    }
+
     try {
         const { query } = JSON.parse(event.body || '{}');
         if (!query) {
             return {
                 statusCode: 400,
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                },
                 body: JSON.stringify({ error: 'Query is required' })
             };
         }
@@ -15,7 +31,7 @@ exports.handler = async (event) => {
             throw new Error('GEMINI_API_KEY is not set');
         }
 
-        console.log('Requête envoyée à Gemini:', query); // Log pour débogage
+        console.log('Requête envoyée à Gemini:', query); // Debug log
 
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
             method: 'POST',
@@ -36,10 +52,13 @@ exports.handler = async (event) => {
         const data = await response.json();
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Aucune réponse disponible.';
 
-        console.log('Réponse reçue de Gemini:', text); // Log pour débogage
+        console.log('Réponse reçue de Gemini:', text); // Debug log
 
         return {
             statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
             body: JSON.stringify({
                 candidates: [{
                     content: {
@@ -48,10 +67,14 @@ exports.handler = async (event) => {
                 }]
             })
         };
+
     } catch (error) {
         console.error('Erreur dans la fonction callGemini:', error.message);
         return {
             statusCode: 500,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
             body: JSON.stringify({
                 error: 'Erreur lors de la communication avec l\'API.',
                 details: error.message
