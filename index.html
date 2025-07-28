@@ -1998,12 +1998,21 @@ const showTypingAnimation = (show) => {
 };
 async function callGemini(query) {
     try {
+        console.log('Calling Netlify function with query:', query);
         const response = await fetch('/.netlify/functions/callGemini', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query })
         });
+        console.log('Netlify function response status:', response.status);
+        if (!response.ok) {
+            throw new Error(`Netlify function returned status ${response.status}`);
+        }
         const data = await response.json();
+        console.log('Netlify function response data:', data);
+        if (!data.response) {
+            console.warn('No response field in data:', data);
+        }
         return data.response || 'Aucune réponse disponible.';
     } catch (error) {
         console.error('Error in callGemini:', error);
@@ -2083,21 +2092,20 @@ const processChatbotQuery = async (query) => {
         let suggestions = [];
 
         // Check for service match
-        const serviceKey = findServiceByName(normalizedQuery);
-        if (serviceKey) {
+        for (const serviceKey in services) {
             const service = services[serviceKey];
-            response = `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
-            suggestions = [
-                { text: `Quels dispositifs pour ${service.name} ?`, action: () => showDevices(serviceKey) },
-                { text: `En savoir plus sur ${service.name}`, action: () => `La spécialité ${service.name} se concentre sur ${service.description.toLowerCase()}.` }
-            ];
-            return { response, suggestions };
+            const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
+            if (serviceSyns.includes(normalizedQuery)) {
+                return `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
+            }
         }
 
-        // Check for device match
+        // Split query into words for better matching
         const queryWords = normalizedQuery.split(/\s+/);
         let foundDevice = null;
         let matchedDeviceName = null;
+
+        // Check for exact synonym matches
         for (const serviceKey in devices) {
             const deviceList = devices[serviceKey];
             for (const device of deviceList) {
@@ -2123,7 +2131,7 @@ const processChatbotQuery = async (query) => {
                 { text: `Quelles sont les marques du ${foundDevice.name} ?`, action: () => `Les marques associées à ${foundDevice.name} sont : ${foundDevice.brands.join(', ')}` },
                 { text: `Quelles sont les normes du ${foundDevice.name} ?`, action: () => `Les normes pour ${foundDevice.name} sont : ${foundDevice.normes.join(', ')}` }
             ];
-            response = `Informations sur ${foundDevice.name} : ${foundDevice.role}`;
+            response = `Vous avez demandé des informations sur ${foundDevice.name}. Voici quelques suggestions :`;
             return { response, suggestions };
         }
 
@@ -2135,57 +2143,39 @@ const processChatbotQuery = async (query) => {
                 const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
                 const queryMatchesDevice = queryWords.some(word => deviceSynonyms.includes(word));
                 if (queryMatchesDevice || (contextDevice && contextDevice.name === device.name)) {
-                    if (normalizedQuery.includes('rôle') || normalizedQuery.includes('role')) {
+                    if (normalizedQuery.includes('rôle')) {
                         return `Le rôle du ${device.name} est : ${device.role}`;
                     }
-                    if (normalizedQuery.includes('principe') || normalizedQuery.includes('fonctionnement')) {
+                    if (normalizedQuery.includes('principe')) {
                         return `Le principe de fonctionnement du ${device.name} est : ${device.principle}`;
                     }
-                    if (normalizedQuery.includes('composants') || normalizedQuery.includes('composant')) {
+                    if (normalizedQuery.includes('composants')) {
                         return `Les composants principaux du ${device.name} sont : ${device.components.join(', ')}`;
                     }
                     if (normalizedQuery.includes('maintenance')) {
                         return `La checklist pour la maintenance du ${device.name} est : ${device.maintenance.join(', ')}`;
                     }
-                    if (normalizedQuery.includes('marques') || normalizedQuery.includes('marque')) {
+                    if (normalizedQuery.includes('marques')) {
                         return `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
                     }
-                    if (normalizedQuery.includes('normes') || normalizedQuery.includes('norme')) {
+                    if (normalizedQuery.includes('normes')) {
                         return `Les normes pour ${device.name} sont : ${device.normes.join(', ')}`;
                     }
                 }
             }
         }
 
-        // Handle general queries
+        // Check for general queries
         if (normalizedQuery.includes('spécialités') || normalizedQuery.includes('specialties')) {
-            response = `MediTech propose des équipements pour : ${Object.values(services).map(s => s.name).join(', ')}`;
-            suggestions = Object.keys(services).map(key => ({
-                text: `En savoir plus sur ${services[key].name}`,
-                action: () => showServices(key)
-            }));
-            return { response, suggestions };
+            return `MediTech propose des équipements pour : ${Object.values(services).map(s => s.name).join(', ')}`;
         }
         if (normalizedQuery.includes('dispositifs') || normalizedQuery.includes('devices')) {
             const allDevices = Object.values(devices).flat().map(d => d.name);
-            response = `MediTech propose : ${allDevices.join(', ')}`;
-            suggestions = Object.values(devices).flat().slice(0, 3).map(device => ({
-                text: `Détails sur ${device.name}`,
-                action: () => showDeviceDetails(device.name)
-            }));
-            return { response, suggestions };
+            return `MediTech propose : ${allDevices.join(', ')}`;
         }
         if (normalizedQuery.includes('marques') || normalizedQuery.includes('brands')) {
             const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
-            response = `Marques disponibles : ${allBrands.join(', ')}`;
-            suggestions = allBrands.slice(0, 3).map(brand => ({
-                text: `Dispositifs de ${brand}`,
-                action: () => {
-                    const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
-                    return `La marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand.map(device => device.name).join(', ')}`;
-                }
-            }));
-            return { response, suggestions };
+            return `Marques disponibles : ${allBrands.join(', ')}`;
         }
 
         // Check for brand-specific queries
@@ -2193,74 +2183,27 @@ const processChatbotQuery = async (query) => {
         for (const brand of allBrands) {
             if (brand.toLowerCase().includes(normalizedQuery)) {
                 const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
-                response = `La marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand.map(device => device.name).join(', ')}`;
-                suggestions = devicesWithBrand.slice(0, 3).map(device => ({
-                    text: `Détails sur ${device.name}`,
-                    action: () => showDeviceDetails(device.name)
-                }));
-                return { response, suggestions };
+                return `La marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand.map(device => device.name).join(', ')}`;
             }
         }
 
-        // Fallback to Gemini API for complex or unmatched queries
+        // If no match found, call Gemini API
         showTypingAnimation(true);
         try {
-            const aiResponse = await callGemini(`Réponds comme un assistant médical expert en français, spécialisé dans les technologies médicales : ${query}`);
+            const reply = await callGemini(`Réponds comme un assistant médical expert : ${query}`);
             showTypingAnimation(false);
-            // Generate dynamic suggestions based on AI response
-            suggestions = generateSuggestionsFromAIResponse(aiResponse, query);
-            return { response: aiResponse, suggestions };
+            return reply;
         } catch (error) {
             console.error('Error calling Gemini API:', error);
             showTypingAnimation(false);
             showNotification('Erreur lors de la communication avec l\'API.', 'error');
-            return { response: 'Désolé, une erreur est survenue. Essayez de reformuler votre question.', suggestions: [] };
+            return 'Désolé, une erreur est survenue. Essayez de reformuler votre question.';
         }
     } catch (error) {
         console.error('Error processing chatbot query:', error);
-        showTypingAnimation(false);
         showNotification('Une erreur est survenue lors du traitement de votre question.', 'error');
-        return { response: 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.', suggestions: [] };
+        return 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
     }
-};
-
-// Helper function to generate suggestions based on AI response
-const generateSuggestionsFromAIResponse = (aiResponse, query) => {
-    const suggestions = [];
-    const lowerResponse = aiResponse.toLowerCase();
-    const queryWords = query.toLowerCase().split(/\s+/);
-
-    // Generate suggestions based on keywords in AI response
-    for (const serviceKey in services) {
-        const service = services[serviceKey];
-        if (lowerResponse.includes(service.name.toLowerCase()) || queryWords.some(word => service.name.toLowerCase().includes(word))) {
-            suggestions.push({
-                text: `En savoir plus sur ${service.name}`,
-                action: () => showServices(serviceKey)
-            });
-        }
-    }
-
-    for (const serviceKey in devices) {
-        devices[serviceKey].forEach(device => {
-            if (lowerResponse.includes(device.name.toLowerCase()) || queryWords.some(word => device.name.toLowerCase().includes(word))) {
-                suggestions.push({
-                    text: `Détails sur ${device.name}`,
-                    action: () => showDeviceDetails(device.name)
-                });
-            }
-        });
-    }
-
-    // Add a generic follow-up suggestion
-    if (suggestions.length < 3) {
-        suggestions.push({
-            text: 'En savoir plus sur les technologies médicales',
-            action: () => showServices()
-        });
-    }
-
-    return suggestions.slice(0, 3); // Limit to 3 suggestions
 };
 // Quiz Generation
 const generateQuiz = () => {
