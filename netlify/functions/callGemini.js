@@ -6,7 +6,7 @@ exports.handler = async (event) => {
         if (!query) {
             return {
                 statusCode: 400,
-                body: JSON.stringify({ response: 'Query is required' })
+                body: JSON.stringify({ error: 'Query is required' })
             };
         }
 
@@ -14,6 +14,8 @@ exports.handler = async (event) => {
         if (!apiKey) {
             throw new Error('GEMINI_API_KEY is not set');
         }
+
+        console.log('Requête envoyée à Gemini:', query); // Log pour débogage
 
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
             method: 'POST',
@@ -28,21 +30,32 @@ exports.handler = async (event) => {
         });
 
         if (!response.ok) {
-            throw new Error(`Gemini API returned status ${response.status}`);
+            throw new Error(`Gemini API returned status ${response.status}: ${await response.text()}`);
         }
 
         const data = await response.json();
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Aucune réponse disponible.';
 
+        console.log('Réponse reçue de Gemini:', text); // Log pour débogage
+
         return {
             statusCode: 200,
-            body: JSON.stringify({ response: text })
+            body: JSON.stringify({
+                candidates: [{
+                    content: {
+                        parts: [{ text }]
+                    }
+                }]
+            })
         };
     } catch (error) {
-        console.error('Error in callGemini function:', error.message);
+        console.error('Erreur dans la fonction callGemini:', error.message);
         return {
             statusCode: 500,
-            body: JSON.stringify({ response: 'Erreur lors de la communication avec l\'API.' })
+            body: JSON.stringify({
+                error: 'Erreur lors de la communication avec l\'API.',
+                details: error.message
+            })
         };
     }
 };
