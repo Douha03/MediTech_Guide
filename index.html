@@ -2151,156 +2151,26 @@ const processChatbotQuery = async (query) => {
         addChatMessage(query, true);
         showTypingAnimation(true);
 
-        let response = '';
-        let suggestions = [];
-
-        // Handle greetings
-        const greetings = ['bonjour', 'salut', 'hello', 'hi', 'bonsoir'];
-        if (greetings.includes(normalizedQuery)) {
-            response = 'Bonjour ! Je suis MediTechBot 🤖. Comment puis-je vous aider avec les technologies médicales aujourd\'hui ?';
-            suggestions = [
-                { text: 'Liste des spécialités médicales', action: () => 'Voici les spécialités disponibles : ' + Object.values(services).map(s => s.name).join(', ') },
-                { text: 'Informations sur l\'IRM', action: () => 'L\'IRM utilise des champs magnétiques et des ondes radio pour produire des images détaillées.' },
-                { text: 'Qu\'est-ce qu\'un scanner ?', action: () => 'Un scanner utilise des rayons X pour créer des images en coupes des organes.' }
-            ];
-            showTypingAnimation(false);
-            addChatMessage(response, false, suggestions);
-            return;
-        }
-
-        // Handle vague queries
-        const vagueQueries = ['ai', 'je veux des info', 'info', 'informations', 'aide', 'itm', 'llr', 'vous etres ai', 'vous êtes ai'];
-        if (vagueQueries.includes(normalizedQuery) || normalizedQuery.length < 3) {
-            response = 'Pouvez-vous préciser votre demande ? Parlez-moi d’un dispositif médical ou d’une spécialité, par exemple "IRM" ou "cardiologie".';
-            suggestions = [
-                { text: 'En savoir plus sur l\'IRM', action: () => 'L\'IRM utilise des champs magnétiques et des ondes radio pour produire des images détaillées.' },
-                { text: 'Qu’est-ce qu’un électrocardiographe ?', action: () => 'Un électrocardiographe enregistre l\'activité électrique du cœur.' },
-                { text: 'Liste des spécialités', action: () => 'Voici les spécialités disponibles : ' + Object.values(services).map(s => s.name).join(', ') }
-            ];
-            showTypingAnimation(false);
-            addChatMessage(response, false, suggestions);
-            return;
-        }
-
-        // Check for exact service match
-        const serviceKey = findServiceByName(normalizedQuery);
-        if (serviceKey && serviceSynonyms[serviceKey].includes(normalizedQuery)) {
-            const service = services[serviceKey];
-            response = `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
-            suggestions = devices[serviceKey]?.map(device => ({
-                text: `En savoir plus sur ${device.name}`,
-                action: () => {
-                    state.currentService = serviceKey;
-                    return `Le rôle du ${device.name} est : ${device.role}`;
-                }
-            })) || [];
-            showTypingAnimation(false);
-            addChatMessage(response, false, suggestions);
-            return;
-        }
-
-        // Check for exact device synonym match
-        let foundDevice = null;
-        let matchedDeviceName = null;
-        let matchedServiceKey = null;
-
-        for (const serviceKey in devices) {
-            const deviceList = devices[serviceKey];
-            for (const device of deviceList) {
-                const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                if (deviceSynonyms.includes(normalizedQuery)) {
-                    foundDevice = device;
-                    matchedDeviceName = device.name;
-                    matchedServiceKey = serviceKey;
-                    break;
-                }
-            }
-            if (foundDevice) break;
-        }
-
-        if (foundDevice) {
-            state.currentService = matchedServiceKey;
-            suggestions = [
-                { text: `Quel est le rôle du ${foundDevice.name} ?`, action: () => `Le rôle du ${foundDevice.name} est : ${foundDevice.role}` },
-                { text: `Quel est le principe de fonctionnement du ${foundDevice.name} ?`, action: () => `Le principe de fonctionnement du ${foundDevice.name} est : ${foundDevice.principle}` },
-                { text: `Quels sont les composants du ${foundDevice.name} ?`, action: () => `Les composants principaux du ${foundDevice.name} sont : ${foundDevice.components.join(', ')}` },
-                { text: `Quelle est la maintenance du ${foundDevice.name} ?`, action: () => `La checklist pour la maintenance du ${foundDevice.name} est : ${foundDevice.maintenance.join(', ')}` },
-                { text: `Quelles sont les marques du ${foundDevice.name} ?`, action: () => `Les marques associées à ${foundDevice.name} sont : ${foundDevice.brands.join(', ')}` },
-                { text: `Quelles sont les normes du ${foundDevice.name} ?`, action: () => `Les normes pour ${foundDevice.name} sont : ${foundDevice.normes.join(', ')}` }
-            ];
-            response = `Vous avez demandé des informations sur ${foundDevice.name}. Voici quelques suggestions :`;
-            showTypingAnimation(false);
-            addChatMessage(response, false, suggestions);
-            return;
-        }
-
-        // Check for context-based attribute queries
-        let contextDevice = null;
-        if (state.chatHistory.length > 1) {
-            const prevEntry = state.chatHistory[state.chatHistory.length - 2];
-            if (prevEntry && prevEntry.query) {
-                contextDevice = findDeviceByName(prevEntry.query);
-            }
-        }
-
-        if (contextDevice) {
-            const attributeResponses = {
-                'rôle': `Le rôle du ${contextDevice.name} est : ${contextDevice.role}`,
-                'principe': `Le principe de fonctionnement du ${contextDevice.name} est : ${contextDevice.principle}`,
-                'composants': `Les composants principaux du ${contextDevice.name} sont : ${contextDevice.components.join(', ')}`,
-                'maintenance': `La checklist pour la maintenance du ${contextDevice.name} est : ${contextDevice.maintenance.join(', ')}`,
-                'marques': `Les marques associées à ${contextDevice.name} sont : ${contextDevice.brands.join(', ')}`,
-                'normes': `Les normes pour ${contextDevice.name} sont : ${contextDevice.normes.join(', ')}`
-            };
-
-            for (const [key, value] of Object.entries(attributeResponses)) {
-                if (normalizedQuery.includes(key)) {
-                    response = value;
-                    showTypingAnimation(false);
-                    addChatMessage(response, false, suggestions);
-                    return;
-                }
-            }
-        }
-
-        // No exact match found, call the API
+        // Directly call the API for all queries
         try {
             const reply = await callGemini(`Réponds comme un assistant médical expert : ${query}`);
             showTypingAnimation(false);
             if (!reply || reply.trim().length < 5) {
-                response = 'Je n’ai pas compris votre question 😅. Essayez de reformuler ou parlez-moi d’un dispositif médical comme l’IRM ou le scanner.';
+                addChatMessage('Je n’ai pas compris votre question 😅. Essayez de reformuler ou parlez-moi d’un dispositif médical comme l’IRM ou le scanner.', false);
             } else {
-                response = reply;
+                addChatMessage(reply, false);
             }
-            suggestions = [
-                { text: 'Liste des spécialités médicales', action: () => 'Voici les spécialités disponibles : ' + Object.values(services).map(s => s.name).join(', ') },
-                { text: 'En savoir plus sur l’IRM', action: () => 'L\'IRM utilise des champs magnétiques et des ondes radio pour produire des images détaillées.' },
-                { text: 'Qu’est-ce qu’un scanner ?', action: () => 'Un scanner utilise des rayons X pour créer des images en coupes des organes.' }
-            ];
-            addChatMessage(response, false, suggestions);
         } catch (error) {
             console.error('Erreur lors de l\'appel à l\'API Gemini:', error);
             showTypingAnimation(false);
             showNotification('Erreur lors de la communication avec l’API.', 'error');
-            response = 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
-            suggestions = [
-                { text: 'Liste des spécialités médicales', action: () => 'Voici les spécialités disponibles : ' + Object.values(services).map(s => s.name).join(', ') },
-                { text: 'En savoir plus sur l’IRM', action: () => 'L\'IRM utilise des champs magnétiques et des ondes radio pour produire des images détaillées.' },
-                { text: 'Qu’est-ce qu’un scanner ?', action: () => 'Un scanner utilise des rayons X pour créer des images en coupes des organes.' }
-            ];
-            addChatMessage(response, false, suggestions);
+            addChatMessage('Désolé, une erreur est survenue. Essayez de reformuler votre question.', false);
         }
     } catch (error) {
         console.error('Erreur lors du traitement de la requête chatbot:', error);
         showTypingAnimation(false);
         showNotification('Une erreur est survenue lors du traitement de votre question.', 'error');
-        response = 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
-        suggestions = [
-            { text: 'Liste des spécialités médicales', action: () => 'Voici les spécialités disponibles : ' + Object.values(services).map(s => s.name).join(', ') },
-            { text: 'En savoir plus sur l’IRM', action: () => 'L\'IRM utilise des champs magnétiques et des ondes radio pour produire des images détaillées.' },
-            { text: 'Qu’est-ce qu’un scanner ?', action: () => 'Un scanner utilise des rayons X pour créer des images en coupes des organes.' }
-        ];
-        addChatMessage(response, false, suggestions);
+        addChatMessage('Désolé, une erreur est survenue. Essayez de reformuler votre question.', false);
     }
 };
 // Gestion des événements du chatbot
