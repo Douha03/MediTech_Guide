@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 
 exports.handler = async (event) => {
     const headers = {
-        'Access-Control-Allow-Origin': 'https://MediTech-Guide.netlify.app',
+        'Access-Control-Allow-Origin': 'https://meditchguide.netlify.app',
         'Access-Control-Allow-Headers': 'Content-Type',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Credentials': 'false'
