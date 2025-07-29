@@ -1999,7 +1999,7 @@
 const callGemini = async (query) => {
     try {
         console.log('Appel à l\'API Gemini avec la requête:', query); // Log pour débogage
-        const response = await fetch('https://meditechguide.netlify.app/.netlify/functions/callGemini', {
+        const response = await fetch('https://meditchguide.netlify.app/.netlify/functions/callGemini', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query })
