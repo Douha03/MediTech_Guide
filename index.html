@@ -14,6 +14,7 @@
     <title>MediTech - Votre Guide Biomédical</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --primary-color: #667eea;
@@ -26,6 +27,8 @@
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.08);
             --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
+            --success-color: #28a745;
+            --error-color: #f56565;
         }
 
         [data-theme="dark"] {
@@ -36,6 +39,8 @@
             --bg-light: #2d3748;
             --border-light: #4a5568;
             --white: #1a202c;
+            --success-color: #48bb78;
+            --error-color: #f87171;
         }
 
         * {
@@ -299,132 +304,235 @@
         }
 
         .quiz-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: var(--white);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md), 0 0 20px rgba(102, 126, 234, 0.2);
+            animation: fadeIn 0.6s ease-in-out;
+            position: relative;
+            overflow: hidden;
         }
 
         .quiz-progress {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
-            font-size: 1rem;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            font-weight: 500;
             color: var(--text-dark);
+            animation: slideUp 0.5s ease-in-out;
         }
 
         .progress-bar {
             width: 100%;
-            height: 10px;
+            height: 12px;
             background: var(--border-light);
-            border-radius: 5px;
-            margin-bottom: 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
             overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .progress-fill {
             height: 100%;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            transition: width 0.3s ease;
+            transition: width 0.5s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
         }
 
         .quiz-question {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 20px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 25px;
             color: var(--text-dark);
+            animation: slideUp 0.5s ease-in-out;
+            line-height: 1.4;
         }
 
         .quiz-options {
             display: grid;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 25px;
+            animation: slideUp 0.5s ease-in-out;
         }
 
         .quiz-option {
             background: var(--bg-light);
-            border: 1px solid var(--border-light);
+            border: 2px solid var(--border-light);
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease, transform 0.2s ease;
+            position: relative;
+            opacity: 0;
+            animation: fadeInOption 0.3s ease-in-out forwards;
         }
+
+        .quiz-option:nth-child(1) { animation-delay: 0.1s; }
+        .quiz-option:nth-child(2) { animation-delay: 0.2s; }
+        .quiz-option:nth-child(3) { animation-delay: 0.3s; }
+        .quiz-option:nth-child(4) { animation-delay: 0.4s; }
 
         .quiz-option:hover {
             background: var(--primary-color);
             color: var(--white);
             border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .quiz-option:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
         }
 
         .quiz-option:disabled {
             cursor: not-allowed;
-            opacity: 0.6;
+            opacity: 0.7;
+            transform: none;
         }
 
         .quiz-option.correct {
             background: var(--success-color);
             color: var(--white);
             border-color: var(--success-color);
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
         }
 
         .quiz-option.incorrect {
             background: var(--error-color);
             color: var(--white);
             border-color: var(--error-color);
+            box-shadow: 0 0 10px rgba(245, 101, 101, 0.5);
         }
 
         .quiz-feedback {
-            font-size: 1rem;
-            margin-bottom: 20px;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
             text-align: center;
             font-weight: 600;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
         .quiz-results {
             text-align: center;
+            animation: fadeIn 0.6s ease-in-out;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 12px;
         }
 
         .quiz-results h3 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .quiz-results p {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--text-dark);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
 
         .btn-restart {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: var(--white);
-            padding: 12px 25px;
+            padding: 14px 30px;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease, transform 0.2s ease;
             box-shadow: var(--shadow-sm);
         }
 
         .btn-restart:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        }
+
+        .btn-restart:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInOption {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         @media (max-width: 768px) {
             .quiz-container {
-                padding: 20px;
+                padding: 25px;
+                margin: 0 10px;
             }
             .quiz-question {
-                font-size: 1.3rem;
+                font-size: 1.4rem;
             }
             .quiz-option {
                 padding: 12px;
+                font-size: 0.95rem;
+            }
+            .quiz-results h3 {
+                font-size: 1.8rem;
+            }
+            .quiz-results p {
+                font-size: 1.1rem;
+            }
+            .btn-restart {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .quiz-container {
+                padding: 20px;
+            }
+            .quiz-question {
+                font-size: 1.2rem;
+            }
+            .quiz-option {
+                padding: 10px;
                 font-size: 0.9rem;
             }
         }
@@ -1165,7 +1273,7 @@
                     normes: ['Installation dans une cage de Faraday', 'Conformité aux normes CEI 60601-2-33', 'Zone de sécurité magnétique délimitée']
                 },
                 {
-                    name: 'Mammographe ',
+                    name: 'Mammographe',
                     image: 'https://via.placeholder.com/400x250?text=Mammographe',
                     role: 'Dépistage et diagnostic du cancer du sein par imagerie.',
                     principle: 'Utilise des rayons X à faible dose pour produire des images des tissus mammaires.',
@@ -1616,24 +1724,62 @@
             }
         };
 
-        // Device handling
-        const findDeviceByName = (name) => {
-            const normalizedName = name.toLowerCase().trim();
-            for (const service in devices) {
-                const device = devices[service].find(d => d.name.toLowerCase() === normalizedName || synonyms[d.name.toLowerCase()]?.includes(normalizedName));
-                if (device) {
-                    state.currentService = service;
-                    return device;
+        // Fonction de distance de Levenshtein simplifiée
+        const levenshteinDistance = (a, b) => {
+            if (a.length === 0) return b.length;
+            if (b.length === 0) return a.length;
+            const matrix = [];
+            for (let i = 0; i <= b.length; i++) {
+                matrix[i] = [i];
+            }
+            for (let j = 0; j <= a.length; j++) {
+                matrix[0][j] = j;
+            }
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    const cost = a[j - 1] === b[i - 1] ? 0 : 1;
+                    matrix[i][j] = Math.min(
+                        matrix[i - 1][j] + 1,
+                        matrix[i][j - 1] + 1,
+                        matrix[i - 1][j - 1] + cost
+                    );
+                }
+            }
+            return matrix[b.length][a.length];
+        };
+
+                // Device handling
+        const findServiceByName = (name) => {
+            const normalizedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
+            for (const serviceKey in services) {
+                const service = services[serviceKey];
+                const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
+                for (const syn of serviceSyns) {
+                    if (syn === normalizedName || normalizedName.includes(syn) || levenshteinDistance(normalizedName, syn) <= 3) {
+                        return serviceKey;
+                    }
                 }
             }
             return null;
         };
 
-        const findServiceByName = (name) => {
+        // Trouver un dispositif par nom ou synonyme
+        const findDeviceByName = (name) => {
+            if (!name || typeof name !== 'string') {
+                console.warn('findDeviceByName: Invalid name parameter', name);
+                return null;
+            }
             const normalizedName = name.toLowerCase().trim();
-            for (const serviceKey in services) {
-                if (serviceKey === normalizedName || services[serviceKey].name.toLowerCase() === normalizedName) {
-                    return serviceKey;
+            for (const service in devices) {
+                const device = devices[service].find(d => {
+                    const deviceSynonyms = synonyms[d.name.toLowerCase()] || [d.name.toLowerCase()];
+                    return deviceSynonyms.some(syn => 
+                        syn === normalizedName || levenshteinDistance(normalizedName, syn) <= 2
+                    );
+                });
+                if (device) {
+                    state.currentService = service;
+                    return device;
                 }
             }
             return null;
@@ -1727,53 +1873,51 @@
                 return;
             }
 
-            // Check for exact or synonym match for devices
-            let device = findDeviceByName(query);
-            if (!device) {
-                const queryWords = query.split(/\s+/);
-                for (const serviceKey in devices) {
-                    devices[serviceKey].forEach(dev => {
-                        const deviceSynonyms = synonyms[dev.name.toLowerCase()] || [dev.name.toLowerCase()];
-                        const match = queryWords.some(word => deviceSynonyms.some(syn => syn.includes(word)) || fuzzyMatch(word, deviceSynonyms, 3));
-                        if (match) {
-                            device = dev;
-                            state.currentService = serviceKey;
-                        }
-                    });
-                    if (device) break;
-                }
+            // Check for service match first
+// Vérification des services
+            const serviceKey = findServiceByName(normalizedQuery);
+            if (serviceKey) {
+                const service = services[serviceKey];
+                response = `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
+                suggestions = devices[serviceKey]?.map(device => ({
+                    text: `En savoir plus sur ${device.name}`,
+                    action: () => `Le rôle du ${device.name} est : ${device.role}`
+                })) || [];
+                addChatMessage(response, false, suggestions);
+                return;
             }
 
+            // Check for exact or synonym match for devices
+            let device = findDeviceByName(query);
             if (device) {
                 showDeviceDetails(device.name);
                 showNotification(`Dispositif trouvé : ${device.name}`, 'success');
                 return;
             }
 
-            // Check for service match
-            const serviceKey = findServiceByName(query);
-            if (serviceKey) {
-                showServices(serviceKey);
-                showNotification(`Spécialité trouvée : ${services[serviceKey].name}`, 'success');
+            // Try synonym matching for devices
+            const queryWords = query.split(/\s+/);
+            for (const serviceKey in devices) {
+                for (const dev of devices[serviceKey]) {
+                    const deviceSynonyms = synonyms[dev.name.toLowerCase()] || [dev.name.toLowerCase()];
+                    const match = queryWords.some(word => deviceSynonyms.includes(word));
+                    if (match) {
+                        state.currentService = serviceKey;
+                        showDeviceDetails(dev.name);
+                        showNotification(`Dispositif trouvé : ${dev.name}`, 'success');
+                        return;
+                    }
+                }
+            }
+
+            // If on devices page, filter devices
+            if (state.currentPage === 'devices-page' && state.currentService) {
+                filterDevices(query);
                 return;
             }
 
-            // Filter devices if on devices page
-            if (state.currentPage === 'devices-page' && state.currentService) {
-                filterDevices(query);
-            } else {
-                addChatMessage(query, true);
-                showTypingAnimation(true);
-                setTimeout(() => {
-                    showTypingAnimation(false);
-                    const response = processChatbotQuery(query);
-                    if (typeof response === 'object') {
-                        addChatMessage(response.response, false, response.suggestions);
-                    } else {
-                        addChatMessage(response, false);
-                    }
-                }, 500);
-            }
+            // Fallback: no match found
+            showNotification('Aucun dispositif ou spécialité trouvé.', 'error');
         };
 
         const filterDevices = (query) => {
@@ -1808,18 +1952,32 @@
             }
         }
 
+
+        const serviceSynonyms = {
+            'pédiatrie': ['pédiatrie', 'pediatrie', 'médecine infantile', 'soins enfants', 'pédiatre'],
+            'cardiologie': ['cardiologie', 'cardio', 'cœur', 'cardiaque'],
+            'imagerie_médicale': ['imagerie médicale', 'imagerie', 'radiologie', 'imagerie medicale'],
+            'neurologie': ['neurologie', 'neuro', 'cerveau', 'système nerveux'],
+            'orthopédie': ['orthopédie', 'orthopedie', 'os', 'articulations'],
+            'gastroentérologie': ['gastro-entérologie', 'gastroenterologie', 'gastro', 'digestion'],
+            'oncologie': ['oncologie', 'cancer', 'tumeur'],
+            'stérilisation': ['stérilisation', 'sterilisation', 'désinfection'],
+            'bloc_opératoire': ['bloc opératoire', 'bloc operatoire', 'chirurgie', 'salle op'],
+            'réanimation': ['réanimation', 'reanimation', 'soins intensifs', 'soins critiques']
+        };
+
         const synonyms = {
             'scanner': ['scanner', 'tomodensitomètre', 'ct', 'scaner', 'scannr', 'tomodensitometre', 'ct scanner', 'tomo'],
             'irm': ['irm', 'résonance magnétique', 'mri', 'irmm', 'resonance magnetique', 'mrii', 'aoi femeini', 'mri scan', 'résonnance', 'imagérie magnétique', 'rmi'],
             'ecg': ['électrocardiographe', 'ecg', 'ekg', 'electrocardiographe', 'elctrocardiographe', 'cardiographe', 'electrocardio', 'ekg cardio'],
             'eeg': ['électroencéphalographe', 'eeg', 'electroencephalographe', 'eeeg', 'elctroencephalo', 'encephalo', 'electroencephalo'],
-            'mammographe numérique': ['mammographe numérique', 'mammographie numérique', 'mammographe', 'mammographie', 'mammograph', 'mammo'],
+            'mammographe': ['mammographe ', 'mammo','mamo', 'mammogra', 'mammographie', 'mammograph', 'mam'],
             'échographe pédiatrique': ['échographe pédiatrique','echo', 'échographe pediatrique', 'échographe', 'ultrason pédiatrique', 'ultrasons pédiatriques', 'ultrasound pediatric', 'echo pediatrique', 'echo', 'écho', 'echo pédiatrique', 'ultrason pediatrique'],
             'incubateur neonatal': ['incubateur néonatal', 'incubateur neonatal', 'incubator neonatal', 'berceau chauffant néonatal', 'neonatal incubator'],
             'moniteur neonatal': ['moniteur néonatal', 'moniteur neonatal', 'monitor neonatal', 'moniteur bébé', 'moniteur nourrisson', 'neonatal monitor'],
             'défibrillateur automatique': ['défibrillateur automatique', 'défibrillateur', 'defibrillateur', 'defibrillator automatique', 'defib automatique', 'defib'],
             'échocardiographe': ['échocardiographe', 'échocardiogramme', 'echo coeur', 'échographie cardiaque', 'echocardiogram', 'echo cardio', 'écho cardiaque'],
-            'doppler transcranienne': ['doppler transcranienne', 'doppler transcranien', 'doppler cerebral', 'doppler', 'ultrason doppler', 'transcranial doppler'],
+            'doppler transcranienne': ['doppler', 'doppler transcranien', 'dopp', 'doppler', 'ultrason doppler', 'transcranial doppler'],
             'arthroscope': ['arthroscope', 'arthroscope osseux', 'arthroscopy', 'arthro'],
             'coloscope': ['coloscope', 'endoscope digestif', 'coloscopie', 'endoscope', 'coloscopy', 'digestive endoscope', 'colonoscope'],
             'gamma knife': ['gamma knife', 'gamma knife radiothérapie', 'radiothérapie gamma knife', 'gamma ray'],
@@ -1838,8 +1996,38 @@
             'Ventilateur Intensif': ['venti', 'Venti intensif', 'ventilateur intensif']
         };
 
+const callGemini = async (query) => {
+    try {
+        console.log('Appel à l\'API Gemini avec la requête:', query); // Log pour débogage
+        const response = await fetch('https://meditechguide.netlify.app/.netlify/functions/callGemini', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query })
+        });
 
-        const addChatMessage = (message, isUser, suggestions = []) => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Réponse de l\'API Gemini:', data); // Log pour débogage
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (!text) {
+            throw new Error('Réponse vide ou mal formatée de l\'API Gemini.');
+        }
+
+        return text.trim();
+    } catch (error) {
+        console.error('Erreur dans callGemini:', error);
+        throw error;
+    }
+};
+window.onload = () => {
+    init();
+};
+
+const addChatMessage = (message, isUser, suggestions = []) => {
     const chatbotBody = $('#chatbotBody');
     if (!chatbotBody) return;
     const messageDiv = document.createElement('div');
@@ -1859,6 +2047,7 @@
                     showTypingAnimation(false);
                     const response = suggestion.action();
                     addChatMessage(response, false);
+                    state.chatHistory.push({ query: suggestion.text, message: suggestion.text, isUser: true, timestamp: Date.now() });
                 }, 1000);
             });
             suggestionsDiv.appendChild(button);
@@ -1867,7 +2056,7 @@
     }
     chatbotBody.appendChild(messageDiv);
     chatbotBody.scrollTop = chatbotBody.scrollHeight;
-    state.chatHistory.push({ message, isUser });
+    state.chatHistory.push({ query: message, message, isUser, timestamp: Date.now() });
 };
 
 const showTypingAnimation = (show) => {
@@ -1876,20 +2065,7 @@ const showTypingAnimation = (show) => {
         typingIndicator.style.display = show ? 'block' : 'none';
     }
 };
-async function callGemini(query) {
-    try {
-        const response = await fetch('/.netlify/functions/callGemini', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query })
-        });
-        const data = await response.json();
-        return data.response || 'Aucune réponse disponible.';
-    } catch (error) {
-        console.error('Error in callGemini:', error);
-        throw new Error('Erreur lors de la communication avec l\'API.');
-    }
-}
+
 const showSearchSuggestions = (query) => {
     const suggestionsContainer = $('#searchSuggestions');
     if (!suggestionsContainer) return;
@@ -1904,23 +2080,25 @@ const showSearchSuggestions = (query) => {
     const suggestions = [];
     const queryWords = normalizedQuery.split(/\s+/);
 
+    // Search services
+    for (const serviceKey in services) {
+        const service = services[serviceKey];
+        const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
+        const match = queryWords.some(word => serviceSyns.includes(word));
+        if (match) {
+            suggestions.push({ name: service.name, type: 'service', key: serviceKey });
+        }
+    }
+
     // Search devices
     for (const serviceKey in devices) {
         devices[serviceKey].forEach(device => {
             const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-            const match = queryWords.some(word => deviceSynonyms.some(syn => syn.includes(word)) || fuzzyMatch(word, deviceSynonyms, 3));
+            const match = queryWords.some(word => deviceSynonyms.includes(word));
             if (match && !suggestions.some(s => s.name === device.name)) {
                 suggestions.push({ name: device.name, type: 'device', service: serviceKey });
             }
         });
-    }
-
-    // Search services
-    for (const serviceKey in services) {
-        const service = services[serviceKey];
-        if (serviceKey.includes(normalizedQuery) || service.name.toLowerCase().includes(normalizedQuery)) {
-            suggestions.push({ name: service.name, type: 'service', key: serviceKey });
-        }
     }
 
     if (suggestions.length === 0) {
@@ -1955,76 +2133,96 @@ const processChatbotQuery = async (query) => {
         if (!devices || !services) {
             throw new Error('Données des dispositifs ou services non disponibles.');
         }
-        const normalizedQuery = query.toLowerCase().trim();
-        state.chatHistory.push({ query: normalizedQuery, timestamp: Date.now() });
-        let response = 'Désolé, je n\'ai pas compris votre question. Essayez de demander quelque chose sur les dispositifs, les marques ou les spécialités médicales.';
-        let suggestions = [];
-
-        // Check for service match
-        for (const serviceKey in services) {
-            const service = services[serviceKey];
-            if (normalizedQuery.includes(serviceKey) || normalizedQuery.includes(service.name.toLowerCase())) {
-                return `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
-            }
+        const normalizedQuery = query.toLowerCase().trim().replace(/[^\w\s]/g, '');
+        if (!normalizedQuery) {
+            showTypingAnimation(false);
+            return;
         }
 
-        // Split query into words for better matching
+        // Éviter les doublons en vérifiant l'historique récent
+        if (state.chatHistory.length > 0 && 
+            state.chatHistory[state.chatHistory.length - 1].query === normalizedQuery && 
+            state.chatHistory[state.chatHistory.length - 1].isUser) {
+            showTypingAnimation(false);
+            return;
+        }
+
+        // Ajouter le message de l'utilisateur une seule fois
+        addChatMessage(query, true);
+        state.chatHistory.push({ query: normalizedQuery, message: query, isUser: true, timestamp: Date.now() });
+        let response = '';
+        let suggestions = [];
+
+        // Gestion des salutations
+        const greetings = ['bonjour', 'salut', 'hello', 'hi', 'bonsoir'];
+        if (greetings.includes(normalizedQuery)) {
+            response = 'Bonjour ! Je suis MediTechBot 🤖. Comment puis-je vous aider avec les technologies médicales aujourd\'hui ?';
+            suggestions = [
+                { text: 'Liste des spécialités médicales', action: () => 'Voici les spécialités disponibles : ' + Object.values(services).map(s => s.name).join(', ') },
+                { text: 'Informations sur l\'IRM', action: () => 'L\'IRM utilise des champs magnétiques et des ondes radio pour produire des images détaillées.' },
+                { text: 'Qu\'est-ce qu\'un scanner ?', action: () => 'Un scanner utilise des rayons X pour créer des images en coupes des organes.' }
+            ];
+            showTypingAnimation(false);
+            addChatMessage(response, false, suggestions);
+            return;
+        }
+
+        // Gestion des requêtes vagues
+        const vagueQueries = ['ai', 'je veux des info', 'info', 'informations', 'aide', 'itm', 'llr', 'vous etres ai', 'vous êtes ai'];
+        if (vagueQueries.includes(normalizedQuery) || normalizedQuery.length < 3) {
+            response = 'Pouvez-vous préciser votre demande ? Parlez-moi d’un dispositif médical ou d’une spécialité, par exemple "IRM" ou "cardiologie".';
+            suggestions = [
+                { text: 'En savoir plus sur l\'IRM', action: () => 'L\'IRM utilise des champs magnétiques et des ondes radio pour produire des images détaillées.' },
+                { text: 'Qu’est-ce qu’un électrocardiographe ?', action: () => 'Un électrocardiographe enregistre l\'activité électrique du cœur.' },
+                { text: 'Liste des spécialités', action: () => 'Voici les spécialités disponibles : ' + Object.values(services).map(s => s.name).join(', ') }
+            ];
+            showTypingAnimation(false);
+            addChatMessage(response, false, suggestions);
+            return;
+        }
+
+        // Vérification des services
+        const serviceKey = findServiceByName(normalizedQuery);
+        if (serviceKey) {
+            const service = services[serviceKey];
+            response = `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
+            suggestions = devices[serviceKey]?.map(device => ({
+                text: `En savoir plus sur ${device.name}`,
+                action: () => {
+                    state.currentService = serviceKey;
+                    return `Le rôle du ${device.name} est : ${device.role}`;
+                }
+            })) || [];
+            showTypingAnimation(false);
+            addChatMessage(response, false, suggestions);
+            return;
+        }
+
+        // Vérification des dispositifs avec synonymes
         const queryWords = normalizedQuery.split(/\s+/);
         let foundDevice = null;
         let matchedDeviceName = null;
-        const allDeviceNames = Object.values(devices).flat().map(d => d.name);
-        const allSynonyms = Object.values(synonyms).flat();
-        const allCandidates = [...allDeviceNames, ...allSynonyms];
+        let matchedServiceKey = null;
 
-        // Prioritize exact synonym matches
         for (const serviceKey in devices) {
             const deviceList = devices[serviceKey];
             for (const device of deviceList) {
                 const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                // Check if any query word matches a synonym exactly
-                const exactMatch = queryWords.some(word => deviceSynonyms.includes(word));
+                const exactMatch = queryWords.some(word => 
+                    deviceSynonyms.some(syn => syn === word || levenshteinDistance(word, syn) <= 2)
+                );
                 if (exactMatch) {
                     foundDevice = device;
                     matchedDeviceName = device.name;
-                    state.currentService = serviceKey;
+                    matchedServiceKey = serviceKey;
                     break;
                 }
             }
             if (foundDevice) break;
         }
 
-        // If no exact match, try fuzzy matching
-        if (!foundDevice) {
-            let bestMatch = null;
-            let bestScore = Infinity;
-            allCandidates.forEach(candidate => {
-                queryWords.forEach(word => {
-                    const distance = levenshteinDistance(word, candidate.toLowerCase());
-                    if (distance < bestScore && distance <= 5) {
-                        bestScore = distance;
-                        bestMatch = candidate;
-                    }
-                });
-            });
-            if (bestMatch) {
-                for (const serviceKey in devices) {
-                    const deviceList = devices[serviceKey];
-                    for (const device of deviceList) {
-                        const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                        if (device.name.toLowerCase() === bestMatch.toLowerCase() || deviceSynonyms.includes(bestMatch.toLowerCase())) {
-                            foundDevice = device;
-                            matchedDeviceName = device.name;
-                            state.currentService = serviceKey;
-                            break;
-                        }
-                    }
-                    if (foundDevice) break;
-                }
-            }
-        }
-
-        // If a device is found, prepare response and suggestions without navigation
         if (foundDevice) {
+            state.currentService = matchedServiceKey;
             suggestions = [
                 { text: `Quel est le rôle du ${foundDevice.name} ?`, action: () => `Le rôle du ${foundDevice.name} est : ${foundDevice.role}` },
                 { text: `Quel est le principe de fonctionnement du ${foundDevice.name} ?`, action: () => `Le principe de fonctionnement du ${foundDevice.name} est : ${foundDevice.principle}` },
@@ -2034,103 +2232,206 @@ const processChatbotQuery = async (query) => {
                 { text: `Quelles sont les normes du ${foundDevice.name} ?`, action: () => `Les normes pour ${foundDevice.name} sont : ${foundDevice.normes.join(', ')}` }
             ];
             response = `Vous avez demandé des informations sur ${foundDevice.name}. Voici quelques suggestions :`;
-            return { response, suggestions };
+            showTypingAnimation(false);
+            addChatMessage(response, false, suggestions);
+            return;
         }
 
-        // Handle specific device attribute queries with context
-        let contextDevice = state.chatHistory.length > 1 ? findDeviceByName(state.chatHistory[state.chatHistory.length - 2].query) : null;
-        for (const serviceKey in devices) {
-            const deviceList = devices[serviceKey];
-            for (const device of deviceList) {
-                const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                const queryMatchesDevice = queryWords.some(word => deviceSynonyms.includes(word)) || fuzzyMatch(normalizedQuery, deviceSynonyms, 5) !== null;
-                if (queryMatchesDevice || (contextDevice && contextDevice.name === device.name)) {
-                    if (normalizedQuery.includes('rôle')) {
-                        return `Le rôle du ${device.name} est : ${device.role}`;
-                    }
-                    if (normalizedQuery.includes('principe')) {
-                        return `Le principe de fonctionnement du ${device.name} est : ${device.principle}`;
-                    }
-                    if (normalizedQuery.includes('composants')) {
-                        return `Les composants principaux du ${device.name} sont : ${device.components.join(', ')}`;
-                    }
-                    if (normalizedQuery.includes('maintenance')) {
-                        return `La checklist pour la maintenance du ${device.name} est : ${device.maintenance.join(', ')}`;
-                    }
-                    if (normalizedQuery.includes('marques')) {
-                        return `Les marques associées à ${device.name} sont : ${device.brands.join(', ')}`;
-                    }
-                    if (normalizedQuery.includes('normes')) {
-                        return `Les normes pour ${device.name} sont : ${device.normes.join(', ')}`;
-                    }
+        // Gestion du contexte pour les attributs spécifiques
+        let contextDevice = null;
+        if (state.chatHistory.length > 1) {
+            const prevEntry = state.chatHistory[state.chatHistory.length - 2];
+            if (prevEntry && prevEntry.query) {
+                contextDevice = findDeviceByName(prevEntry.query);
+            }
+        }
+
+        if (contextDevice) {
+            const attributeResponses = {
+                'rôle': `Le rôle du ${contextDevice.name} est : ${contextDevice.role}`,
+                'principe': `Le principe de fonctionnement du ${contextDevice.name} est : ${contextDevice.principle}`,
+                'composants': `Les composants principaux du ${contextDevice.name} sont : ${contextDevice.components.join(', ')}`,
+                'maintenance': `La checklist pour la maintenance du ${contextDevice.name} est : ${contextDevice.maintenance.join(', ')}`,
+                'marques': `Les marques associées à ${contextDevice.name} sont : ${contextDevice.brands.join(', ')}`,
+                'normes': `Les normes pour ${contextDevice.name} sont : ${contextDevice.normes.join(', ')}`
+            };
+
+            for (const [key, value] of Object.entries(attributeResponses)) {
+                if (normalizedQuery.includes(key)) {
+                    response = value;
+                    showTypingAnimation(false);
+                    addChatMessage(response, false, suggestions);
+                    return;
                 }
             }
         }
 
-        // Check for comparison
-        if (normalizedQuery.includes('comparer') || normalizedQuery.includes('compare')) {
-            const foundDevices = [];
-            allCandidates.forEach(candidate => {
-                const match = fuzzyMatch(normalizedQuery, [candidate], 5);
-                if (match && !foundDevices.includes(match)) {
-                    const device = findDeviceByName(match);
-                    if (device) foundDevices.push(device);
-                }
-            });
-            if (foundDevices.length >= 2) {
-                const device1 = foundDevices[0];
-                const device2 = foundDevices[1];
-                return `Comparaison entre ${device1.name} et ${device2.name} :\n` +
-                    `- **Rôle** : ${device1.name} : ${device1.role} | ${device2.name} : ${device2.role}\n` +
-                    `- **Principe** : ${device1.name} : ${device1.principle} | ${device2.name} : ${device2.principle}\n` +
-                    `- **Marques** : ${device1.name} : ${device1.brands.join(', ')} | ${device2.name} : ${device2.brands.join(', ')}\n` +
-                    `- **Normes** : ${device1.name} : ${device1.normes.join(', ')} | ${device2.name} : ${device2.normes.join(', ')}`;
-            }
-        }
-
-        // Check for general queries
-        if (normalizedQuery.includes('spécialités') || normalizedQuery.includes('specialties')) {
-            return `MediTech propose des équipements pour : ${Object.values(services).map(s => s.name).join(', ')}`;
-        }
-        if (normalizedQuery.includes('dispositifs') || normalizedQuery.includes('devices')) {
-            const allDevices = Object.values(devices).flat().map(d => d.name);
-            return `MediTech propose : ${allDevices.join(', ')}`;
-        }
-        if (normalizedQuery.includes('marques') || normalizedQuery.includes('brands')) {
-            const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
-            return `Marques disponibles : ${allBrands.join(', ')}`;
-        }
-
-        // Check for brand-specific queries
-        const allBrands = [...new Set(Object.values(devices).flat().flatMap(device => device.brands))];
-        for (const brand of allBrands) {
-            if (brand.toLowerCase().indexOf(normalizedQuery) !== -1) {
-                const devicesWithBrand = Object.values(devices).flat().filter(device => device.brands.includes(brand));
-                return `La marque ${brand} est associée aux dispositifs suivants : ${devicesWithBrand.map(device => device.name).join(', ')}`;
-            }
-        }
-
-        // If no match found, call Gemini API
+        // Appel à l'API Gemini pour les requêtes non reconnues
         showTypingAnimation(true);
         try {
             const reply = await callGemini(`Réponds comme un assistant médical expert : ${query}`);
             showTypingAnimation(false);
-            return reply;
+            if (!reply || reply.trim().length < 5) {
+                response = 'Je n’ai pas compris votre question 😅. Essayez de reformuler ou parlez-moi d’un dispositif médical comme l’IRM ou le scanner.';
+            } else {
+                response = reply;
+            }
+            suggestions = [
+                { text: 'Liste des spécialités médicales', action: () => 'Voici les spécialités disponibles : ' + Object.values(services).map(s => s.name).join(', ') },
+                { text: 'En savoir plus sur l’IRM', action: () => 'L\'IRM utilise des champs magnétiques et des ondes radio pour produire des images détaillées.' },
+                { text: 'Qu’est-ce qu’un scanner ?', action: () => 'Un scanner utilise des rayons X pour créer des images en coupes des organes.' }
+            ];
+            addChatMessage(response, false, suggestions);
         } catch (error) {
-            console.error('Error calling Gemini API:', error);
+            console.error('Erreur lors de l\'appel à l\'API Gemini:', error);
             showTypingAnimation(false);
-            showNotification('Erreur lors de la communication avec l\'API.', 'error');
-            return 'Désolé, une erreur est survenue. Essayez de reformuler votre question.';
+            showNotification('Erreur lors de la communication avec l’API.', 'error');
+            response = 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
+            suggestions = [
+                { text: 'Liste des spécialités médicales', action: () => 'Voici les spécialités disponibles : ' + Object.values(services).map(s => s.name).join(', ') },
+                { text: 'En savoir plus sur l’IRM', action: () => 'L\'IRM utilise des champs magnétiques et des ondes radio pour produire des images détaillées.' },
+                { text: 'Qu’est-ce qu’un scanner ?', action: () => 'Un scanner utilise des rayons X pour créer des images en coupes des organes.' }
+            ];
+            addChatMessage(response, false, suggestions);
         }
     } catch (error) {
-        console.error('Error processing chatbot query:', error);
+        console.error('Erreur lors du traitement de la requête chatbot:', error);
+        showTypingAnimation(false);
         showNotification('Une erreur est survenue lors du traitement de votre question.', 'error');
-        return 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
+        response = 'Désolé, une erreur est survenue. Essayez de reformuler votre question ou consulter les services.';
+        suggestions = [
+            { text: 'Liste des spécialités médicales', action: () => 'Voici les spécialités disponibles : ' + Object.values(services).map(s => s.name).join(', ') },
+            { text: 'En savoir plus sur l’IRM', action: () => 'L\'IRM utilise des champs magnétiques et des ondes radio pour produire des images détaillées.' },
+            { text: 'Qu’est-ce qu’un scanner ?', action: () => 'Un scanner utilise des rayons X pour créer des images en coupes des organes.' }
+        ];
+        addChatMessage(response, false, suggestions);
+    }
+};
+
+// Gestion des événements du chatbot
+const initEventListeners = () => {
+    const searchBox = $('#searchBox');
+    if (searchBox) {
+        searchBox.addEventListener('input', debounce((e) => {
+            showSearchSuggestions(e.target.value);
+            handleSearch(e.target.value);
+        }, 300));
+        searchBox.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSearch(e.target.value);
+            }
+        });
+        searchBox.addEventListener('keydown', (e) => {
+            const suggestionsContainer = $('#searchSuggestions');
+            const suggestionItems = $$('.suggestion-item', suggestionsContainer);
+            if (!suggestionItems.length) return;
+
+            let selectedIndex = suggestionItems.findIndex(item => item.classList.contains('selected'));
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (selectedIndex < suggestionItems.length - 1) {
+                    if (selectedIndex >= 0) suggestionItems[selectedIndex].classList.remove('selected');
+                    selectedIndex += 1;
+                    suggestionItems[selectedIndex].classList.add('selected');
+                    suggestionItems[selectedIndex].focus();
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (selectedIndex > 0) {
+                    suggestionItems[selectedIndex].classList.remove('selected');
+                    selectedIndex -= 1;
+                    suggestionItems[selectedIndex].classList.add('selected');
+                    suggestionItems[selectedIndex].focus();
+                }
+            } else if (e.key === 'Enter' && selectedIndex >= 0) {
+                e.preventDefault();
+                suggestionItems[selectedIndex].click();
+            }
+        });
+    }
+
+    const exploreServicesBtn = $('#exploreServicesBtn');
+    if (exploreServicesBtn) {
+        exploreServicesBtn.addEventListener('click', () => showServices());
+    }
+    const homeBackBtn = $('#homeBackBtn');
+    if (homeBackBtn) {
+        homeBackBtn.addEventListener('click', showHome);
+    }
+    const servicesBackBtn = $('#servicesBackBtn');
+    if (servicesBackBtn) {
+        servicesBackBtn.addEventListener('click', () => showServices());
+    }
+    const devicesBackBtn = $('#devicesBackBtn');
+    if (devicesBackBtn) {
+        devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
+    }
+    const chatbotBackBtn = $('#chatbotBackBtn');
+    if (chatbotBackBtn) {
+        chatbotBackBtn.addEventListener('click', () => {
+            const previousPage = state.navigationHistory[state.navigationHistory.length - 2];
+            if (previousPage) {
+                previousPage.action();
+                state.navigationHistory.pop();
+            } else {
+                showHome();
+            }
+        });
+    }
+
+    const chatGuideBtn = $('#chatGuideBtn');
+    if (chatGuideBtn) {
+        chatGuideBtn.addEventListener('click', showChatbotPage);
+    }
+
+    const chatbotSend = $('#chatbotSend');
+    const chatbotInput = $('#chatbotInput');
+    if (chatbotSend && chatbotInput) {
+        chatbotSend.addEventListener('click', async () => {
+            const query = chatbotInput.value.trim();
+            if (!query) return;
+            showTypingAnimation(true);
+            try {
+                await processChatbotQuery(query);
+                chatbotInput.value = '';
+            } catch (error) {
+                showTypingAnimation(false);
+                console.error('Error in chatbot query:', error);
+                showNotification('Erreur lors du traitement de la question.', 'error');
+                addChatMessage('Désolé, une erreur est survenue. Essayez de reformuler votre question.', false);
+                chatbotInput.value = '';
+            }
+        });
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                chatbotSend.click();
+            }
+        });
+    }
+
+    const sortSelect = $('#sortSelect');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+            if (state.currentService) {
+                showDevices(state.currentService);
+            }
+        });
+    }
+
+    const themeToggle = $('#themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+
+    const generateQuizBtn = $('#generateQuizBtn');
+    if (generateQuizBtn) {
+        generateQuizBtn.addEventListener('click', generateQuiz);
     }
 };
 // Quiz Generation
 const generateQuiz = () => {
     const devicesList = Object.values(devices).flat();
+    const servicesList = Object.values(services);
     const quizQuestions = [];
     const questionTypes = [
         {
@@ -2138,7 +2439,7 @@ const generateQuiz = () => {
             question: device => `Quel est le rôle principal de "${device.name}" ?`,
             correct: device => device.role,
             incorrects: () => devicesList
-                .filter(d => d.role) // Ensure role exists
+                .filter(d => d.role)
                 .sort(() => Math.random() - 0.5)
                 .slice(0, 3)
                 .map(d => d.role)
@@ -2147,44 +2448,102 @@ const generateQuiz = () => {
             type: 'components',
             question: device => `Quel est un composant principal de "${device.name}" ?`,
             correct: device => device.components[Math.floor(Math.random() * device.components.length)],
-            incorrects: (device) => {
-                const otherDevices = devicesList
-                    .filter(d => d.name !== device.name && d.components.length > 0)
-                    .sort(() => Math.random() - 0.5)
-                    .slice(0, 3);
-                return otherDevices.map(d => d.components[Math.floor(Math.random() * d.components.length)]);
-            }
+            incorrects: (device) => devicesList
+                .filter(d => d.name !== device.name && d.components.length > 0)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3)
+                .map(d => d.components[Math.floor(Math.random() * d.components.length)])
         },
         {
             type: 'brands',
             question: device => `Quelle marque fabrique "${device.name}" ?`,
             correct: device => device.brands[Math.floor(Math.random() * device.brands.length)],
-            incorrects: () => devicesList
-                .flatMap(d => d.brands)
-                .filter((brand, idx, arr) => arr.indexOf(brand) === idx) // Remove duplicates
+            incorrects: () => [...new Set(devicesList
+                .flatMap(d => d.brands))]
                 .sort(() => Math.random() - 0.5)
                 .slice(0, 3)
+        },
+        {
+            type: 'principle',
+            question: device => `Quel est le principe de fonctionnement de "${device.name}" ?`,
+            correct: device => device.principle,
+            incorrects: () => devicesList
+                .filter(d => d.principle)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3)
+                .map(d => d.principle)
+        },
+        {
+            type: 'maintenance',
+            question: device => `Quelle est une tâche de maintenance pour "${device.name}" ?`,
+            correct: device => device.maintenance[Math.floor(Math.random() * device.maintenance.length)],
+            incorrects: (device) => devicesList
+                .filter(d => d.name !== device.name && d.maintenance.length > 0)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3)
+                .map(d => d.maintenance[Math.floor(Math.random() * d.maintenance.length)])
+        },
+        {
+            type: 'normes',
+            question: device => `Quelle norme s'applique à "${device.name}" ?`,
+            correct: device => device.normes[Math.floor(Math.random() * device.normes.length)],
+            incorrects: (device) => devicesList
+                .filter(d => d.name !== device.name && d.normes.length > 0)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3)
+                .map(d => d.normes[Math.floor(Math.random() * d.normes.length)])
+        },
+        {
+            type: 'service_description',
+            question: service => `Quelle est la description de la spécialité "${service.name}" ?`,
+            correct: service => service.description,
+            incorrects: () => servicesList
+                .filter(s => s.description)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3)
+                .map(s => s.description)
+        },
+        {
+            type: 'service_example',
+            question: service => `Quel dispositif est associé à la spécialité "${service.name}" ?`,
+            correct: service => {
+                const serviceKey = Object.keys(services).find(key => services[key].name === service.name);
+                return devices[serviceKey][Math.floor(Math.random() * devices[serviceKey].length)].name;
+            },
+            incorrects: (service) => {
+                const serviceKey = Object.keys(services).find(key => services[key].name === service.name);
+                return devicesList
+                    .filter(d => !devices[serviceKey].some(dev => dev.name === d.name))
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3)
+                    .map(d => d.name);
+            }
         }
     ];
 
-    // Generate 5 unique questions
-    const selectedDevices = [];
-    while (quizQuestions.length < 5) {
-        const device = devicesList[Math.floor(Math.random() * devicesList.length)];
-        if (!selectedDevices.includes(device) && device.components.length > 0 && device.brands.length > 0) {
-            const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
-            const correctAnswer = questionType.correct(device);
-            const incorrectAnswers = questionType.incorrects(device).filter(ans => ans && ans !== correctAnswer);
+    // Generate 6 unique questions (4 device-related, 2 service-related)
+    const selectedItems = [];
+    while (quizQuestions.length < 6) {
+        const isDeviceQuestion = quizQuestions.length < 4;
+        const item = isDeviceQuestion
+            ? devicesList[Math.floor(Math.random() * devicesList.length)]
+            : servicesList[Math.floor(Math.random() * servicesList.length)];
+        if (!selectedItems.includes(item) && item.components?.length > 0 && item.brands?.length > 0 || item.description) {
+            const availableTypes = isDeviceQuestion
+                ? questionTypes.filter(qt => !qt.type.includes('service'))
+                : questionTypes.filter(qt => qt.type.includes('service'));
+            const questionType = availableTypes[Math.floor(Math.random() * availableTypes.length)];
+            const correctAnswer = questionType.correct(item);
+            const incorrectAnswers = questionType.incorrects(item).filter(ans => ans && ans !== correctAnswer);
             if (incorrectAnswers.length >= 3) {
-                const question = {
-                    device: device.name,
+                quizQuestions.push({
+                    item: item.name,
                     type: questionType.type,
-                    text: questionType.question(device),
+                    text: questionType.question(item),
                     correctAnswer,
                     answers: [correctAnswer, ...incorrectAnswers.slice(0, 3)].sort(() => Math.random() - 0.5)
-                };
-                quizQuestions.push(question);
-                selectedDevices.push(device);
+                });
+                selectedItems.push(item);
             }
         }
     }
@@ -2193,11 +2552,6 @@ const generateQuiz = () => {
     let score = 0;
 
     const showQuizPage = () => {
-        if (typeof showPage !== 'function') {
-            console.error('showPage function is not defined');
-            showNotification('Erreur : Impossible d\'afficher la page du quiz.', 'error');
-            return;
-        }
         showPage('quiz-page', 'Quiz sur les Technologies Médicales', [
             { text: 'Quiz', action: showQuizPage }
         ]);
@@ -2222,7 +2576,7 @@ const generateQuiz = () => {
         const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
 
         quizContainer.innerHTML = `
-            <div class="quiz-progress">
+            <div class="quiz-progress" aria-live="polite">
                 <span>Question ${currentQuestionIndex + 1} sur ${quizQuestions.length}</span>
                 <span>Score: ${score}</span>
             </div>
@@ -2230,42 +2584,52 @@ const generateQuiz = () => {
                 <div class="progress-fill" style="width: ${progress}%"></div>
             </div>
             <h3 class="quiz-question">${question.text}</h3>
-            <div class="quiz-options">
+            <div class="quiz-options" role="radiogroup" aria-label="Options de réponse">
                 ${question.answers.map((answer, index) => `
-                    <button class="quiz-option" data-index="${index}">${answer}</button>
+                    <button class="quiz-option" data-index="${index}" role="radio" aria-checked="false">${answer}</button>
                 `).join('')}
             </div>
-            <p class="quiz-feedback" id="quizFeedback"></p>
+            <p class="quiz-feedback" id="quizFeedback" aria-live="assertive"></p>
         `;
 
         const options = quizContainer.querySelectorAll('.quiz-option');
-        options.forEach(option => {
+        options.forEach((option, index) => {
             option.addEventListener('click', () => {
                 const feedback = $('#quizFeedback');
                 const selectedAnswer = option.textContent;
                 const isCorrect = selectedAnswer === question.correctAnswer;
 
+                options.forEach(opt => {
+                    opt.disabled = true;
+                    opt.setAttribute('aria-checked', 'false');
+                    if (opt.textContent === question.correctAnswer) {
+                        opt.classList.add('correct');
+                    } else if (opt.textContent === selectedAnswer && !isCorrect) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+                option.setAttribute('aria-checked', 'true');
+
                 if (isCorrect) {
                     score += 1;
-                    feedback.textContent = 'Correct ! Bien joué.';
+                    feedback.textContent = `Correct ! Bien joué. ${question.type.includes('service') ? `La spécialité "${question.item}" est bien décrite ainsi.` : `Le dispositif "${question.item}" est correct.`}`;
                     feedback.style.color = 'var(--success-color)';
-                    option.classList.add('correct');
                 } else {
                     feedback.textContent = `Incorrect. La réponse correcte est : ${question.correctAnswer}`;
                     feedback.style.color = 'var(--error-color)';
-                    option.classList.add('incorrect');
-                    options.forEach(opt => {
-                        if (opt.textContent === question.correctAnswer) {
-                            opt.classList.add('correct');
-                        }
-                    });
                 }
 
-                options.forEach(opt => opt.disabled = true);
                 setTimeout(() => {
                     currentQuestionIndex += 1;
                     renderQuizQuestion();
                 }, 1500);
+            });
+
+            option.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    option.click();
+                }
             });
         });
     };
@@ -2275,13 +2639,24 @@ const generateQuiz = () => {
         if (!quizContainer) return;
 
         const percentage = (score / quizQuestions.length) * 100;
-        let message;
+        let message, suggestion;
         if (percentage >= 80) {
             message = 'Excellent ! Vous êtes un expert en technologies médicales !';
+            suggestion = 'Continuez à explorer nos spécialités pour approfondir vos connaissances.';
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#667eea', '#764ba2', '#28a745']
+                });
+            }, 500);
         } else if (percentage >= 50) {
-            message = 'Bien joué ! Continuez à explorer pour devenir un pro.';
+            message = 'Bien joué ! Vous avez une bonne maîtrise des technologies médicales.';
+            suggestion = 'Essayez notre ChatGuide IA pour en savoir plus sur des dispositifs spécifiques.';
         } else {
-            message = 'Pas mal, mais il y a encore à découvrir. Essayez encore !';
+            message = 'Pas mal, mais il y a encore à découvrir !';
+            suggestion = 'Consultez nos pages de spécialités ou recommencez le quiz pour améliorer votre score.';
         }
 
         quizContainer.innerHTML = `
@@ -2289,7 +2664,9 @@ const generateQuiz = () => {
                 <h3>Résultats du Quiz</h3>
                 <p>Votre score : ${score} sur ${quizQuestions.length} (${percentage}%)</p>
                 <p>${message}</p>
-                <button class="btn-restart">Recommencer le Quiz</button>
+                <p>${suggestion}</p>
+                <button class="btn-restart" aria-label="Recommencer le quiz">Recommencer le Quiz</button>
+                <button class="btn-primary" id="exploreServicesQuizBtn" aria-label="Retourner aux spécialités">Explorer les Spécialités</button>
             </div>
         `;
 
@@ -2302,39 +2679,14 @@ const generateQuiz = () => {
                 generateQuiz();
             });
         }
+
+        const exploreServicesQuizBtn = quizContainer.querySelector('#exploreServicesQuizBtn');
+        if (exploreServicesQuizBtn) {
+            exploreServicesQuizBtn.addEventListener('click', () => showServices());
+        }
     };
 
     showQuizPage();
-};
-
-// Levenshtein distance function for fuzzy matching
-const levenshteinDistance = (a, b) => {
-    const matrix = Array(b.length + 1).fill().map(() => Array(a.length + 1).fill(0));
-    for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
-    for (let j = 0; j <= b.length; j++) matrix[j][0] = j;
-    for (let j = 1; j <= b.length; j++) {
-        for (let i = 1; i <= a.length; i++) {
-            const indicator = a[i - 1] === b[j - 1] ? 0 : 1;
-            matrix[j][i] = Math.min(
-                matrix[j][i - 1] + 1, // deletion
-                matrix[j - 1][i] + 1, // insertion
-                matrix[j - 1][i - 1] + indicator // substitution
-            );
-        }
-    }
-    return matrix[b.length][a.length];
-};
-
-// Fuzzy match function to find the closest device name
-const fuzzyMatch = (query, candidates, threshold = 3) => {
-    let bestMatch = { name: '', score: Infinity };
-    candidates.forEach(candidate => {
-        const distance = levenshteinDistance(query.toLowerCase(), candidate.toLowerCase());
-        if (distance < bestMatch.score) {
-            bestMatch = { name: candidate, score: distance };
-        }
-    });
-    return bestMatch.score <= threshold ? bestMatch.name : null;
 };
 
 // Theme Toggle
