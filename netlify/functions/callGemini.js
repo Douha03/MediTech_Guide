@@ -58,7 +58,7 @@ exports.handler = async (event) => {
             {
               parts: [
                 {
-                  text: `Réponds comme un assistant médical expert en français, spécialisé dans les technologies médicales : ${query}`,
+                  text: `Réponds de façon concise et précise comme un ingenieur bimedical et technicien biomédical expert : … : ${query}`,
                 },
               ],
             },
