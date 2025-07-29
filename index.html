@@ -13,7 +13,7 @@
     <meta property="og:url" content="https://www.meditech.com">
     <title>MediTech - Votre Guide Biomédical</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
@@ -2026,108 +2026,7 @@ const callGemini = async (query) => {
 window.onload = () => {
     init();
 };
-
-const addChatMessage = (message, isUser, suggestions = []) => {
-    const chatbotBody = $('#chatbotBody');
-    if (!chatbotBody) return;
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
-    messageDiv.innerHTML = `<p>${message}</p>`;
-    if (!isUser && suggestions.length > 0) {
-        const suggestionsDiv = document.createElement('div');
-        suggestionsDiv.className = 'chatbot-suggestions';
-        suggestions.forEach(suggestion => {
-            const button = document.createElement('button');
-            button.className = 'suggestion-btn';
-            button.textContent = suggestion.text;
-            button.addEventListener('click', () => {
-                addChatMessage(suggestion.text, true);
-                showTypingAnimation(true);
-                setTimeout(() => {
-                    showTypingAnimation(false);
-                    const response = suggestion.action();
-                    addChatMessage(response, false);
-                    state.chatHistory.push({ query: suggestion.text, message: suggestion.text, isUser: true, timestamp: Date.now() });
-                }, 1000);
-            });
-            suggestionsDiv.appendChild(button);
-        });
-        messageDiv.appendChild(suggestionsDiv);
-    }
-    chatbotBody.appendChild(messageDiv);
-    chatbotBody.scrollTop = chatbotBody.scrollHeight;
-    state.chatHistory.push({ query: message, message, isUser, timestamp: Date.now() });
-};
-
-const showTypingAnimation = (show) => {
-    const typingIndicator = $('#chatbotTyping');
-    if (typingIndicator) {
-        typingIndicator.style.display = show ? 'block' : 'none';
-    }
-};
-
-const showSearchSuggestions = (query) => {
-    const suggestionsContainer = $('#searchSuggestions');
-    if (!suggestionsContainer) return;
-
-    suggestionsContainer.innerHTML = '';
-    if (!query.trim()) {
-        suggestionsContainer.classList.remove('show');
-        return;
-    }
-
-    const normalizedQuery = query.toLowerCase().trim();
-    const suggestions = [];
-    const queryWords = normalizedQuery.split(/\s+/);
-
-    // Search services
-    for (const serviceKey in services) {
-        const service = services[serviceKey];
-        const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
-        const match = queryWords.some(word => serviceSyns.includes(word));
-        if (match) {
-            suggestions.push({ name: service.name, type: 'service', key: serviceKey });
-        }
-    }
-
-    // Search devices
-    for (const serviceKey in devices) {
-        devices[serviceKey].forEach(device => {
-            const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-            const match = queryWords.some(word => deviceSynonyms.includes(word));
-            if (match && !suggestions.some(s => s.name === device.name)) {
-                suggestions.push({ name: device.name, type: 'device', service: serviceKey });
-            }
-        });
-    }
-
-    if (suggestions.length === 0) {
-        suggestionsContainer.classList.remove('show');
-        return;
-    }
-
-    suggestions.slice(0, 5).forEach(suggestion => {
-        const item = document.createElement('div');
-        item.className = 'suggestion-item';
-        item.setAttribute('tabindex', '0');
-        item.textContent = suggestion.name;
-        item.setAttribute('role', 'option');
-        item.setAttribute('aria-label', `Naviguer vers ${suggestion.name}`);
-        item.addEventListener('click', () => {
-            $('#searchBox').value = suggestion.name;
-            suggestionsContainer.classList.remove('show');
-            if (suggestion.type === 'device') {
-                state.currentService = suggestion.service;
-                showDeviceDetails(suggestion.name);
-            } else {
-                showServices(suggestion.key);
-            }
-        });
-        suggestionsContainer.appendChild(item);
-    });
-
-    suggestionsContainer.classList.add('show');
-};
+// Modified processChatbotQuery function
 const processChatbotQuery = async (query) => {
     try {
         if (!devices || !services) {
@@ -2139,7 +2038,7 @@ const processChatbotQuery = async (query) => {
             return;
         }
 
-        // Éviter les doublons en vérifiant l'historique récent
+        // Vérifier si la requête a déjà été traitée récemment pour éviter les doublons
         if (state.chatHistory.length > 0 && 
             state.chatHistory[state.chatHistory.length - 1].query === normalizedQuery && 
             state.chatHistory[state.chatHistory.length - 1].isUser) {
@@ -2147,9 +2046,8 @@ const processChatbotQuery = async (query) => {
             return;
         }
 
-        // Ajouter le message de l'utilisateur une seule fois
+        // Ajouter le message de l'utilisateur
         addChatMessage(query, true);
-        state.chatHistory.push({ query: normalizedQuery, message: query, isUser: true, timestamp: Date.now() });
         let response = '';
         let suggestions = [];
 
@@ -2308,76 +2206,107 @@ const processChatbotQuery = async (query) => {
     }
 };
 
-// Gestion des événements du chatbot
-const initEventListeners = () => {
-    const searchBox = $('#searchBox');
-    if (searchBox) {
-        searchBox.addEventListener('input', debounce((e) => {
-            showSearchSuggestions(e.target.value);
-            handleSearch(e.target.value);
-        }, 300));
-        searchBox.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleSearch(e.target.value);
+const addChatMessage = (message, isUser, suggestions = []) => {
+    const chatbotBody = $('#chatbotBody');
+    if (!chatbotBody) return;
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
+    messageDiv.innerHTML = `<p>${message}</p>`;
+    if (!isUser && suggestions.length > 0) {
+        const suggestionsDiv = document.createElement('div');
+        suggestionsDiv.className = 'chatbot-suggestions';
+        suggestions.forEach(suggestion => {
+            const button = document.createElement('button');
+            button.className = 'suggestion-btn';
+            button.textContent = suggestion.text;
+            button.addEventListener('click', () => {
+                addChatMessage(suggestion.text, true);
+                showTypingAnimation(true);
+                setTimeout(() => {
+                    showTypingAnimation(false);
+                    const response = suggestion.action();
+                    addChatMessage(response, false);
+                    state.chatHistory.push({ query: suggestion.text, message: suggestion.text, isUser: true, timestamp: Date.now() });
+                }, 1000);
+            });
+            suggestionsDiv.appendChild(button);
+        });
+        messageDiv.appendChild(suggestionsDiv);
+    }
+    chatbotBody.appendChild(messageDiv);
+    chatbotBody.scrollTop = chatbotBody.scrollHeight;
+    state.chatHistory.push({ query: message, message, isUser, timestamp: Date.now() });
+};
+
+const showTypingAnimation = (show) => {
+    const typingIndicator = $('#chatbotTyping');
+    if (typingIndicator) {
+        typingIndicator.style.display = show ? 'block' : 'none';
+    }
+};
+
+const showSearchSuggestions = (query) => {
+    const suggestionsContainer = $('#searchSuggestions');
+    if (!suggestionsContainer) return;
+
+    suggestionsContainer.innerHTML = '';
+    if (!query.trim()) {
+        suggestionsContainer.classList.remove('show');
+        return;
+    }
+
+    const normalizedQuery = query.toLowerCase().trim();
+    const suggestions = [];
+    const queryWords = normalizedQuery.split(/\s+/);
+
+    // Search services
+    for (const serviceKey in services) {
+        const service = services[serviceKey];
+        const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
+        const match = queryWords.some(word => serviceSyns.includes(word));
+        if (match) {
+            suggestions.push({ name: service.name, type: 'service', key: serviceKey });
+        }
+    }
+
+    // Search devices
+    for (const serviceKey in devices) {
+        devices[serviceKey].forEach(device => {
+            const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
+            const match = queryWords.some(word => deviceSynonyms.includes(word));
+            if (match && !suggestions.some(s => s.name === device.name)) {
+                suggestions.push({ name: device.name, type: 'device', service: serviceKey });
             }
         });
-        searchBox.addEventListener('keydown', (e) => {
-            const suggestionsContainer = $('#searchSuggestions');
-            const suggestionItems = $$('.suggestion-item', suggestionsContainer);
-            if (!suggestionItems.length) return;
-
-            let selectedIndex = suggestionItems.findIndex(item => item.classList.contains('selected'));
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                if (selectedIndex < suggestionItems.length - 1) {
-                    if (selectedIndex >= 0) suggestionItems[selectedIndex].classList.remove('selected');
-                    selectedIndex += 1;
-                    suggestionItems[selectedIndex].classList.add('selected');
-                    suggestionItems[selectedIndex].focus();
-                }
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                if (selectedIndex > 0) {
-                    suggestionItems[selectedIndex].classList.remove('selected');
-                    selectedIndex -= 1;
-                    suggestionItems[selectedIndex].classList.add('selected');
-                    suggestionItems[selectedIndex].focus();
-                }
-            } else if (e.key === 'Enter' && selectedIndex >= 0) {
-                e.preventDefault();
-                suggestionItems[selectedIndex].click();
-            }
-        });
     }
 
-    const exploreServicesBtn = $('#exploreServicesBtn');
-    if (exploreServicesBtn) {
-        exploreServicesBtn.addEventListener('click', () => showServices());
+    if (suggestions.length === 0) {
+        suggestionsContainer.classList.remove('show');
+        return;
     }
-    const homeBackBtn = $('#homeBackBtn');
-    if (homeBackBtn) {
-        homeBackBtn.addEventListener('click', showHome);
-    }
-    const servicesBackBtn = $('#servicesBackBtn');
-    if (servicesBackBtn) {
-        servicesBackBtn.addEventListener('click', () => showServices());
-    }
-    const devicesBackBtn = $('#devicesBackBtn');
-    if (devicesBackBtn) {
-        devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
-    }
-    const chatbotBackBtn = $('#chatbotBackBtn');
-    if (chatbotBackBtn) {
-        chatbotBackBtn.addEventListener('click', () => {
-            const previousPage = state.navigationHistory[state.navigationHistory.length - 2];
-            if (previousPage) {
-                previousPage.action();
-                state.navigationHistory.pop();
+
+    suggestions.slice(0, 5).forEach(suggestion => {
+        const item = document.createElement('div');
+        item.className = 'suggestion-item';
+        item.setAttribute('tabindex', '0');
+        item.textContent = suggestion.name;
+        item.setAttribute('role', 'option');
+        item.setAttribute('aria-label', `Naviguer vers ${suggestion.name}`);
+        item.addEventListener('click', () => {
+            $('#searchBox').value = suggestion.name;
+            suggestionsContainer.classList.remove('show');
+            if (suggestion.type === 'device') {
+                state.currentService = suggestion.service;
+                showDeviceDetails(suggestion.name);
             } else {
-                showHome();
+                showServices(suggestion.key);
             }
         });
-    }
+        suggestionsContainer.appendChild(item);
+    });
+
+    suggestionsContainer.classList.add('show');
+};
 
     const chatGuideBtn = $('#chatGuideBtn');
     if (chatGuideBtn) {
@@ -2427,7 +2356,7 @@ const initEventListeners = () => {
     if (generateQuizBtn) {
         generateQuizBtn.addEventListener('click', generateQuiz);
     }
-};
+
 // Quiz Generation
 const generateQuiz = () => {
     const devicesList = Object.values(devices).flat();
@@ -2703,7 +2632,129 @@ const toggleTheme = () => {
 };
 
 // Event Listeners
+const initEventListeners = () => {
+    const searchBox = $('#searchBox');
+    if (searchBox) {
+        searchBox.addEventListener('input', debounce((e) => {
+            showSearchSuggestions(e.target.value);
+            handleSearch(e.target.value);
+        }, 300));
+        searchBox.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSearch(e.target.value);
+            }
+        });
+        searchBox.addEventListener('keydown', (e) => {
+            const suggestionsContainer = $('#searchSuggestions');
+            const suggestionItems = $$('.suggestion-item', suggestionsContainer);
+            if (!suggestionItems.length) return;
 
+            let selectedIndex = suggestionItems.findIndex(item => item.classList.contains('selected'));
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (selectedIndex < suggestionItems.length - 1) {
+                    if (selectedIndex >= 0) suggestionItems[selectedIndex].classList.remove('selected');
+                    selectedIndex += 1;
+                    suggestionItems[selectedIndex].classList.add('selected');
+                    suggestionItems[selectedIndex].focus();
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (selectedIndex > 0) {
+                    suggestionItems[selectedIndex].classList.remove('selected');
+                    selectedIndex -= 1;
+                    suggestionItems[selectedIndex].classList.add('selected');
+                    suggestionItems[selectedIndex].focus();
+                }
+            } else if (e.key === 'Enter' && selectedIndex >= 0) {
+                e.preventDefault();
+                suggestionItems[selectedIndex].click();
+            }
+        });
+    }
+
+    const exploreServicesBtn = $('#exploreServicesBtn');
+    if (exploreServicesBtn) {
+        exploreServicesBtn.addEventListener('click', () => showServices());
+    }
+    const homeBackBtn = $('#homeBackBtn');
+    if (homeBackBtn) {
+        homeBackBtn.addEventListener('click', showHome);
+    }
+    const servicesBackBtn = $('#servicesBackBtn');
+    if (servicesBackBtn) {
+        servicesBackBtn.addEventListener('click', () => showServices());
+    }
+    const devicesBackBtn = $('#devicesBackBtn');
+    if (devicesBackBtn) {
+        devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
+    }
+    const chatbotBackBtn = $('#chatbotBackBtn');
+    if (chatbotBackBtn) {
+        chatbotBackBtn.addEventListener('click', () => {
+            const previousPage = state.navigationHistory[state.navigationHistory.length - 2];
+            if (previousPage) {
+                previousPage.action();
+                state.navigationHistory.pop();
+            } else {
+                showHome();
+            }
+        });
+    }
+
+    const chatGuideBtn = $('#chatGuideBtn');
+    if (chatGuideBtn) {
+        chatGuideBtn.addEventListener('click', showChatbotPage);
+    }
+
+    const chatbotSend = $('#chatbotSend');
+    const chatbotInput = $('#chatbotInput');
+    if (chatbotSend && chatbotInput) {
+        // Débouncer pour éviter les déclenchements multiples
+        const debouncedProcessQuery = debounce(async () => {
+            const query = chatbotInput.value.trim();
+            if (!query) return;
+            showTypingAnimation(true);
+            try {
+                await processChatbotQuery(query);
+                chatbotInput.value = '';
+            } catch (error) {
+                showTypingAnimation(false);
+                console.error('Error in chatbot query:', error);
+                showNotification('Erreur lors du traitement de la question.', 'error');
+                addChatMessage('Désolé, une erreur est survenue. Essayez de reformuler votre question.', false);
+                chatbotInput.value = '';
+            }
+        }, 300);
+
+        chatbotSend.addEventListener('click', debouncedProcessQuery);
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Empêche le déclenchement par défaut
+                debouncedProcessQuery();
+            }
+        });
+    }
+
+    const sortSelect = $('#sortSelect');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+            if (state.currentService) {
+                showDevices(state.currentService);
+            }
+        });
+    }
+
+    const themeToggle = $('#themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+
+    const generateQuizBtn = $('#generateQuizBtn');
+    if (generateQuizBtn) {
+        generateQuizBtn.addEventListener('click', generateQuiz);
+    }
+};
 
 // Initialization
 const init = () => {
