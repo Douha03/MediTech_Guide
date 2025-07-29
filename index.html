@@ -2139,7 +2139,7 @@ const processChatbotQuery = async (query) => {
             return;
         }
 
-        // Éviter les doublons en vérifiant l'historique récent
+        // Prevent duplicate query processing
         if (state.chatHistory.length > 0 && 
             state.chatHistory[state.chatHistory.length - 1].query === normalizedQuery && 
             state.chatHistory[state.chatHistory.length - 1].isUser) {
@@ -2147,13 +2147,14 @@ const processChatbotQuery = async (query) => {
             return;
         }
 
-        // Ajouter le message de l'utilisateur une seule fois
+        // Add user message only once
         addChatMessage(query, true);
-        state.chatHistory.push({ query: normalizedQuery, message: query, isUser: true, timestamp: Date.now() });
+        showTypingAnimation(true);
+
         let response = '';
         let suggestions = [];
 
-        // Gestion des salutations
+        // Handle greetings
         const greetings = ['bonjour', 'salut', 'hello', 'hi', 'bonsoir'];
         if (greetings.includes(normalizedQuery)) {
             response = 'Bonjour ! Je suis MediTechBot 🤖. Comment puis-je vous aider avec les technologies médicales aujourd\'hui ?';
@@ -2167,7 +2168,7 @@ const processChatbotQuery = async (query) => {
             return;
         }
 
-        // Gestion des requêtes vagues
+        // Handle vague queries
         const vagueQueries = ['ai', 'je veux des info', 'info', 'informations', 'aide', 'itm', 'llr', 'vous etres ai', 'vous êtes ai'];
         if (vagueQueries.includes(normalizedQuery) || normalizedQuery.length < 3) {
             response = 'Pouvez-vous préciser votre demande ? Parlez-moi d’un dispositif médical ou d’une spécialité, par exemple "IRM" ou "cardiologie".';
@@ -2181,9 +2182,9 @@ const processChatbotQuery = async (query) => {
             return;
         }
 
-        // Vérification des services
+        // Check for exact service match
         const serviceKey = findServiceByName(normalizedQuery);
-        if (serviceKey) {
+        if (serviceKey && serviceSynonyms[serviceKey].includes(normalizedQuery)) {
             const service = services[serviceKey];
             response = `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
             suggestions = devices[serviceKey]?.map(device => ({
@@ -2198,8 +2199,7 @@ const processChatbotQuery = async (query) => {
             return;
         }
 
-        // Vérification des dispositifs avec synonymes
-        const queryWords = normalizedQuery.split(/\s+/);
+        // Check for exact device synonym match
         let foundDevice = null;
         let matchedDeviceName = null;
         let matchedServiceKey = null;
@@ -2208,10 +2208,7 @@ const processChatbotQuery = async (query) => {
             const deviceList = devices[serviceKey];
             for (const device of deviceList) {
                 const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-                const exactMatch = queryWords.some(word => 
-                    deviceSynonyms.some(syn => syn === word || levenshteinDistance(word, syn) <= 2)
-                );
-                if (exactMatch) {
+                if (deviceSynonyms.includes(normalizedQuery)) {
                     foundDevice = device;
                     matchedDeviceName = device.name;
                     matchedServiceKey = serviceKey;
@@ -2237,7 +2234,7 @@ const processChatbotQuery = async (query) => {
             return;
         }
 
-        // Gestion du contexte pour les attributs spécifiques
+        // Check for context-based attribute queries
         let contextDevice = null;
         if (state.chatHistory.length > 1) {
             const prevEntry = state.chatHistory[state.chatHistory.length - 2];
@@ -2266,8 +2263,7 @@ const processChatbotQuery = async (query) => {
             }
         }
 
-        // Appel à l'API Gemini pour les requêtes non reconnues
-        showTypingAnimation(true);
+        // No exact match found, call the API
         try {
             const reply = await callGemini(`Réponds comme un assistant médical expert : ${query}`);
             showTypingAnimation(false);
@@ -2307,7 +2303,6 @@ const processChatbotQuery = async (query) => {
         addChatMessage(response, false, suggestions);
     }
 };
-
 // Gestion des événements du chatbot
 const initEventListeners = () => {
     const searchBox = $('#searchBox');
