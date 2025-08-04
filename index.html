@@ -1769,12 +1769,14 @@
                 console.warn('findDeviceByName: Invalid name parameter', name);
                 return null;
             }
-            const normalizedName = name.toLowerCase().trim();
+            const normalizedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
             for (const service in devices) {
                 const device = devices[service].find(d => {
                     const deviceSynonyms = synonyms[d.name.toLowerCase()] || [d.name.toLowerCase()];
                     return deviceSynonyms.some(syn => 
-                        syn === normalizedName || levenshteinDistance(normalizedName, syn) <= 2
+                        syn === normalizedName || 
+                        normalizedName.includes(syn) || 
+                        levenshteinDistance(normalizedName, syn) <= 3
                     );
                 });
                 if (device) {
@@ -1873,50 +1875,29 @@
                 return;
             }
 
-            // Check for service match first
-// Vérification des services
-            const serviceKey = findServiceByName(normalizedQuery);
+            // Vérifier d'abord une correspondance avec un service
+            const serviceKey = findServiceByName(query);
             if (serviceKey) {
-                const service = services[serviceKey];
-                response = `${service.name} : ${service.description}\nExemples : ${service.examples.join(', ')}`;
-                suggestions = devices[serviceKey]?.map(device => ({
-                    text: `En savoir plus sur ${device.name}`,
-                    action: () => `Le rôle du ${device.name} est : ${device.role}`
-                })) || [];
-                addChatMessage(response, false, suggestions);
+                showServices(serviceKey);
+                showNotification(`Spécialité trouvée : ${services[serviceKey].name}`, 'success');
                 return;
             }
 
-            // Check for exact or synonym match for devices
-            let device = findDeviceByName(query);
+            // Vérifier une correspondance exacte ou par synonyme pour les dispositifs
+            const device = findDeviceByName(query);
             if (device) {
                 showDeviceDetails(device.name);
                 showNotification(`Dispositif trouvé : ${device.name}`, 'success');
                 return;
             }
 
-            // Try synonym matching for devices
-            const queryWords = query.split(/\s+/);
-            for (const serviceKey in devices) {
-                for (const dev of devices[serviceKey]) {
-                    const deviceSynonyms = synonyms[dev.name.toLowerCase()] || [dev.name.toLowerCase()];
-                    const match = queryWords.some(word => deviceSynonyms.includes(word));
-                    if (match) {
-                        state.currentService = serviceKey;
-                        showDeviceDetails(dev.name);
-                        showNotification(`Dispositif trouvé : ${dev.name}`, 'success');
-                        return;
-                    }
-                }
-            }
-
-            // If on devices page, filter devices
+            // Si sur la page des dispositifs, filtrer les dispositifs
             if (state.currentPage === 'devices-page' && state.currentService) {
                 filterDevices(query);
                 return;
             }
 
-            // Fallback: no match found
+            // Aucun résultat trouvé
             showNotification('Aucun dispositif ou spécialité trouvé.', 'error');
         };
 
@@ -2080,23 +2061,23 @@ const showSearchSuggestions = (query) => {
     const suggestions = [];
     const queryWords = normalizedQuery.split(/\s+/);
 
-    // Search services
+    // Recherche dans les services
     for (const serviceKey in services) {
         const service = services[serviceKey];
         const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
-        const match = queryWords.some(word => serviceSyns.includes(word));
-        if (match) {
+        if (queryWords.some(word => serviceSyns.some(syn => syn.includes(word) || levenshteinDistance(word, syn) <= 3))) {
             suggestions.push({ name: service.name, type: 'service', key: serviceKey });
         }
     }
 
-    // Search devices
+    // Recherche dans les dispositifs
     for (const serviceKey in devices) {
         devices[serviceKey].forEach(device => {
             const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-            const match = queryWords.some(word => deviceSynonyms.includes(word));
-            if (match && !suggestions.some(s => s.name === device.name)) {
-                suggestions.push({ name: device.name, type: 'device', service: serviceKey });
+            if (queryWords.some(word => deviceSynonyms.some(syn => syn.includes(word) || levenshteinDistance(word, syn) <= 3))) {
+                if (!suggestions.some(s => s.name === device.name)) {
+                    suggestions.push({ name: device.name, type: 'device', service: serviceKey });
+                }
             }
         });
     }
