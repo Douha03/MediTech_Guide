@@ -79,7 +79,7 @@
 
         .header-content {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* Déjà présent, mais pour référence */
             align-items: center;
             flex-wrap: wrap;
             gap: 10px;
@@ -114,7 +114,10 @@
         }
 
         .search-container {
-            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end; /* Ajouter ceci pour aligner à droite */
         }
 
         .search-box {
@@ -137,11 +140,20 @@
             background: var(--primary-color);
             color: var(--white);
             border: none;
-            padding: 8px 12px;
+            padding: 8px; /* Modifier pour uniformiser */
+            width: 40px; /* Ajouter une largeur fixe */
+            height: 40px; /* Ajouter une hauteur fixe */
             border-radius: 8px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 16px; /* Ajuster la taille de l'icône */
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: var(--transition);
+        }
+
+        .theme-icon {
+            font-size: 16px; /* Taille de l'icône pour correspondre à l'icône de recherche */
         }
 
         .theme-toggle:hover {
@@ -196,11 +208,6 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        .hero-section {
-            text-align: center;
-            margin-bottom: 40px;
         }
 
         .hero-section h2 {
@@ -942,11 +949,29 @@
                 font-size: 1.5rem;
             }
 
-            .hero-section .btn-primary, .hero-section .btn-chatbot, .hero-section .btn-quiz {
-                margin: 10px 0 0;
-                width: 100%;
-                text-align: center;
-            }
+        .hero-section {
+            text-align: center;
+            margin-bottom: 40px;
+            display: flex; /* Ajouter pour contrôler la disposition */
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-section .btn-primary, .hero-section .btn-chatbot, .hero-section .btn-quiz {
+            padding: 12px 25px; /* Uniformiser le padding */
+            font-size: 1rem;
+            width: 200px; /* Ajouter une largeur fixe pour uniformiser */
+            margin: 10px 0; /* Ajuster pour éviter l'espacement excessif */
+            text-align: center;
+        }
+
+        .hero-section .button-container {
+            display: flex;
+            justify-content: space-between; /* Aligner les boutons aux extrémités */
+            width: 100%;
+            max-width: 450px; /* Limiter la largeur pour éviter un étirement excessif */
+            margin-top: 20px;
+        }
 
             .device-details {
                 padding: 20px;
@@ -999,7 +1024,7 @@
                 <div class="search-container">
                     <input type="text" class="search-box" id="searchBox" placeholder="Rechercher des dispositifs ou spécialités..." aria-label="Rechercher des dispositifs ou spécialités">
                     <button class="theme-toggle" id="searchBtn" aria-label="Rechercher"><i class="fas fa-search"></i></button>
-                    <button class="theme-toggle" id="themeToggle" aria-label="Basculer entre thème clair et sombre">🌙</button>
+                    <button class="theme-toggle" id="themeToggle" aria-label="Basculer entre thème clair et sombre"><span class="theme-icon">🌙</span></button>
                 </div>
             <nav class="nav-breadcrumb" id="breadcrumb" aria-label="Fil d'Ariane"></nav>
         </header>
@@ -1720,22 +1745,30 @@
                 console.warn('findDeviceByName: Nom invalide', name);
                 return null;
             }
-            const normalizedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
+            // Normaliser en supprimant les accents et les caractères spéciaux
+            const normalizedName = name.toLowerCase().trim()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Supprimer les diacritiques
+                .replace(/[^\w\s]/g, '');
             console.debug('Recherche du dispositif avec:', normalizedName); // Debugging
             for (const deviceName in synonyms) {
-                const deviceSynonyms = synonyms[deviceName];
+                const deviceSynonyms = synonyms[deviceName].map(syn => 
+                    syn.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w\s]/g, '')
+                );
                 if (deviceSynonyms.includes(normalizedName)) {
                     for (const service in devices) {
-                        const device = devices[service].find(d => d.name.toLowerCase() === deviceName.toLowerCase());
+                        const device = devices[service].find(d => 
+                            d.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') === 
+                            deviceName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                        );
                         if (device) {
-                            console.debug(`Dispositif trouvé: ${device.name} dans le service: ${service} pour le synonyme: ${normalizedName}`); // Debugging
+                            console.debug(`Dispositif trouvé: ${device.name} dans le service: ${service} pour le synonyme: ${normalizedName}`);
                             state.currentService = service;
                             return device;
                         }
                     }
                 }
             }
-            console.debug('Aucun dispositif trouvé pour:', normalizedName); // Debugging
+            console.debug('Aucun dispositif trouvé pour:', normalizedName);
             return null;
         };
         const createDeviceCard = (device) => {
@@ -1896,7 +1929,7 @@
             'électrocardiographe': ['électrocardiographe', 'ecg', 'ekg', 'cardiographe', 'electrocardio'],
             'électroencéphalographe': ['électroencéphalographe', 'eeg', 'encephalo', 'electroencephalo'],
             'mammographe': ['mammographe', 'mammo', 'mammographie', 'mam'],
-            'échographe pédiatrique': ['échographe pédiatrique', 'échographe pediatrique', 'ultrason pédiatrique', 'écho pédiatrique', 'ultrason pediatrique'],
+            'échographe pédiatrique': ['échographe pédiatrique', 'échographe pediatrique', 'echo', 'ultrason pédiatrique', 'écho pédiatrique', 'ultrason pediatrique'],
             'incubateur néonatal': ['incubateur néonatal', 'incubateur neonatal', 'neonatal incubator'],
             'moniteur néonatal': ['moniteur néonatal', 'moniteur neonatal', 'neonatal monitor'],
             'défibrillateur automatique': ['défibrillateur automatique', 'défibrillateur', 'defibrillateur', 'defib'],
@@ -1917,7 +1950,7 @@
             'appareil d\'ecmo': ['appareil d\'ecmo', 'ecmo'],
             'moniteur multiparamètres': ['moniteur multiparamètres', 'moniteur multi-paramètres', 'multiparameter monitor'],
             'pompe à perfusion': ['pompe à perfusion', 'infusion pump'],
-            'ventilateur intensif': ['ventilateur intensif', 'venti']
+            'ventilateur intensif': ['ventilateur intensif', 'venti','ventil']
         };
 
 const callGemini = async (query) => {
