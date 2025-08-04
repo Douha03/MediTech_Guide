@@ -117,38 +117,6 @@
             position: relative;
         }
 
-        .search-suggestions {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: var(--white);
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            box-shadow: var(--shadow-sm);
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1100;
-            display: none;
-        }
-
-        .search-suggestions.show {
-            display: block;
-        }
-
-        .suggestion-item {
-            padding: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            color: var(--text-dark);
-            transition: var(--transition);
-        }
-
-        .suggestion-item:hover, .suggestion-item.selected {
-            background: var(--primary-color);
-            color: var(--white);
-        }
-
         .search-box {
             background: var(--bg-light);
             border: 1px solid var(--border-light);
@@ -1030,10 +998,9 @@
                 </div>
                 <div class="search-container">
                     <input type="text" class="search-box" id="searchBox" placeholder="Rechercher des dispositifs ou spécialités..." aria-label="Rechercher des dispositifs ou spécialités">
-                    <div class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="Suggestions de recherche"></div>
+                    <button class="theme-toggle" id="searchBtn" aria-label="Rechercher"><i class="fas fa-search"></i></button>
                     <button class="theme-toggle" id="themeToggle" aria-label="Basculer entre thème clair et sombre">🌙</button>
                 </div>
-            </div>
             <nav class="nav-breadcrumb" id="breadcrumb" aria-label="Fil d'Ariane"></nav>
         </header>
 
@@ -1190,7 +1157,7 @@
             pediatrie: [
                 {
                     name: 'Échographe Pédiatrique',
-                    image: 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/ecoped.png ',
+                    image: 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/ecoped.png',
                     role: 'Diagnostic par imagerie pour enfants et nourrissons.',
                     principle: 'Utilise des ultrasons pour produire des images des organes internes en temps réel.',
                     components: ['Sonde à ultrasons', 'Écran Full HD', 'Système de traitement d\'image', 'Clavier de commande'],
@@ -1200,7 +1167,7 @@
                 },
                 {
                     name: 'Moniteur Néonatal',
-                    image: 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/Mneo.jpg ',
+                    image: 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/Mneo.jpg',
                     role: 'Surveillance continue des paramètres vitaux des nouveau-nés.',
                     principle: 'Mesure et affiche les signaux vitaux comme le rythme cardiaque et la saturation en oxygène.',
                     components: ['Capteurs SpO2', 'Électrodes ECG', 'Écran tactile', 'Système d\'alarme'],
@@ -1724,69 +1691,53 @@
             }
         };
 
-        // Fonction de distance de Levenshtein simplifiée
-        const levenshteinDistance = (a, b) => {
-            if (a.length === 0) return b.length;
-            if (b.length === 0) return a.length;
-            const matrix = [];
-            for (let i = 0; i <= b.length; i++) {
-                matrix[i] = [i];
-            }
-            for (let j = 0; j <= a.length; j++) {
-                matrix[0][j] = j;
-            }
-            for (let i = 1; i <= b.length; i++) {
-                for (let j = 1; j <= a.length; j++) {
-                    const cost = a[j - 1] === b[i - 1] ? 0 : 1;
-                    matrix[i][j] = Math.min(
-                        matrix[i - 1][j] + 1,
-                        matrix[i][j - 1] + 1,
-                        matrix[i - 1][j - 1] + cost
-                    );
-                }
-            }
-            return matrix[b.length][a.length];
-        };
+    
 
                 // Device handling
         const findServiceByName = (name) => {
+            if (!name || typeof name !== 'string') {
+                console.warn('findServiceByName: Nom invalide', name);
+                return null;
+            }
             const normalizedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
+            console.debug('Recherche du service avec:', normalizedName); // Debugging
             for (const serviceKey in services) {
                 const service = services[serviceKey];
                 const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
                 for (const syn of serviceSyns) {
-                    if (syn === normalizedName || normalizedName.includes(syn) || levenshteinDistance(normalizedName, syn) <= 3) {
+                    if (syn === normalizedName) {
+                        console.debug(`Service trouvé: ${serviceKey} pour le synonyme: ${syn}`); // Debugging
                         return serviceKey;
                     }
                 }
             }
+            console.debug('Aucun service trouvé pour:', normalizedName); // Debugging
             return null;
         };
-
         // Trouver un dispositif par nom ou synonyme
         const findDeviceByName = (name) => {
             if (!name || typeof name !== 'string') {
-                console.warn('findDeviceByName: Invalid name parameter', name);
+                console.warn('findDeviceByName: Nom invalide', name);
                 return null;
             }
             const normalizedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
-            for (const service in devices) {
-                const device = devices[service].find(d => {
-                    const deviceSynonyms = synonyms[d.name.toLowerCase()] || [d.name.toLowerCase()];
-                    return deviceSynonyms.some(syn => 
-                        syn === normalizedName || 
-                        normalizedName.includes(syn) || 
-                        levenshteinDistance(normalizedName, syn) <= 3
-                    );
-                });
-                if (device) {
-                    state.currentService = service;
-                    return device;
+            console.debug('Recherche du dispositif avec:', normalizedName); // Debugging
+            for (const deviceName in synonyms) {
+                const deviceSynonyms = synonyms[deviceName];
+                if (deviceSynonyms.includes(normalizedName)) {
+                    for (const service in devices) {
+                        const device = devices[service].find(d => d.name.toLowerCase() === deviceName.toLowerCase());
+                        if (device) {
+                            console.debug(`Dispositif trouvé: ${device.name} dans le service: ${service} pour le synonyme: ${normalizedName}`); // Debugging
+                            state.currentService = service;
+                            return device;
+                        }
+                    }
                 }
             }
+            console.debug('Aucun dispositif trouvé pour:', normalizedName); // Debugging
             return null;
         };
-
         const createDeviceCard = (device) => {
             const card = document.createElement('div');
             card.className = 'device-card';
@@ -1862,43 +1813,36 @@
 
         // Search handling
         const handleSearch = (query) => {
-            query = query.trim().toLowerCase();
-            const suggestionsContainer = $('#searchSuggestions');
-            if (suggestionsContainer) {
-                suggestionsContainer.classList.remove('show');
-            }
-
-            if (!query) {
-                if (state.currentPage === 'devices-page' && state.currentService) {
-                    showDevices(state.currentService);
-                }
+            if (!query || typeof query !== 'string') {
+                console.warn('handleSearch: Requête invalide', query);
+                showNotification('Veuillez entrer un terme de recherche.', 'error');
                 return;
             }
 
-            // Vérifier d'abord une correspondance avec un service
-            const serviceKey = findServiceByName(query);
+            const normalizedQuery = query.trim().toLowerCase().replace(/[^\w\s]/g, '');
+            console.debug('Traitement de la recherche avec:', normalizedQuery); // Debugging
+
+            // Vérifier si la requête correspond à un service
+            const serviceKey = findServiceByName(normalizedQuery);
             if (serviceKey) {
+                console.debug(`Redirection vers le service: ${services[serviceKey].name}`); // Debugging
                 showServices(serviceKey);
                 showNotification(`Spécialité trouvée : ${services[serviceKey].name}`, 'success');
                 return;
             }
 
-            // Vérifier une correspondance exacte ou par synonyme pour les dispositifs
-            const device = findDeviceByName(query);
+            // Vérifier si la requête correspond à un dispositif
+            const device = findDeviceByName(normalizedQuery);
             if (device) {
+                console.debug(`Redirection vers le dispositif: ${device.name}`); // Debugging
                 showDeviceDetails(device.name);
-                showNotification(`Dispositif trouvé : ${device.name}`, 'success');
-                return;
-            }
-
-            // Si sur la page des dispositifs, filtrer les dispositifs
-            if (state.currentPage === 'devices-page' && state.currentService) {
-                filterDevices(query);
+                showNotification(`Équipement trouvé : ${device.name}`, 'success');
                 return;
             }
 
             // Aucun résultat trouvé
-            showNotification('Aucun dispositif ou spécialité trouvé.', 'error');
+            console.warn('Aucun résultat pour la recherche:', normalizedQuery); // Debugging
+            showNotification('Aucun équipement ou spécialité trouvé.', 'error');
         };
 
         const filterDevices = (query) => {
@@ -1946,35 +1890,34 @@
             'bloc_opératoire': ['bloc opératoire', 'bloc operatoire', 'chirurgie', 'salle op'],
             'réanimation': ['réanimation', 'reanimation', 'soins intensifs', 'soins critiques']
         };
-
         const synonyms = {
-            'scanner': ['scanner', 'tomodensitomètre', 'ct', 'scaner', 'scannr', 'tomodensitometre', 'ct scanner', 'tomo'],
-            'irm': ['irm', 'résonance magnétique', 'mri', 'irmm', 'resonance magnetique', 'mrii', 'aoi femeini', 'mri scan', 'résonnance', 'imagérie magnétique', 'rmi'],
-            'ecg': ['électrocardiographe', 'ecg', 'ekg', 'electrocardiographe', 'elctrocardiographe', 'cardiographe', 'electrocardio', 'ekg cardio'],
-            'eeg': ['électroencéphalographe', 'eeg', 'electroencephalographe', 'eeeg', 'elctroencephalo', 'encephalo', 'electroencephalo'],
-            'mammographe': ['mammographe ', 'mammo','mamo', 'mammogra', 'mammographie', 'mammograph', 'mam'],
-            'échographe pédiatrique': ['échographe pédiatrique','echo', 'échographe pediatrique', 'échographe', 'ultrason pédiatrique', 'ultrasons pédiatriques', 'ultrasound pediatric', 'echo pediatrique', 'echo', 'écho', 'echo pédiatrique', 'ultrason pediatrique'],
-            'incubateur neonatal': ['incubateur néonatal', 'incubateur neonatal', 'incubator neonatal', 'berceau chauffant néonatal', 'neonatal incubator'],
-            'moniteur neonatal': ['moniteur néonatal', 'moniteur neonatal', 'monitor neonatal', 'moniteur bébé', 'moniteur nourrisson', 'neonatal monitor'],
-            'défibrillateur automatique': ['défibrillateur automatique', 'défibrillateur', 'defibrillateur', 'defibrillator automatique', 'defib automatique', 'defib'],
-            'échocardiographe': ['échocardiographe', 'échocardiogramme', 'echo coeur', 'échographie cardiaque', 'echocardiogram', 'echo cardio', 'écho cardiaque'],
-            'doppler transcranienne': ['doppler', 'doppler transcranien', 'dopp', 'doppler', 'ultrason doppler', 'transcranial doppler'],
-            'arthroscope': ['arthroscope', 'arthroscope osseux', 'arthroscopy', 'arthro'],
-            'coloscope': ['coloscope', 'endoscope digestif', 'coloscopie', 'endoscope', 'coloscopy', 'digestive endoscope', 'colonoscope'],
-            'gamma knife': ['gamma knife', 'gamma knife radiothérapie', 'radiothérapie gamma knife', 'gamma ray'],
-            'pet scanner': ['pet scanner', 'pet scan', 'scanner pet', 'pet ct', 'tomographie par émission de positons', 'pet'],
-            'radiothérapie linac': ['linac', 'radiothérapie linac', 'accélérateur linéaire', 'linear accelerator'],
-            'autoclave': ['autoclave', 'stérilisateur vapeur', 'autoclav', 'sterilisateur vapeur', 'steam sterilizer'],
-            'stérilisateur plasma': ['stérilisateur plasma', 'sterilisateur plasma', 'plasma sterilizer'],
-            'stérilisateur uv': ['stérilisateur uv', 'sterilisateur uv', 'uv sterilizer', 'stérilisateur ultraviolets'],
-            'lampe opératoire': ['lampe opératoire', 'lampe chirurgicale', 'lampe operation', 'surgical lamp'],
-            'robot chirurgical': ['robot chirurgical', 'robot chirurgie', 'surgical robot', 'robot chirurgicale', 'robot surgery', 'robot'],
-            'système de navigation chirurgical': ['système de navigation chirurgical', 'navigation chirurgicale', 'surgical navigation system', 'nav chirurgicale'],
-            'tableau chirurgical': ['tableau chirurgical', 'table chirurgicale', 'surgical table', 'tableau opératoire'],
-            'appareil d\'ecmo': ['appareil d\'ecmo', 'ecmo', 'ecmo device', 'oxygénation extracorporelle'],
-            'moniteur multiparamètre': ['moniteur multiparamètre', 'moniteur multi-paramètre', 'moniteur multi paramètre', 'multiparameter monitor', 'multi monitor'],
-            'pompe à perfusion': ['pompe à perfusion', 'perfuseur','perf','pompe', 'infuseur', 'infusion pump', 'pompe perfusion'],
-            'Ventilateur Intensif': ['venti', 'Venti intensif', 'ventilateur intensif']
+            'scanner': ['scanner', 'tomodensitomètre', 'ct', 'ct scanner', 'tomo'],
+            'irm': ['irm', 'résonance magnétique', 'mri', 'mri scan', 'résonnance', 'imagérie magnétique', 'rmi'],
+            'électrocardiographe': ['électrocardiographe', 'ecg', 'ekg', 'cardiographe', 'electrocardio'],
+            'électroencéphalographe': ['électroencéphalographe', 'eeg', 'encephalo', 'electroencephalo'],
+            'mammographe': ['mammographe', 'mammo', 'mammographie', 'mam'],
+            'échographe pédiatrique': ['échographe pédiatrique', 'échographe pediatrique', 'ultrason pédiatrique', 'écho pédiatrique', 'ultrason pediatrique'],
+            'incubateur néonatal': ['incubateur néonatal', 'incubateur neonatal', 'neonatal incubator'],
+            'moniteur néonatal': ['moniteur néonatal', 'moniteur neonatal', 'neonatal monitor'],
+            'défibrillateur automatique': ['défibrillateur automatique', 'défibrillateur', 'defibrillateur', 'defib'],
+            'échocardiographe': ['échocardiographe', 'échocardiogramme', 'écho cardiaque'],
+            'doppler transcrânien': ['doppler transcrânien', 'doppler', 'ultrason doppler'],
+            'arthroscope': ['arthroscope', 'arthroscopy'],
+            'coloscope': ['coloscope', 'coloscopie', 'colonoscope'],
+            'gamma knife': ['gamma knife', 'gamma ray'],
+            'pet scanner': ['pet scanner', 'pet scan', 'pet ct'],
+            'radiothérapie linac': ['radiothérapie linac', 'linac', 'accélérateur linéaire'],
+            'autoclave': ['autoclave', 'stérilisateur vapeur'],
+            'stérilisateur plasma': ['stérilisateur plasma', 'plasma sterilizer'],
+            'stérilisateur uv': ['stérilisateur uv', 'uv sterilizer'],
+            'lampe opératoire': ['lampe opératoire', 'lampe chirurgicale'],
+            'robot chirurgical': ['robot chirurgical', 'surgical robot'],
+            'système de navigation chirurgical': ['système de navigation chirurgical', 'navigation chirurgicale'],
+            'tableau chirurgical': ['tableau chirurgical', 'table chirurgicale'],
+            'appareil d\'ecmo': ['appareil d\'ecmo', 'ecmo'],
+            'moniteur multiparamètres': ['moniteur multiparamètres', 'moniteur multi-paramètres', 'multiparameter monitor'],
+            'pompe à perfusion': ['pompe à perfusion', 'infusion pump'],
+            'ventilateur intensif': ['ventilateur intensif', 'venti']
         };
 
 const callGemini = async (query) => {
@@ -2047,68 +1990,6 @@ const showTypingAnimation = (show) => {
     }
 };
 
-const showSearchSuggestions = (query) => {
-    const suggestionsContainer = $('#searchSuggestions');
-    if (!suggestionsContainer) return;
-
-    suggestionsContainer.innerHTML = '';
-    if (!query.trim()) {
-        suggestionsContainer.classList.remove('show');
-        return;
-    }
-
-    const normalizedQuery = query.toLowerCase().trim();
-    const suggestions = [];
-    const queryWords = normalizedQuery.split(/\s+/);
-
-    // Recherche dans les services
-    for (const serviceKey in services) {
-        const service = services[serviceKey];
-        const serviceSyns = serviceSynonyms[serviceKey] || [serviceKey, service.name.toLowerCase()];
-        if (queryWords.some(word => serviceSyns.some(syn => syn.includes(word) || levenshteinDistance(word, syn) <= 3))) {
-            suggestions.push({ name: service.name, type: 'service', key: serviceKey });
-        }
-    }
-
-    // Recherche dans les dispositifs
-    for (const serviceKey in devices) {
-        devices[serviceKey].forEach(device => {
-            const deviceSynonyms = synonyms[device.name.toLowerCase()] || [device.name.toLowerCase()];
-            if (queryWords.some(word => deviceSynonyms.some(syn => syn.includes(word) || levenshteinDistance(word, syn) <= 3))) {
-                if (!suggestions.some(s => s.name === device.name)) {
-                    suggestions.push({ name: device.name, type: 'device', service: serviceKey });
-                }
-            }
-        });
-    }
-
-    if (suggestions.length === 0) {
-        suggestionsContainer.classList.remove('show');
-        return;
-    }
-
-    suggestions.slice(0, 5).forEach(suggestion => {
-        const item = document.createElement('div');
-        item.className = 'suggestion-item';
-        item.setAttribute('tabindex', '0');
-        item.textContent = suggestion.name;
-        item.setAttribute('role', 'option');
-        item.setAttribute('aria-label', `Naviguer vers ${suggestion.name}`);
-        item.addEventListener('click', () => {
-            $('#searchBox').value = suggestion.name;
-            suggestionsContainer.classList.remove('show');
-            if (suggestion.type === 'device') {
-                state.currentService = suggestion.service;
-                showDeviceDetails(suggestion.name);
-            } else {
-                showServices(suggestion.key);
-            }
-        });
-        suggestionsContainer.appendChild(item);
-    });
-
-    suggestionsContainer.classList.add('show');
-};
 const processChatbotQuery = async (query) => {
     try {
         if (!devices || !services) {
@@ -2157,42 +2038,17 @@ const processChatbotQuery = async (query) => {
 // Gestion des événements du chatbot
 const initEventListeners = () => {
     const searchBox = $('#searchBox');
-    if (searchBox) {
-        searchBox.addEventListener('input', debounce((e) => {
-            showSearchSuggestions(e.target.value);
-            handleSearch(e.target.value);
-        }, 300));
+    const searchBtn = $('#searchBtn');
+    if (searchBox && searchBtn) {
         searchBox.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                handleSearch(e.target.value);
+                console.debug('Recherche déclenchée par Entrée:', searchBox.value); // Debugging
+                handleSearch(searchBox.value);
             }
         });
-        searchBox.addEventListener('keydown', (e) => {
-            const suggestionsContainer = $('#searchSuggestions');
-            const suggestionItems = $$('.suggestion-item', suggestionsContainer);
-            if (!suggestionItems.length) return;
-
-            let selectedIndex = suggestionItems.findIndex(item => item.classList.contains('selected'));
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                if (selectedIndex < suggestionItems.length - 1) {
-                    if (selectedIndex >= 0) suggestionItems[selectedIndex].classList.remove('selected');
-                    selectedIndex += 1;
-                    suggestionItems[selectedIndex].classList.add('selected');
-                    suggestionItems[selectedIndex].focus();
-                }
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                if (selectedIndex > 0) {
-                    suggestionItems[selectedIndex].classList.remove('selected');
-                    selectedIndex -= 1;
-                    suggestionItems[selectedIndex].classList.add('selected');
-                    suggestionItems[selectedIndex].focus();
-                }
-            } else if (e.key === 'Enter' && selectedIndex >= 0) {
-                e.preventDefault();
-                suggestionItems[selectedIndex].click();
-            }
+        searchBtn.addEventListener('click', () => {
+            console.debug('Recherche déclenchée par clic:', searchBox.value); // Debugging
+            handleSearch(searchBox.value);
         });
     }
 
