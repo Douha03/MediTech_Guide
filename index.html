@@ -79,10 +79,10 @@
 
         .header-content {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* Maintenir la justification pour espacer logo et recherche */
             align-items: center;
             flex-wrap: wrap;
-            gap: 8 px;
+            gap: 15px;
         }
 
         .logo {
@@ -117,7 +117,8 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            justify-content: center; /* Alignement à gauche */
+            justify-content: flex-end; /* Aligner à droite */
+            width: auto; /* Ajuster la largeur automatiquement */
         }
 
         .search-box {
@@ -231,9 +232,9 @@
             display: flex;
             flex-direction: column; /* Stack buttons vertically */
             align-items: center; /* Center buttons horizontally */
-            gap: 15px; /* Spacing between buttons */
+            gap: 20px; /* Augmenter l'espacement entre les boutons */
             width: 100%;
-            max-width: 250px; /* Limit button width */
+            max-width: 350px; /* Augmenter la largeur maximale des boutons */
             margin-top: 20px;
         }
 
@@ -241,12 +242,12 @@
         .hero-section .btn-chatbot,
         .hero-section .btn-quiz,
         .hero-section .btn-emergency {
-            padding: 12px 25px;
-            font-size: 1rem;
-            width: 100%; /* Full width within max-width */
+            padding: 16px 35px; /* Augmenter le padding pour des boutons plus grands */
+            font-size: 1.2rem; /* Augmenter la taille de la police */
+            width: 100%; /* Full width dans max-width */
             text-align: center;
+            border-radius: 10px; /* Coins légèrement plus arrondis pour l'esthétique */
         }
-
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: var(--white);
@@ -897,6 +898,12 @@
             width: 90%;
             position: relative;
             box-shadow: var(--shadow-md);
+            max-height: 90vh; /* Augmenter légèrement pour s'adapter à la plupart des écrans */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Répartir l'espace pour garder le bouton en bas */
+            min-height: 400px; /* Hauteur minimale pour éviter un modal trop petit */
+            overflow-y: auto; /* Défilement uniquement si nécessaire */
         }
 
         .modal-close {
@@ -917,6 +924,10 @@
 
         .emergency-container {
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Réduire l'espacement pour compacter le contenu */
+            flex-grow: 1; /* Permet au conteneur de s'adapter à l'espace disponible */
         }
 
         .emergency-alert {
@@ -925,7 +936,7 @@
             padding: 10px;
             border-radius: 8px;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* Réduire la marge pour compacter */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -934,34 +945,37 @@
         }
 
         .emergency-case {
-            font-size: 1.2rem;
+            font-size: 1.1rem; /* Réduire légèrement la taille de la police */
             font-weight: 500;
-            margin-bottom: 20px;
-            padding: 15px;
+            margin-bottom: 10px; /* Réduire la marge pour compacter */
+            padding: 10px; /* Réduire le padding pour compacter */
             background: var(--bg-light);
             border-radius: 8px;
             border: 1px solid var(--border-light);
+            line-height: 1.4; /* Réduire la hauteur de ligne pour compacter */
         }
 
         .emergency-timer {
-            font-size: 1.1rem;
+            font-size: 1rem; /* Réduire légèrement la taille de la police */
             font-weight: 600;
             color: var(--error-color);
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* Réduire la marge pour compacter */
         }
 
         .emergency-options {
             display: grid;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px; /* Réduire l'espacement entre les options */
+            margin-bottom: 10px; /* Réduire la marge pour compacter */
+            max-height: 180px; /* Limiter la hauteur des options */
+            overflow-y: auto; /* Défilement interne si trop d'options */
         }
 
         .emergency-option {
             background: var(--bg-light);
             border: 2px solid var(--border-light);
-            padding: 12px;
+            padding: 10px; /* Réduire le padding pour compacter */
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 0.95rem; /* Réduire légèrement la taille de la police */
             cursor: pointer;
             transition: var(--transition);
         }
@@ -990,9 +1004,29 @@
         }
 
         .emergency-feedback {
-            font-size: 1rem;
+            font-size: 0.95rem; /* Réduire légèrement la taille de la police */
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* Réduire la marge pour compacter */
+            min-height: 24px; /* Réserver un espace pour éviter le décalage */
+        }
+
+        .emergency-restart-btn {
+            position: sticky;
+            bottom: 10px;
+            z-index: 10;
+            margin-top: 10px; /* Ajouter un espacement pour séparer du contenu */
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .emergency-restart-btn:hover {
+            background: var(--primary-dark);
         }
 
         @keyframes pulse {
