@@ -1110,13 +1110,12 @@
                     <input type="text" id="chatbotInput" placeholder="Posez une question..." aria-label="Saisir une question pour le chatbot">
                     <button id="chatbotSend" aria-label="Envoyer la question">➤</button>
                 </div>
+            </section>
 
             <section id="quiz-page" class="content-section hidden" aria-labelledby="quiz-title">
                 <button class="back-btn" id="quizBackBtn" aria-label="Retour à l'accueil"><i class="fas fa-arrow-left"></i> Retour</button>
                 <h1 class="page-title" id="quiz-title">Quiz sur les Technologies Médicales</h1>
-                <div class="quiz-container" id="quizContainer">
-                </div>
-
+                <div class="quiz-container" id="quizContainer"></div>
             </section>
         </main>
 
@@ -1571,6 +1570,7 @@
         };
 
         const showPage = (pageId, title, breadcrumbItems = []) => {
+            console.debug('showPage appelée pour:', pageId); // Log pour débogage
             hideAllPages();
             const page = $(`#${pageId}`);
             if (!page) {
@@ -2119,53 +2119,71 @@ const processChatbotQuery = async (query) => {
 };
 // Gestion des événements du chatbot
 const initEventListeners = () => {
-    const searchBox = $('#searchBox');
-    const searchBtn = $('#searchBtn');
-    if (searchBox && searchBtn) {
-        searchBox.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                console.debug('Recherche déclenchée par Entrée:', searchBox.value); // Debugging
-                handleSearch(searchBox.value);
-            }
-        });
-        searchBtn.addEventListener('click', () => {
-            console.debug('Recherche déclenchée par clic:', searchBox.value); // Debugging
-            handleSearch(searchBox.value);
-        });
-    }
+    console.debug('initEventListeners appelée'); // Log pour débogage
 
-    const exploreServicesBtn = $('#exploreServicesBtn');
-    if (exploreServicesBtn) {
-        exploreServicesBtn.addEventListener('click', () => showServices());
-    }
-    const homeBackBtn = $('#homeBackBtn');
-    if (homeBackBtn) {
-        homeBackBtn.addEventListener('click', showHome);
-    }
-    const servicesBackBtn = $('#servicesBackBtn');
-    if (servicesBackBtn) {
-        servicesBackBtn.addEventListener('click', () => showServices());
-    }
-    const devicesBackBtn = $('#devicesBackBtn');
-    if (devicesBackBtn) {
-        devicesBackBtn.addEventListener('click', () => showDevices(state.currentService));
-    }
-    const chatbotBackBtn = $('#chatbotBackBtn');
-    if (chatbotBackBtn) {
-        chatbotBackBtn.addEventListener('click', () => {
+    // Fonction utilitaire pour gérer les boutons de retour
+    const handleBackButton = (button, fallbackAction = showHome) => {
+        if (!button) {
+            console.error('Bouton de retour non trouvé');
+            return;
+        }
+        button.addEventListener('click', () => {
+            console.debug('Bouton de retour cliqué:', button.id);
             const previousPage = state.navigationHistory[state.navigationHistory.length - 2];
             if (previousPage) {
                 previousPage.action();
                 state.navigationHistory.pop();
             } else {
-                showHome();
+                fallbackAction();
             }
         });
+    };
+
+    // Section : Recherche
+    const searchBox = $('#searchBox');
+    const searchBtn = $('#searchBtn');
+    if (searchBox && searchBtn) {
+        searchBox.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                console.debug('Recherche déclenchée par Entrée:', searchBox.value);
+                handleSearch(searchBox.value);
+            }
+        });
+        searchBtn.addEventListener('click', () => {
+            console.debug('Recherche déclenchée par clic:', searchBox.value);
+            handleSearch(searchBox.value);
+        });
+    } else {
+        console.error('searchBox ou searchBtn non trouvé');
     }
 
+    // Section : Navigation principale
+    const exploreServicesBtn = $('#exploreServicesBtn');
+    if (exploreServicesBtn) {
+        exploreServicesBtn.addEventListener('click', () => {
+            console.debug('Bouton Explorer les Spécialités cliqué');
+            showServices();
+        });
+    } else {
+        console.error('exploreServicesBtn non trouvé');
+    }
+
+    // Section : Boutons de retour
+    handleBackButton($('#homeBackBtn'), showHome);
+    handleBackButton($('#servicesBackBtn'), showHome);
+    handleBackButton($('#devicesBackBtn'), () => showServices());
+    handleBackButton($('#chatbotBackBtn'), showHome);
+    handleBackButton($('#quizBackBtn'), showHome); // Ajout pour quizBackBtn
+
+    // Section : Chatbot
     const chatGuideBtn = $('#chatGuideBtn');
     if (chatGuideBtn) {
-        chatGuideBtn.addEventListener('click', showChatbotPage);
+        chatGuideBtn.addEventListener('click', () => {
+            console.debug('Bouton ChatGuide IA cliqué');
+            showChatbotPage();
+        });
+    } else {
+        console.error('chatGuideBtn non trouvé');
     }
 
     const chatbotSend = $('#chatbotSend');
@@ -2173,14 +2191,18 @@ const initEventListeners = () => {
     if (chatbotSend && chatbotInput) {
         chatbotSend.addEventListener('click', async () => {
             const query = chatbotInput.value.trim();
-            if (!query) return;
+            if (!query) {
+                console.debug('Chatbot : Entrée vide, aucune action');
+                return;
+            }
+            console.debug('Chatbot : Envoi de la requête:', query);
             showTypingAnimation(true);
             try {
                 await processChatbotQuery(query);
                 chatbotInput.value = '';
             } catch (error) {
                 showTypingAnimation(false);
-                console.error('Error in chatbot query:', error);
+                console.error('Erreur dans la requête du chatbot:', error);
                 showNotification('Erreur lors du traitement de la question.', 'error');
                 addChatMessage('Désolé, une erreur est survenue. Essayez de reformuler votre question.', false);
                 chatbotInput.value = '';
@@ -2188,28 +2210,47 @@ const initEventListeners = () => {
         });
         chatbotInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                console.debug('Chatbot : Entrée déclenchée par Entrée');
                 chatbotSend.click();
             }
         });
+    } else {
+        console.error('chatbotSend ou chatbotInput non trouvé');
     }
 
+    // Section : Tri des dispositifs
     const sortSelect = $('#sortSelect');
     if (sortSelect) {
         sortSelect.addEventListener('change', () => {
             if (state.currentService) {
+                console.debug('Tri des dispositifs changé:', sortSelect.value);
                 showDevices(state.currentService);
             }
         });
+    } else {
+        console.error('sortSelect non trouvé');
     }
 
+    // Section : Thème
     const themeToggle = $('#themeToggle');
     if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
+        themeToggle.addEventListener('click', () => {
+            console.debug('Bouton de changement de thème cliqué');
+            toggleTheme();
+        });
+    } else {
+        console.error('themeToggle non trouvé');
     }
 
+    // Section : Quiz
     const generateQuizBtn = $('#generateQuizBtn');
     if (generateQuizBtn) {
-        generateQuizBtn.addEventListener('click', generateQuiz);
+        generateQuizBtn.addEventListener('click', () => {
+            console.debug('Bouton Générer un Quiz cliqué');
+            generateQuiz();
+        });
+    } else {
+        console.error('generateQuizBtn non trouvé');
     }
 };
 // Quiz Generation
@@ -2336,6 +2377,7 @@ const generateQuiz = () => {
     let score = 0;
 
     const showQuizPage = () => {
+        console.debug('showQuizPage appelée'); // Log pour débogage
         showPage('quiz-page', 'Quiz sur les Technologies Médicales', [
             { text: 'Quiz', action: showQuizPage }
         ]);
@@ -2344,6 +2386,7 @@ const generateQuiz = () => {
     };
 
     const renderQuizQuestion = () => {
+        console.debug('renderQuizQuestion appelée, index:', currentQuestionIndex, 'questions:', quizQuestions); // Log pour débogage
         const quizContainer = $('#quizContainer');
         if (!quizContainer) {
             console.error('quizContainer element not found');
