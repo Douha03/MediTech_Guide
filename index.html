@@ -228,22 +228,27 @@
         }
 
         .hero-section .button-container {
-            display: flex;
-            justify-content: center; /* Centrer les boutons */
-            gap: 15px; /* Espacement entre les boutons */
+            flex-direction: column; /* Stack buttons vertically */
+            align-items: center; /* Center buttons horizontally */
+            gap: 15px;
             width: 100%;
-            max-width: 650px; /* Ajuster la largeur maximale */
+            max-width: 650px;
             margin-top: 20px;
         }
 
-        .hero-section .btn-primary,
+        .hero-section .btn-primary {
+            padding: 16px 30px; /* Increase padding for larger size */
+            font-size: 1.2rem; /* Larger font size */
+            width: 250px; /* Wider button */
+            margin-bottom: 20px; /* Add space below to separate from other buttons */
+        }
         .hero-section .btn-chatbot,
-        .hero-section .btn-quiz {
+        .hero-section .btn-quiz,
+        .hero-section .btn-emergency {
             padding: 12px 25px;
             font-size: 1rem;
             width: 200px;
-            margin: 0; /* Supprimer les marges */
-            text-align: center;
+            margin: 0;
         }
 
         .btn-primary {
@@ -905,10 +910,10 @@
 
         .modal-content {
             background: var(--white);
-            padding: 20px;
+            padding: 15px; /* Reduced padding */
             border-radius: 12px;
-            max-width: 600px;
-            width: 90%;
+            max-width: 500px; /* Reduced from 600px */
+            width: 85%; /* Slightly smaller width */
             position: relative;
             box-shadow: var(--shadow-md);
         }
@@ -1165,6 +1170,7 @@
     </style>
 </head>
 <body>
+<audio id="emergencySound" src="https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/pdfs/Hospital Beep (Pitido hospital) [Video and Sound] [Download Link].mp3"></audio>
     <noscript>
         <div class="no-js" role="alert">
             JavaScript est désactivé. Veuillez l'activer pour une expérience optimale.
@@ -2424,6 +2430,28 @@ const initEventListeners = () => {
         });
     } else {
         console.error('generateQuizBtn non trouvé');
+    }
+
+    // Section : Simulateur d'Urgence
+    const emergencySimBtn = $('#emergencySimBtn');
+    if (emergencySimBtn) {
+        emergencySimBtn.addEventListener('click', () => {
+            console.debug('Bouton Simulateur d\'Urgence cliqué');
+            const sound = $('#emergencySound');
+            if (sound) {
+                sound.play().catch(error => {
+                    console.error('Erreur lors de la lecture du son:', error);
+                });
+            }
+            showPage('emergency-sim-page', 'Simulateur d\'Urgence Médicale', [
+                { text: 'Accueil', action: showHome },
+                { text: 'Simulateur d\'Urgence', action: () => showPage('emergency-sim-page', 'Simulateur d\'Urgence Médicale') }
+            ]);
+            $('#emergencyModal').style.display = 'flex';
+            startEmergencySimulation();
+        });
+    } else {
+        console.error('emergencySimBtn non trouvé');
     }
 };
 // Quiz Generation
