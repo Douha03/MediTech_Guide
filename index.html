@@ -229,20 +229,21 @@
 
         .hero-section .button-container {
             display: flex;
-            justify-content: center; /* Centrer les boutons */
-            gap: 15px; /* Espacement entre les boutons */
+            flex-direction: column; /* Stack buttons vertically */
+            align-items: center; /* Center buttons horizontally */
+            gap: 15px; /* Spacing between buttons */
             width: 100%;
-            max-width: 650px; /* Ajuster la largeur maximale */
+            max-width: 250px; /* Limit button width */
             margin-top: 20px;
         }
 
         .hero-section .btn-primary,
         .hero-section .btn-chatbot,
-        .hero-section .btn-quiz {
+        .hero-section .btn-quiz,
+        .hero-section .btn-emergency {
             padding: 12px 25px;
             font-size: 1rem;
-            width: 200px;
-            margin: 0; /* Supprimer les marges */
+            width: 100%; /* Full width within max-width */
             text-align: center;
         }
 
@@ -531,20 +532,6 @@
                 font-size: 1.5rem;
             }
 
-            .hero-section .button-container {
-                flex-direction: column; /* Empiler les boutons verticalement */
-                align-items: center; /* Centrer les boutons */
-                max-width: 300px; /* Réduire la largeur sur mobile */
-            }
-
-            .hero-section .btn-primary,
-            .hero-section .btn-chatbot,
-            .hero-section .btn-quiz {
-                width: 100%; /* Pleine largeur sur mobile */
-                max-width: 250px; /* Limiter la largeur maximale */
-                margin: 5px 0; /* Petite marge verticale */
-            }
-
             .device-details {
                 padding: 20px;
             }
@@ -589,7 +576,6 @@
                 font-size: 1rem;
             }
         }
-
         @media (max-width: 480px) {
             .quiz-container {
                 padding: 20px;
@@ -1194,9 +1180,9 @@
                     <h2>L'Innovation au Service de la Médecine</h2>
                     <p>Explorez notre écosystème de technologies médicales de pointe pour un diagnostic et un traitement précis dans toutes les spécialités médicales.</p>
                     <div class="button-container">
-                        <button class="btn-quiz" id="generateQuizBtn" aria-label="Générer un quiz sur les technologies médicales">Générer un Quiz</button>
                         <button class="btn-primary" id="exploreServicesBtn" aria-label="Explorer les spécialités médicales">Explorer nos Spécialités</button>
                         <button class="btn-chatbot" id="chatGuideBtn" aria-label="Ouvrir le ChatGuide IA">IA ChatGuide</button>
+                        <button class="btn-quiz" id="generateQuizBtn" aria-label="Générer un quiz sur les technologies médicales">Générer un Quiz</button>
                         <button class="btn-emergency" id="emergencySimBtn" aria-label="Lancer le simulateur d'urgence médicale">Simulateur d'Urgence</button>
                     </div>
                 </article>
@@ -2825,6 +2811,10 @@ const emergencyCases = [
         console.debug('Bouton Fermer Simulation cliqué');
         showPage('home-page', 'Technologies Médicales Avancées', []);
         resetEmergencySimulation();
+        if (emergencySound) {
+            emergencySound.pause();
+            emergencySound.currentTime = 0; // Reset sound to start
+        }
     });
 
     // Handle Restart Button
