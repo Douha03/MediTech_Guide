@@ -873,20 +873,20 @@
         }
 
         .btn-emergency {
-            background: linear-gradient(135deg, var(--error-color), var(--warning-color));
-            color: var(--white);
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
+                background: linear-gradient(135deg, var(--error-color, #f56565), var(--warning-color, #f6b65e)) !important;
+                color: var(--white);
+                padding: 12px 25px;
+                border: none;
+                border-radius: 8px;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: var(--transition);
+                box-shadow: var(--shadow-sm);
         }
 
         .btn-emergency:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(245, 101, 101, 0.3);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(245, 101, 101, 0.3);
         }
 
         .modal-overlay {
@@ -2707,181 +2707,195 @@ const toggleTheme = () => {
 };
 
 const emergencyCases = [
-    {
-        description: "Patient de 42 ans, douleurs thoraciques, tension 180/100, respiration irrégulière.",
-        options: [
-            { name: "Électrocardiographe", correct: true, feedback: "Correct ! L'ECG est essentiel pour diagnostiquer une anomalie cardiaque." },
-            { name: "Défibrillateur Automatique", correct: false, feedback: "Incorrect. Un défibrillateur est utilisé pour les arrêts cardiaques, pas pour le diagnostic initial." },
-            { name: "Moniteur Néonatal", correct: false, feedback: "Incorrect. Ce dispositif est destiné aux nouveau-nés." },
-            { name: "Échographe Pédiatrique", correct: false, feedback: "Incorrect. Cet équipement n'est pas adapté à ce cas." }
-        ]
-    },
-    {
-        description: "Patient de 65 ans, inconscience soudaine, pouls faible, suspicion d'arrêt cardiaque.",
-        options: [
-            { name: "Défibrillateur Automatique", correct: true, feedback: "Correct ! Un défibrillateur est crucial pour rétablir le rythme cardiaque." },
-            { name: "Électrocardiographe", correct: false, feedback: "Incorrect. L'ECG est utilisé pour le diagnostic, pas pour une intervention immédiate." },
-            { name: "IRM", correct: false, feedback: "Incorrect. L'IRM n'est pas adaptée pour une urgence immédiate." },
-            { name: "Ventilateur Intensif", correct: false, feedback: "Incorrect. Le ventilateur est utilisé pour la respiration assistée, pas pour un arrêt cardiaque." }
-        ]
-    },
-    {
-        description: "Nouveau-né de 3 jours, hypothermie, fréquence respiratoire lente, saturation en oxygène à 88%.",
-        options: [
-            { name: "Incubateur Néonatal", correct: true, feedback: "Correct ! L'incubateur maintient la température corporelle et stabilise le nouveau-né." },
-            { name: "Échographe Pédiatrique", correct: false, feedback: "Incorrect. L'échographe est utilisé pour l'imagerie, pas pour gérer l'hypothermie." },
-            { name: "Moniteur Néonatal", correct: false, feedback: "Incorrect. Bien que utile pour surveiller, il ne traite pas directement l'hypothermie." },
-            { name: "Défibrillateur Automatique", correct: false, feedback: "Incorrect. Un défibrillateur n'est pas adapté pour les nouveau-nés en hypothermie." }
-        ]
-    },
-    {
-        description: "Patient de 50 ans, suspicion de crise d'épilepsie, convulsions continues depuis 2 minutes.",
-        options: [
-            { name: "Électroencéphalographe", correct: true, feedback: "Correct ! L'EEG est utilisé pour analyser l'activité cérébrale et confirmer une crise épileptique." },
-            { name: "Doppler Transcrânien", correct: false, feedback: "Incorrect. Le Doppler est utilisé pour évaluer le flux sanguin, pas pour les convulsions." },
-            { name: "Ventilateur Intensif", correct: false, feedback: "Incorrect. Le ventilateur n'est pas nécessaire pour une crise épileptique sans détresse respiratoire." },
-            { name: "Scanner", correct: false, feedback: "Incorrect. Un scanner peut être utilisé plus tard, mais pas en urgence pour une crise active." }
-        ]
-    },
-    {
-        description: "Femme de 45 ans, douleur mammaire suspecte, antécédents familiaux de cancer du sein.",
-        options: [
-            { name: "Mammographe", correct: true, feedback: "Correct ! La mammographie est l'outil principal pour le dépistage du cancer du sein." },
-            { name: "IRM", correct: false, feedback: "Incorrect. Une IRM peut être utilisée en complément, mais la mammographie est prioritaire." },
-            { name: "Échographe Pédiatrique", correct: false, feedback: "Incorrect. Cet équipement est spécifique aux enfants." },
-            { name: "PET Scanner", correct: false, feedback: "Incorrect. Le PET Scanner est utilisé pour des diagnostics avancés, pas pour le dépistage initial." }
-        ]
-    },
-    {
-        description: "Patient de 30 ans, douleur abdominale aiguë, suspicion d'appendicite.",
-        options: [
-            { name: "Scanner", correct: true, feedback: "Correct ! Le scanner est idéal pour confirmer une appendicite par imagerie." },
-            { name: "Coloscope", correct: false, feedback: "Incorrect. Le coloscope est utilisé pour explorer le côlon, pas pour l'appendicite." },
-            { name: "Endoscope Digestif", correct: false, feedback: "Incorrect. L'endoscopie n'est pas adaptée pour diagnostiquer une appendicite." },
-            { name: "Densitomètre Osseux", correct: false, feedback: "Incorrect. Cet équipement est utilisé pour la densité osseuse, pas pour les douleurs abdominales." }
-        ]
-    },
-    {
-        description: "Patient de 55 ans, fracture ouverte de la jambe suite à un accident, douleur intense.",
-        options: [
-            { name: "Arthroscope", correct: true, feedback: "Correct ! L'arthroscope peut être utilisé pour évaluer et traiter les lésions articulaires associées à la fracture." },
-            { name: "Densitomètre Osseux", correct: false, feedback: "Incorrect. Le densitomètre est utilisé pour mesurer la densité osseuse, pas pour les fractures aiguës." },
-            { name: "Électrocardiographe", correct: false, feedback: "Incorrect. L'ECG est utilisé pour les problèmes cardiaques, pas pour les fractures." },
-            { name: "IRM", correct: false, feedback: "Incorrect. Une IRM peut être utilisée plus tard, mais pas en urgence pour une fracture ouverte." }
-        ]
-    },
-    {
-        description: "Patient de 70 ans, détresse respiratoire aiguë, saturation en oxygène à 85%.",
-        options: [
-            { name: "Ventilateur Intensif", correct: true, feedback: "Correct ! Le ventilateur est essentiel pour assister la respiration en cas de détresse." },
-            { name: "Moniteur Multiparamètres", correct: false, feedback: "Incorrect. Le moniteur surveille les paramètres vitaux, mais ne traite pas la détresse respiratoire." },
-            { name: "Électroencéphalographe", correct: false, feedback: "Incorrect. L'EEG est utilisé pour l'activité cérébrale, pas pour la respiration." },
-            { name: "Table Chirurgicale", correct: false, feedback: "Incorrect. Une table chirurgicale n'est pas adaptée à une détresse respiratoire." }
-        ]
-    }
-];
+        {
+            description: "Patient de 42 ans, douleurs thoraciques, tension 180/100, respiration irrégulière.",
+            options: [
+                { name: "Électrocardiographe", correct: true, feedback: "Correct ! L'ECG est essentiel pour diagnostiquer une anomalie cardiaque." },
+                { name: "Défibrillateur Automatique", correct: false, feedback: "Incorrect. Un défibrillateur est utilisé pour les arrêts cardiaques, pas pour le diagnostic initial." },
+                { name: "Moniteur Néonatal", correct: false, feedback: "Incorrect. Ce dispositif est destiné aux nouveau-nés." },
+                { name: "Échographe Pédiatrique", correct: false, feedback: "Incorrect. Cet équipement n'est pas adapté à ce cas." }
+            ]
+        },
+        {
+            description: "Patient de 65 ans, inconscience soudaine, pouls faible, suspicion d'arrêt cardiaque.",
+            options: [
+                { name: "Défibrillateur Automatique", correct: true, feedback: "Correct ! Un défibrillateur est crucial pour rétablir le rythme cardiaque." },
+                { name: "Électrocardiographe", correct: false, feedback: "Incorrect. L'ECG est utilisé pour le diagnostic, pas pour une intervention immédiate." },
+                { name: "IRM", correct: false, feedback: "Incorrect. L'IRM n'est pas adaptée pour une urgence immédiate." },
+                { name: "Ventilateur Intensif", correct: false, feedback: "Incorrect. Le ventilateur est utilisé pour la respiration assistée, pas pour un arrêt cardiaque." }
+            ]
+        },
+        {
+            description: "Nouveau-né de 3 jours, hypothermie, fréquence respiratoire lente, saturation en oxygène à 88%.",
+            options: [
+                { name: "Incubateur Néonatal", correct: true, feedback: "Correct ! L'incubateur maintient la température corporelle et stabilise le nouveau-né." },
+                { name: "Échographe Pédiatrique", correct: false, feedback: "Incorrect. L'échographe est utilisé pour l'imagerie, pas pour gérer l'hypothermie." },
+                { name: "Moniteur Néonatal", correct: false, feedback: "Incorrect. Bien que utile pour surveiller, il ne traite pas directement l'hypothermie." },
+                { name: "Défibrillateur Automatique", correct: false, feedback: "Incorrect. Un défibrillateur n'est pas adapté pour les nouveau-nés en hypothermie." }
+            ]
+        },
+        {
+            description: "Patient de 50 ans, suspicion de crise d'épilepsie, convulsions continues depuis 2 minutes.",
+            options: [
+                { name: "Électroencéphalographe", correct: true, feedback: "Correct ! L'EEG est utilisé pour analyser l'activité cérébrale et confirmer une crise épileptique." },
+                { name: "Doppler Transcrânien", correct: false, feedback: "Incorrect. Le Doppler est utilisé pour évaluer le flux sanguin, pas pour les convulsions." },
+                { name: "Ventilateur Intensif", correct: false, feedback: "Incorrect. Le ventilateur n'est pas nécessaire pour une crise épileptique sans détresse respiratoire." },
+                { name: "Scanner", correct: false, feedback: "Incorrect. Un scanner peut être utilisé plus tard, mais pas en urgence pour une crise active." }
+            ]
+        },
+        {
+            description: "Femme de 45 ans, douleur mammaire suspecte, antécédents familiaux de cancer du sein.",
+            options: [
+                { name: "Mammographe", correct: true, feedback: "Correct ! La mammographie est l'outil principal pour le dépistage du cancer du sein." },
+                { name: "IRM", correct: false, feedback: "Incorrect. Une IRM peut être utilisée en complément, mais la mammographie est prioritaire." },
+                { name: "Échographe Pédiatrique", correct: false, feedback: "Incorrect. Cet équipement est spécifique aux enfants." },
+                { name: "PET Scanner", correct: false, feedback: "Incorrect. Le PET Scanner est utilisé pour des diagnostics avancés, pas pour le dépistage initial." }
+            ]
+        },
+        {
+            description: "Patient de 30 ans, douleur abdominale aiguë, suspicion d'appendicite.",
+            options: [
+                { name: "Scanner", correct: true, feedback: "Correct ! Le scanner est idéal pour confirmer une appendicite par imagerie." },
+                { name: "Coloscope", correct: false, feedback: "Incorrect. Le coloscope est utilisé pour explorer le côlon, pas pour l'appendicite." },
+                { name: "Endoscope Digestif", correct: false, feedback: "Incorrect. L'endoscopie n'est pas adaptée pour diagnostiquer une appendicite." },
+                { name: "Densitomètre Osseux", correct: false, feedback: "Incorrect. Cet équipement est utilisé pour la densité osseuse, pas pour les douleurs abdominales." }
+            ]
+        },
+        {
+            description: "Patient de 55 ans, fracture ouverte de la jambe suite à un accident, douleur intense.",
+            options: [
+                { name: "Arthroscope", correct: true, feedback: "Correct ! L'arthroscope peut être utilisé pour évaluer et traiter les lésions articulaires associées à la fracture." },
+                { name: "Densitomètre Osseux", correct: false, feedback: "Incorrect. Le densitomètre est utilisé pour mesurer la densité osseuse, pas pour les fractures aiguës." },
+                { name: "Électrocardiographe", correct: false, feedback: "Incorrect. L'ECG est utilisé pour les problèmes cardiaques, pas pour les fractures." },
+                { name: "IRM", correct: false, feedback: "Incorrect. Une IRM peut être utilisée plus tard, mais pas en urgence pour une fracture ouverte." }
+            ]
+        },
+        {
+            description: "Patient de 70 ans, détresse respiratoire aiguë, saturation en oxygène à 85%.",
+            options: [
+                { name: "Ventilateur Intensif", correct: true, feedback: "Correct ! Le ventilateur est essentiel pour assister la respiration en cas de détresse." },
+                { name: "Moniteur Multiparamètres", correct: false, feedback: "Incorrect. Le moniteur surveille les paramètres vitaux, mais ne traite pas la détresse respiratoire." },
+                { name: "Électroencéphalographe", correct: false, feedback: "Incorrect. L'EEG est utilisé pour l'activité cérébrale, pas pour la respiration." },
+                { name: "Table Chirurgicale", correct: false, feedback: "Incorrect. Une table chirurgicale n'est pas adaptée à une détresse respiratoire." }
+            ]
+        }
+    ];
 
-// Variables pour le simulateur
-let currentCase = null;
-let timer = null;
-let timeLeft = 30;
+    // Variables for the simulator
+    let currentCase = null;
+    let timer = null;
+    let timeLeft = 30;
 
-// Gestion du bouton Simulateur d'Urgence
-document.getElementById('emergencySimBtn').addEventListener('click', () => {
-    showSection('emergency-sim-page');
-    startEmergencySimulation();
-});
-
-// Gestion de la fermeture de la modale
-document.getElementById('emergencyCloseBtn').addEventListener('click', () => {
-    showSection('home-page');
-    resetEmergencySimulation();
-});
-
-// Gestion du bouton Rejouer
-document.getElementById('emergencyRestartBtn').addEventListener('click', () => {
-    startEmergencySimulation();
-});
-
-// Lancer la simulation
-function startEmergencySimulation() {
-    const emergencyContainer = document.getElementById('emergencyContainer');
-    const emergencyCase = document.getElementById('emergencyCase');
-    const emergencyOptions = document.getElementById('emergencyOptions');
-    const emergencyFeedback = document.getElementById('emergencyFeedback');
-    const emergencyRestartBtn = document.getElementById('emergencyRestartBtn');
-    const emergencyTimer = document.getElementById('emergencyTimer');
-
-    // Réinitialiser
-    resetEmergencySimulation();
-
-    // Sélectionner un cas aléatoire
-    currentCase = emergencyCases[Math.floor(Math.random() * emergencyCases.length)];
-    emergencyCase.textContent = currentCase.description;
-
-    // Afficher les options
-    emergencyOptions.innerHTML = '';
-    currentCase.options.forEach((option, index) => {
-        const btn = document.createElement('button');
-        btn.classList.add('emergency-option');
-        btn.textContent = option.name;
-        btn.setAttribute('aria-label', `Choisir ${option.name}`);
-        btn.addEventListener('click', () => handleOptionSelection(option, btn));
-        emergencyOptions.appendChild(btn);
+    // Handle Emergency Simulation Button
+    document.getElementById('emergencySimBtn').addEventListener('click', () => {
+        console.debug('Bouton Simulateur d\'Urgence cliqué');
+        showPage('emergency-sim-page', 'Simulateur d\'Urgence Médicale', [
+            { text: 'Accueil', action: showHome },
+            { text: 'Simulateur d\'Urgence', action: () => showPage('emergency-sim-page', 'Simulateur d\'Urgence Médicale') }
+        ]);
+        document.getElementById('emergencyModal').style.display = 'flex'; // Ensure modal is visible
+        startEmergencySimulation();
     });
 
-    // Lancer le timer
-    timeLeft = 30;
-    emergencyTimer.textContent = `Temps restant : ${timeLeft}s`;
-    timer = setInterval(() => {
-        timeLeft--;
-        emergencyTimer.textContent = `Temps restant : ${timeLeft}s`;
-        if (timeLeft <= 0) {
-            clearInterval(timer);
-            emergencyFeedback.textContent = "Temps écoulé ! Essayez à nouveau.";
-            emergencyFeedback.style.color = 'var(--error-color)';
-            disableOptions();
-            emergencyRestartBtn.style.display = 'block';
-        }
-    }, 1000);
-}
+    // Handle Modal Close
+    document.getElementById('emergencyCloseBtn').addEventListener('click', () => {
+        console.debug('Bouton Fermer Simulation cliqué');
+        showPage('home-page', 'Technologies Médicales Avancées', []);
+        resetEmergencySimulation();
+    });
 
-// Gérer la sélection d'une option
-function handleOptionSelection(option, button) {
-    const emergencyFeedback = document.getElementById('emergencyFeedback');
-    const emergencyRestartBtn = document.getElementById('emergencyRestartBtn');
-    
-    clearInterval(timer);
-    emergencyFeedback.textContent = option.feedback;
-    emergencyFeedback.style.color = option.correct ? 'var(--success-color)' : 'var(--error-color)';
-    button.classList.add(option.correct ? 'correct' : 'incorrect');
-    disableOptions();
-    emergencyRestartBtn.style.display = 'block';
-    
-    if (option.correct) {
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
+    // Handle Restart Button
+    document.getElementById('emergencyRestartBtn').addEventListener('click', () => {
+        console.debug('Bouton Rejouer Simulation cliqué');
+        startEmergencySimulation();
+    });
+
+    // Start Emergency Simulation
+    function startEmergencySimulation() {
+        console.debug('Démarrage de la simulation d\'urgence');
+        const emergencyContainer = document.getElementById('emergencyContainer');
+        const emergencyCase = document.getElementById('emergencyCase');
+        const emergencyOptions = document.getElementById('emergencyOptions');
+        const emergencyFeedback = document.getElementById('emergencyFeedback');
+        const emergencyRestartBtn = document.getElementById('emergencyRestartBtn');
+        const emergencyTimer = document.getElementById('emergencyTimer');
+
+        // Reset simulation
+        resetEmergencySimulation();
+
+        // Select a random case
+        currentCase = emergencyCases[Math.floor(Math.random() * emergencyCases.length)];
+        emergencyCase.textContent = currentCase.description;
+
+        // Display options
+        emergencyOptions.innerHTML = '';
+        currentCase.options.forEach((option, index) => {
+            const btn = document.createElement('button');
+            btn.classList.add('emergency-option');
+            btn.textContent = option.name;
+            btn.setAttribute('aria-label', `Choisir ${option.name}`);
+            btn.addEventListener('click', () => handleOptionSelection(option, btn));
+            emergencyOptions.appendChild(btn);
+        });
+
+        // Start timer
+        timeLeft = 30;
+        emergencyTimer.textContent = `Temps restant : ${timeLeft}s`;
+        timer = setInterval(() => {
+            timeLeft--;
+            emergencyTimer.textContent = `Temps restant : ${timeLeft}s`;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                emergencyFeedback.textContent = "Temps écoulé ! Essayez à nouveau.";
+                emergencyFeedback.style.color = 'var(--error-color)';
+                disableOptions();
+                emergencyRestartBtn.style.display = 'block';
+                console.debug('Simulation terminée : temps écoulé');
+            }
+        }, 1000);
+    }
+
+    // Handle option selection
+    function handleOptionSelection(option, button) {
+        console.debug(`Option sélectionnée : ${option.name}`);
+        const emergencyFeedback = document.getElementById('emergencyFeedback');
+        const emergencyRestartBtn = document.getElementById('emergencyRestartBtn');
+        
+        clearInterval(timer);
+        emergencyFeedback.textContent = option.feedback;
+        emergencyFeedback.style.color = option.correct ? 'var(--success-color)' : 'var(--error-color)';
+        button.classList.add(option.correct ? 'correct' : 'incorrect');
+        disableOptions();
+        emergencyRestartBtn.style.display = 'block';
+        
+        if (option.correct) {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+    }
+
+    // Disable options after selection
+    function disableOptions() {
+        const options = document.querySelectorAll('.emergency-option');
+        options.forEach(btn => {
+            btn.disabled = true;
+            console.debug(`Option désactivée : ${btn.textContent}`);
         });
     }
-}
 
-// Désactiver les options après sélection
-function disableOptions() {
-    const options = document.querySelectorAll('.emergency-option');
-    options.forEach(btn => btn.disabled = true);
-}
-
-// Réinitialiser la simulation
-function resetEmergencySimulation() {
-    clearInterval(timer);
-    document.getElementById('emergencyCase').textContent = '';
-    document.getElementById('emergencyOptions').innerHTML = '';
-    document.getElementById('emergencyFeedback').textContent = '';
-    document.getElementById('emergencyRestartBtn').style.display = 'none';
-    document.getElementById('emergencyTimer').textContent = 'Temps restant : 30s';
-}
+    // Reset simulation
+    function resetEmergencySimulation() {
+        console.debug('Réinitialisation de la simulation');
+        clearInterval(timer);
+        document.getElementById('emergencyCase').textContent = '';
+        document.getElementById('emergencyOptions').innerHTML = '';
+        document.getElementById('emergencyFeedback').textContent = '';
+        document.getElementById('emergencyRestartBtn').style.display = 'none';
+        document.getElementById('emergencyTimer').textContent = 'Temps restant : 30s';
+    }
 
 // Initialization
 const init = () => {
