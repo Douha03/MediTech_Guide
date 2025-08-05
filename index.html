@@ -117,7 +117,8 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            justify-content: center; /* Alignement à gauche */
+            justify-content: center; /* Centrer les éléments */
+            width: 100%; /* S'assurer que le conteneur prend toute la largeur disponible */
         }
 
         .search-box {
@@ -515,8 +516,10 @@
             }
 
             .search-container {
-                width: 100%; /* Étendre la barre de recherche */
-                justify-content: flex-start; /* Alignement à gauche */
+                justify-content: center; /* Centrer sur les petits écrans */
+                width: 100%; /* Prendre toute la largeur */
+                max-width: 300px; /* Limiter la largeur maximale */
+                margin: 0 auto; /* Centrer horizontalement */
             }
 
             .search-box {
@@ -897,10 +900,12 @@
             width: 90%;
             position: relative;
             box-shadow: var(--shadow-md);
+            max-height: 80vh; /* Limiter la hauteur à 80% de la hauteur de la fenêtre */
+            overflow-y: auto; /* Activer le défilement vertical si nécessaire */
         }
 
         .modal-close {
-            position: absolute;
+            position: sticky;
             top: 10px;
             right: 10px;
             background: none;
@@ -909,6 +914,9 @@
             color: var(--text-dark);
             cursor: pointer;
             transition: var(--transition);
+            bottom: 10px;
+            z-index: 10;
+            margin-top: 10px;
         }
 
         .modal-close:hover {
@@ -917,6 +925,9 @@
 
         .emergency-container {
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .emergency-alert {
