@@ -1570,7 +1570,7 @@
         };
 
         const showPage = (pageId, title, breadcrumbItems = []) => {
-            console.debug('showPage appelée pour:', pageId); // Log pour débogage
+            console.debug('showPage appelée pour:', pageId);
             hideAllPages();
             const page = $(`#${pageId}`);
             if (!page) {
@@ -1582,6 +1582,12 @@
             page.style.display = 'block';
             state.currentPage = pageId;
             document.title = `MediTech - ${title}`;
+            
+            // Clear history for top-level pages
+            if (['home-page', 'chatbot-page', 'quiz-page'].includes(pageId)) {
+                state.navigationHistory = [];
+            }
+            
             updateBreadcrumb(breadcrumbItems);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
@@ -1723,9 +1729,13 @@
 
         const showChatbotPage = () => {
             showPage('chatbot-page', 'MediTech Assistant', [
+                { text: 'Accueil', action: showHome },
                 { text: 'MediTech Assistant', action: showChatbotPage }
             ]);
-            state.navigationHistory.push({ text: 'MediTech Assistant', action: showChatbotPage });
+            state.navigationHistory = [
+                { text: 'Accueil', action: showHome },
+                { text: 'MediTech Assistant', action: showChatbotPage }
+            ];
             const chatbotInput = $('#chatbotInput');
             if (chatbotInput) {
                 chatbotInput.focus();
@@ -2129,8 +2139,8 @@ const initEventListeners = () => {
         }
         button.addEventListener('click', () => {
             console.debug('Bouton de retour cliqué:', button.id);
-            const previousPage = state.navigationHistory[state.navigationHistory.length - 2];
-            if (previousPage) {
+            if (state.navigationHistory.length > 1) {
+                const previousPage = state.navigationHistory[state.navigationHistory.length - 2];
                 previousPage.action();
                 state.navigationHistory.pop();
             } else {
@@ -2377,11 +2387,15 @@ const generateQuiz = () => {
     let score = 0;
 
     const showQuizPage = () => {
-        console.debug('showQuizPage appelée'); // Log pour débogage
+        console.debug('showQuizPage appelée');
         showPage('quiz-page', 'Quiz sur les Technologies Médicales', [
+            { text: 'Accueil', action: showHome },
             { text: 'Quiz', action: showQuizPage }
         ]);
-        state.navigationHistory.push({ text: 'Quiz', action: showQuizPage });
+        state.navigationHistory = [
+            { text: 'Accueil', action: showHome },
+            { text: 'Quiz', action: showQuizPage }
+        ];
         renderQuizQuestion();
     };
 
