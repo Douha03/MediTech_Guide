@@ -860,74 +860,36 @@
         }
 
         .btn-emergency {
-                background: linear-gradient(135deg, var(--error-color, #f56565), var(--warning-color, #f6b65e)) !important;
-                color: var(--white);
-                padding: 12px 25px;
-                border: none;
-                border-radius: 8px;
-                font-size: 1rem;
-                cursor: pointer;
-                transition: var(--transition);
-                box-shadow: var(--shadow-sm);
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-emergency:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(245, 101, 101, 0.3);
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal-content {
-            background: var(--white);
-            padding: 20px;
-            border-radius: 12px;
-            max-width: 600px;
-            width: 90%;
-            position: relative;
-            box-shadow: var(--shadow-md);
-            max-height: 90vh; /* Augmenter légèrement pour s'adapter à la plupart des écrans */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between; /* Répartir l'espace pour garder le bouton en bas */
-            min-height: 400px; /* Hauteur minimale pour éviter un modal trop petit */
-            overflow-y: auto; /* Défilement uniquement si nécessaire */
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            color: var(--text-dark);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .modal-close:hover {
-            color: var(--error-color);
+            background: var(--primary-dark, darken(var(--primary-color), 10%));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
 
         .emergency-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md), 0 0 20px rgba(102, 126, 234, 0.2);
+            animation: fadeIn 0.6s ease-in-out;
             text-align: center;
             display: flex;
             flex-direction: column;
-            gap: 10px; /* Réduire l'espacement pour compacter le contenu */
-            flex-grow: 1; /* Permet au conteneur de s'adapter à l'espace disponible */
+            gap: 20px;
         }
 
         .emergency-alert {
@@ -936,7 +898,7 @@
             padding: 10px;
             border-radius: 8px;
             font-weight: 600;
-            margin-bottom: 10px; /* Réduire la marge pour compacter */
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -945,88 +907,111 @@
         }
 
         .emergency-case {
-            font-size: 1.1rem; /* Réduire légèrement la taille de la police */
+            font-size: 1.2rem;
             font-weight: 500;
-            margin-bottom: 10px; /* Réduire la marge pour compacter */
-            padding: 10px; /* Réduire le padding pour compacter */
+            margin-bottom: 20px;
+            padding: 15px;
             background: var(--bg-light);
             border-radius: 8px;
             border: 1px solid var(--border-light);
-            line-height: 1.4; /* Réduire la hauteur de ligne pour compacter */
+            line-height: 1.5;
+            animation: slideUp 0.5s ease-in-out;
         }
 
         .emergency-timer {
-            font-size: 1rem; /* Réduire légèrement la taille de la police */
+            font-size: 1.1rem;
             font-weight: 600;
             color: var(--error-color);
-            margin-bottom: 10px; /* Réduire la marge pour compacter */
+            text-align: center;
+            margin-bottom: 20px;
+            animation: slideUp 0.5s ease-in-out;
         }
 
         .emergency-options {
             display: grid;
-            gap: 8px; /* Réduire l'espacement entre les options */
-            margin-bottom: 10px; /* Réduire la marge pour compacter */
-            max-height: 180px; /* Limiter la hauteur des options */
-            overflow-y: auto; /* Défilement interne si trop d'options */
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .emergency-option {
             background: var(--bg-light);
             border: 2px solid var(--border-light);
-            padding: 10px; /* Réduire le padding pour compacter */
-            border-radius: 8px;
-            font-size: 0.95rem; /* Réduire légèrement la taille de la police */
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease, transform 0.2s ease;
+            position: relative;
+            opacity: 0;
+            animation: fadeInOption 0.3s ease-in-out forwards;
         }
+
+        .emergency-option:nth-child(1) { animation-delay: 0.1s; }
+        .emergency-option:nth-child(2) { animation-delay: 0.2s; }
+        .emergency-option:nth-child(3) { animation-delay: 0.3s; }
+        .emergency-option:nth-child(4) { animation-delay: 0.4s; }
 
         .emergency-option:hover {
             background: var(--primary-color);
             color: var(--white);
             border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .emergency-option:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
         }
 
         .emergency-option.correct {
             background: var(--success-color);
             color: var(--white);
             border-color: var(--success-color);
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
         }
 
         .emergency-option.incorrect {
             background: var(--error-color);
             color: var(--white);
             border-color: var(--error-color);
+            box-shadow: 0 0 10px rgba(245, 101, 101, 0.5);
         }
 
         .emergency-option:disabled {
             cursor: not-allowed;
             opacity: 0.7;
+            transform: none;
         }
 
         .emergency-feedback {
-            font-size: 0.95rem; /* Réduire légèrement la taille de la police */
+            font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 10px; /* Réduire la marge pour compacter */
-            min-height: 24px; /* Réserver un espace pour éviter le décalage */
+            margin-bottom: 20px;
+            min-height: 24px;
+            color: var(--text-dark);
+            animation: fadeIn 0.5s ease-in-out;
         }
 
         .emergency-restart-btn {
-            position: sticky;
-            bottom: 10px;
-            z-index: 10;
-            margin-top: 10px; /* Ajouter un espacement pour séparer du contenu */
-            padding: 10px 20px;
             background: var(--primary-color);
             color: var(--white);
+            padding: 12px 25px;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            margin: 0 auto;
         }
 
         .emergency-restart-btn:hover {
-            background: var(--primary-dark);
+            background: var(--primary-dark, darken(var(--primary-color), 10%));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
 
         @keyframes pulse {
@@ -1284,21 +1269,24 @@
             </section>
 
             <section id="emergency-sim-page" class="content-section hidden" aria-labelledby="emergency-sim-title">
-                <div class="modal-overlay" id="emergencyModal">
-                    <div class="modal-content">
-                        <button class="modal-close" id="emergencyCloseBtn" aria-label="Fermer la simulation"><i class="fas fa-times"></i></button>
-                        <h1 class="page-title" id="emergency-sim-title">Simulateur d'Urgence Médicale</h1>
-                        <div class="emergency-container" id="emergencyContainer">
-                            <div class="emergency-alert">
-                                <i class="fas fa-exclamation-triangle"></i> Alerte Urgence !
-                            </div>
-                            <div class="emergency-case" id="emergencyCase"></div>
-                            <div class="emergency-timer" id="emergencyTimer">Temps restant : 30s</div>
-                            <div class="emergency-options" id="emergencyOptions"></div>
-                            <div class="emergency-feedback" id="emergencyFeedback"></div>
-                            <button class="btn-restart" id="emergencyRestartBtn" style="display: none;">Rejouer</button>
-                        </div>
+                <button class="back-btn" id="emergencyBackBtn" aria-label="Retour à l'accueil"><i class="fas fa-arrow-left"></i> Retour</button>
+                <h1 class="page-title" id="emergency-sim-title">Simulateur d'Urgence Médicale</h1>
+                <div class="quiz-container" id="emergencyContainer">
+                    <div class="quiz-progress" aria-live="polite">
+                        <span id="emergencyCaseNumber">Cas 1 sur 8</span>
+                        <span id="emergencyScore">Score: 0</span>
                     </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="emergencyProgress" style="width: 12.5%"></div>
+                    </div>
+                    <div class="emergency-alert">
+                        <i class="fas fa-exclamation-triangle"></i> Alerte Urgence !
+                    </div>
+                    <div class="quiz-question" id="emergencyCase"></div>
+                    <div class="emergency-timer" id="emergencyTimer">Temps restant : 30s</div>
+                    <div class="quiz-options" id="emergencyOptions" role="radiogroup" aria-label="Options de réponse"></div>
+                    <p class="quiz-feedback" id="emergencyFeedback" aria-live="assertive"></p>
+                    <button class="btn-restart" id="emergencyRestartBtn" style="display: none;">Rejouer</button>
                 </div>
             </section>
         </main>
@@ -2824,70 +2812,88 @@ const emergencyCases = [
         }
     ];
 
-    // Variables for the simulator
-    let currentCase = null;
+    let currentCaseIndex = 0;
+    let emergencyScore = 0;
     let timer = null;
     let timeLeft = 30;
+    const totalCases = emergencyCases.length;
 
-    // Handle Emergency Simulation Button
-    document.getElementById('emergencySimBtn').addEventListener('click', () => {
-        console.debug('Bouton Simulateur d\'Urgence cliqué');
+    const startEmergencySimulation = () => {
+        console.debug('Démarrage de la simulation d\'urgence');
+        const emergencySound = $('#emergencySound');
+        if (emergencySound) {
+            emergencySound.play().catch(error => {
+                console.error('Erreur lors de la lecture du son:', error);
+            });
+        }
+        showEmergencyPage();
+        currentCaseIndex = 0;
+        emergencyScore = 0;
+        renderEmergencyCase();
+    };
+
+    const showEmergencyPage = () => {
+        console.debug('showEmergencyPage appelée');
         showPage('emergency-sim-page', 'Simulateur d\'Urgence Médicale', [
             { text: 'Accueil', action: showHome },
-            { text: 'Simulateur d\'Urgence', action: () => showPage('emergency-sim-page', 'Simulateur d\'Urgence Médicale') }
+            { text: 'Simulateur d\'Urgence', action: showEmergencyPage }
         ]);
-        document.getElementById('emergencyModal').style.display = 'flex'; // Ensure modal is visible
-        startEmergencySimulation();
-    });
+        state.navigationHistory = [
+            { text: 'Accueil', action: showHome },
+            { text: 'Simulateur d\'Urgence', action: showEmergencyPage }
+        ];
+    };
 
-    // Handle Modal Close
-    document.getElementById('emergencyCloseBtn').addEventListener('click', () => {
-        console.debug('Bouton Fermer Simulation cliqué');
-        showPage('home-page', 'Technologies Médicales Avancées', []);
-        resetEmergencySimulation();
-        if (emergencySound) {
-            emergencySound.pause();
-            emergencySound.currentTime = 0; // Reset sound to start
+    const renderEmergencyCase = () => {
+        console.debug('renderEmergencyCase appelée, index:', currentCaseIndex);
+        const emergencyContainer = $('#emergencyContainer');
+        const emergencyCase = $('#emergencyCase');
+        const emergencyOptions = $('#emergencyOptions');
+        const emergencyFeedback = $('#emergencyFeedback');
+        const emergencyRestartBtn = $('#emergencyRestartBtn');
+        const emergencyTimer = $('#emergencyTimer');
+        const emergencyProgress = $('#emergencyProgress');
+        const emergencyCaseNumber = $('#emergencyCaseNumber');
+        const emergencyScoreElement = $('#emergencyScore');
+
+        if (currentCaseIndex >= totalCases) {
+            renderEmergencyResults();
+            return;
         }
-    });
 
-    // Handle Restart Button
-    document.getElementById('emergencyRestartBtn').addEventListener('click', () => {
-        console.debug('Bouton Rejouer Simulation cliqué');
-        startEmergencySimulation();
-    });
+        const currentCase = emergencyCases[currentCaseIndex];
+        const progress = ((currentCaseIndex + 1) / totalCases) * 100;
 
-    // Start Emergency Simulation
-    function startEmergencySimulation() {
-        console.debug('Démarrage de la simulation d\'urgence');
-        const emergencyContainer = document.getElementById('emergencyContainer');
-        const emergencyCase = document.getElementById('emergencyCase');
-        const emergencyOptions = document.getElementById('emergencyOptions');
-        const emergencyFeedback = document.getElementById('emergencyFeedback');
-        const emergencyRestartBtn = document.getElementById('emergencyRestartBtn');
-        const emergencyTimer = document.getElementById('emergencyTimer');
-
-        // Reset simulation
-        resetEmergencySimulation();
-
-        // Select a random case
-        currentCase = emergencyCases[Math.floor(Math.random() * emergencyCases.length)];
+        emergencyCaseNumber.textContent = `Cas ${currentCaseIndex + 1} sur ${totalCases}`;
+        emergencyScoreElement.textContent = `Score: ${emergencyScore}`;
+        emergencyProgress.style.width = `${progress}%`;
         emergencyCase.textContent = currentCase.description;
+        emergencyTimer.textContent = `Temps restant : ${timeLeft}s`;
+        emergencyFeedback.textContent = '';
+        emergencyRestartBtn.style.display = 'none';
 
-        // Display options
         emergencyOptions.innerHTML = '';
         currentCase.options.forEach((option, index) => {
             const btn = document.createElement('button');
-            btn.classList.add('emergency-option');
+            btn.className = 'emergency-option';
+            btn.setAttribute('data-index', index);
+            btn.setAttribute('role', 'radio');
+            btn.setAttribute('aria-checked', 'false');
             btn.textContent = option.name;
-            btn.setAttribute('aria-label', `Choisir ${option.name}`);
             btn.addEventListener('click', () => handleOptionSelection(option, btn));
+            btn.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    btn.click();
+                }
+            });
             emergencyOptions.appendChild(btn);
         });
 
         // Start timer
         timeLeft = 30;
         emergencyTimer.textContent = `Temps restant : ${timeLeft}s`;
+        clearInterval(timer);
         timer = setInterval(() => {
             timeLeft--;
             emergencyTimer.textContent = `Temps restant : ${timeLeft}s`;
@@ -2900,49 +2906,124 @@ const emergencyCases = [
                 console.debug('Simulation terminée : temps écoulé');
             }
         }, 1000);
-    }
+    };
 
-    // Handle option selection
-    function handleOptionSelection(option, button) {
+    const handleOptionSelection = (option, button) => {
         console.debug(`Option sélectionnée : ${option.name}`);
-        const emergencyFeedback = document.getElementById('emergencyFeedback');
-        const emergencyRestartBtn = document.getElementById('emergencyRestartBtn');
-        
+        const emergencyFeedback = $('#emergencyFeedback');
+        const emergencyRestartBtn = $('#emergencyRestartBtn');
+        const emergencyOptions = $$('.emergency-option');
+
         clearInterval(timer);
         emergencyFeedback.textContent = option.feedback;
         emergencyFeedback.style.color = option.correct ? 'var(--success-color)' : 'var(--error-color)';
         button.classList.add(option.correct ? 'correct' : 'incorrect');
-        disableOptions();
-        emergencyRestartBtn.style.display = 'block';
-        
+        button.setAttribute('aria-checked', 'true');
+        emergencyOptions.forEach(opt => {
+            opt.disabled = true;
+            opt.setAttribute('aria-checked', 'false');
+            if (opt.textContent === option.name) {
+                opt.setAttribute('aria-checked', 'true');
+            }
+            if (opt.textContent === currentCase.options.find(o => o.correct).name) {
+                opt.classList.add('correct');
+            }
+        });
+
         if (option.correct) {
+            emergencyScore++;
             confetti({
                 particleCount: 100,
                 spread: 70,
-                origin: { y: 0.6 }
+                origin: { y: 0.6 },
+                colors: ['#667eea', '#764ba2', '#28a745']
             });
         }
-    }
 
-    // Disable options after selection
-    function disableOptions() {
-        const options = document.querySelectorAll('.emergency-option');
+        setTimeout(() => {
+            currentCaseIndex++;
+            renderEmergencyCase();
+        }, 1500);
+    };
+
+    const disableOptions = () => {
+        const options = $$('.emergency-option');
         options.forEach(btn => {
             btn.disabled = true;
             console.debug(`Option désactivée : ${btn.textContent}`);
         });
-    }
+    };
 
-    // Reset simulation
-    function resetEmergencySimulation() {
-        console.debug('Réinitialisation de la simulation');
+    const renderEmergencyResults = () => {
+        const emergencyContainer = $('#emergencyContainer');
+        const emergencySound = $('#emergencySound');
+        if (emergencySound) {
+            emergencySound.pause();
+            emergencySound.currentTime = 0;
+        }
+
+        const percentage = (emergencyScore / totalCases) * 100;
+        let message, suggestion;
+        if (percentage >= 80) {
+            message = 'Excellent ! Vous êtes prêt à gérer les urgences médicales !';
+            suggestion = 'Continuez à explorer nos spécialités pour approfondir vos connaissances.';
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#667eea', '#764ba2', '#28a745']
+                });
+            }, 500);
+        } else if (percentage >= 50) {
+            message = 'Bien joué ! Vous avez une bonne maîtrise des interventions d\'urgence.';
+            suggestion = 'Essayez notre ChatGuide IA pour en savoir plus sur les dispositifs d\'urgence.';
+        } else {
+            message = 'Pas mal, mais il y a encore à apprendre !';
+            suggestion = 'Consultez nos pages de spécialités ou recommencez la simulation pour améliorer votre score.';
+        }
+
+        emergencyContainer.innerHTML = `
+            <div class="quiz-results">
+                <h3>Résultats de la Simulation</h3>
+                <p>Votre score : ${emergencyScore} sur ${totalCases} (${percentage}%)</p>
+                <p>${message}</p>
+                <p>${suggestion}</p>
+                <button class="btn-restart" id="emergencyRestartBtn" aria-label="Recommencer la simulation">Recommencer la Simulation</button>
+                <button class="btn-primary" id="exploreServicesEmergencyBtn" aria-label="Retourner aux spécialités">Explorer les Spécialités</button>
+            </div>
+        `;
+
+        const restartBtn = $('#emergencyRestartBtn');
+        if (restartBtn) {
+            restartBtn.addEventListener('click', () => {
+                startEmergencySimulation();
+            });
+        }
+
+        const exploreServicesBtn = $('#exploreServicesEmergencyBtn');
+        if (exploreServicesBtn) {
+            exploreServicesBtn.addEventListener('click', () => showServices());
+        }
+    };
+
+    // Handle Emergency Simulation Button
+    $('#emergencySimBtn').addEventListener('click', () => {
+        console.debug('Bouton Simulateur d\'Urgence cliqué');
+        startEmergencySimulation();
+    });
+
+    // Handle Back Button
+    $('#emergencyBackBtn').addEventListener('click', () => {
+        console.debug('Bouton Retour Simulation cliqué');
+        const emergencySound = $('#emergencySound');
+        if (emergencySound) {
+            emergencySound.pause();
+            emergencySound.currentTime = 0;
+        }
         clearInterval(timer);
-        document.getElementById('emergencyCase').textContent = '';
-        document.getElementById('emergencyOptions').innerHTML = '';
-        document.getElementById('emergencyFeedback').textContent = '';
-        document.getElementById('emergencyRestartBtn').style.display = 'none';
-        document.getElementById('emergencyTimer').textContent = 'Temps restant : 30s';
-    }
+        showHome();
+    });
 
 // Initialization
 const init = () => {
