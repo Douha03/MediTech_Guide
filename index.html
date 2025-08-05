@@ -228,27 +228,22 @@
         }
 
         .hero-section .button-container {
-            flex-direction: column; /* Stack buttons vertically */
-            align-items: center; /* Center buttons horizontally */
-            gap: 15px;
+            display: flex;
+            justify-content: center; /* Centrer les boutons */
+            gap: 15px; /* Espacement entre les boutons */
             width: 100%;
-            max-width: 650px;
+            max-width: 650px; /* Ajuster la largeur maximale */
             margin-top: 20px;
         }
 
-        .hero-section .btn-primary {
-            padding: 16px 30px; /* Increase padding for larger size */
-            font-size: 1.2rem; /* Larger font size */
-            width: 250px; /* Wider button */
-            margin-bottom: 20px; /* Add space below to separate from other buttons */
-        }
+        .hero-section .btn-primary,
         .hero-section .btn-chatbot,
-        .hero-section .btn-quiz,
-        .hero-section .btn-emergency {
+        .hero-section .btn-quiz {
             padding: 12px 25px;
             font-size: 1rem;
             width: 200px;
-            margin: 0;
+            margin: 0; /* Supprimer les marges */
+            text-align: center;
         }
 
         .btn-primary {
@@ -910,10 +905,10 @@
 
         .modal-content {
             background: var(--white);
-            padding: 15px; /* Reduced padding */
+            padding: 20px;
             border-radius: 12px;
-            max-width: 500px; /* Reduced from 600px */
-            width: 85%; /* Slightly smaller width */
+            max-width: 600px;
+            width: 90%;
             position: relative;
             box-shadow: var(--shadow-md);
         }
