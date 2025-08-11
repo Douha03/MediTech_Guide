@@ -2947,10 +2947,10 @@ const generateQuiz = () => {
                 <p>Votre score : ${score} sur ${quizQuestions.length} (${percentage.toFixed(2)}%)</p>
                 <p>${message}</p>
                 <p>${suggestion}</p>
-                ${score >= 25 ? '<p>Félicitations ! Vous avez obtenu un certificat et 5 points CPD.</p>' : '<p>Un score de 25/30 ou plus est requis pour obtenir un certificat.</p>'}
+                ${score >= 1 ? '<p>Félicitations ! Vous avez obtenu un certificat et 5 points CPD.</p>' : '<p>Un score de 25/30 ou plus est requis pour obtenir un certificat.</p>'}
                 <button class="btn-restart" aria-label="Recommencer le quiz">Recommencer le Quiz</button>
                 <button class="btn-primary" id="exploreServicesQuizBtn" aria-label="Retourner aux spécialités">Explorer les Spécialités</button>
-                ${score >= 25 ? '<button class="certificate-btn" id="viewCertificateBtn" aria-label="Voir le certificat">Voir le Certificat</button>' : ''}
+                ${score >= 1 ? '<button class="certificate-btn" id="viewCertificateBtn" aria-label="Voir le certificat">Voir le Certificat</button>' : ''}
             </div>
         `;
 
@@ -2971,7 +2971,7 @@ const generateQuiz = () => {
             exploreServicesQuizBtn.addEventListener('click', () => showServices());
         }
 
-        if (score >= 25) {
+        if (score >= 1) {
             const viewCertificateBtn = quizContainer.querySelector('#viewCertificateBtn');
             if (viewCertificateBtn) {
                 viewCertificateBtn.addEventListener('click', showCertificateModal);
