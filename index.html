@@ -2918,7 +2918,7 @@ const generateQuiz = () => {
         if (!quizContainer) return;
 
         const percentage = (score / quizQuestions.length) * 100;
-        cpdPoints = score >= 25 ? 5 : 0; // Award 5 CPD points if score is 25 or higher
+        cpdPoints = score >= 1 ? 5 : 0; // Award 5 CPD points if score is 25 or higher
         let message, suggestion;
         if (percentage >= 80) {
             message = 'Excellent ! Vous êtes un expert en technologies médicales !';
