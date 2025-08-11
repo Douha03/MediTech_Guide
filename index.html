@@ -537,9 +537,7 @@
                 max-width: 300px; /* Réduire la largeur sur mobile */
             }
 
-            .hero-section .btn-primary,
-            .hero-section .btn-chatbot,
-            .hero-section .btn-quiz {
+            .hero-section .btn-primary, .hero-section .btn-chatbot, .hero-section .btn-quiz, .hero-section .btn-emergency {
                 width: 100%; /* Pleine largeur sur mobile */
                 max-width: 250px; /* Limiter la largeur maximale */
                 margin: 5px 0; /* Petite marge verticale */
@@ -873,20 +871,20 @@
         }
 
         .btn-emergency {
-                background: linear-gradient(135deg, var(--error-color, #f56565), var(--warning-color, #f6b65e)) !important;
-                color: var(--white);
-                padding: 12px 25px;
-                border: none;
-                border-radius: 8px;
-                font-size: 1rem;
-                cursor: pointer;
-                transition: var(--transition);
-                box-shadow: var(--shadow-sm);
+            background: linear-gradient(135deg, var(--error-color), var(--secondary-color)); /* Custom gradient for emergency */
+            color: var(--white);
+            padding: 12px 25px; /* Same padding as other buttons */
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-emergency:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(245, 101, 101, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 101, 101, 0.3); /* Matching hover effect */
         }
 
         .modal-overlay {
@@ -905,9 +903,9 @@
 
         .modal-content {
             background: var(--white);
-            padding: 20px;
+            padding: 15px; /* Reduced padding */
             border-radius: 12px;
-            max-width: 600px;
+            max-width: 500px; /* Reduced max-width */
             width: 90%;
             position: relative;
             box-shadow: var(--shadow-md);
@@ -948,14 +946,15 @@
         }
 
         .emergency-case {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 500;
-            margin-bottom: 20px;
-            padding: 15px;
+            margin-bottom: 15px;
+            padding: 10px;
             background: var(--bg-light);
             border-radius: 8px;
             border: 1px solid var(--border-light);
         }
+
 
         .emergency-timer {
             font-size: 1.1rem;
@@ -966,16 +965,16 @@
 
         .emergency-options {
             display: grid;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 15px;
         }
 
         .emergency-option {
             background: var(--bg-light);
             border: 2px solid var(--border-light);
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: var(--transition);
         }
@@ -2718,12 +2717,13 @@ const generateQuiz = () => {
 
 // Theme Toggle
 const toggleTheme = () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
+    console.debug('Theme toggle clicked'); // Debug to confirm click
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light'; // Default to light if not set
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
     const themeToggle = $('#themeToggle');
     if (themeToggle) {
-        themeToggle.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+        themeToggle.innerHTML = newTheme === 'dark' ? '<span class="theme-icon">🌙</span>' : '<span class="theme-icon">☀️</span>';
         themeToggle.setAttribute('aria-label', `Basculer vers le thème ${newTheme === 'dark' ? 'clair' : 'sombre'}`);
     }
     localStorage.setItem('theme', newTheme);
@@ -2930,8 +2930,9 @@ const init = () => {
     document.documentElement.setAttribute('data-theme', savedTheme);
     const themeToggle = $('#themeToggle');
     if (themeToggle) {
-        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
-        themeToggle.setAttribute('aria-label', `Basculer vers le thème ${savedTheme === 'dark' ? 'clair' : 'sombre'}`);
+        themeToggle.addEventListener('click', toggleTheme);
+    } else {
+        console.error('themeToggle element not found');
     }
     showHome();
     initEventListeners();
