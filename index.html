@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MediTech Guide - Découvrez les technologies médicales avancées pour toutes les spécialités médicales.">
     <meta name="keywords" content="technologies médicales, équipements médicaux, santé, diagnostic, thérapie">
-    <meta name="author" content="MediTech">
+    <meta name="author" content="MediTech Guide">
     <meta property="og:title" content="MediTech Guide - Votre Guide Biomédical">
     <meta property="og:description" content="Explorez notre écosystème de technologies médicales de pointe pour un diagnostic et un traitement précis.">
     <meta property="og:type" content="website">
@@ -1176,7 +1176,7 @@
                 <div class="logo">
                     <img src="https://sl.bing.net/jSTsvEJzwG" alt="MediTech Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <span class="logo-img-error" aria-hidden="true">🏥</span>
-                    <span class="logo-text">MediTech</span>
+                    <span class="logo-text">MediTech Guide</span>
                 </div>
                 <div class="search-container">
                     <input type="text" class="search-box" id="searchBox" placeholder="Rechercher des dispositifs ou spécialités..." aria-label="Rechercher des dispositifs ou spécialités">
@@ -1199,7 +1199,7 @@
                         <button class="btn-emergency" id="emergencySimBtn" aria-label="Lancer le simulateur d'urgence médicale">Simulateur d'Urgence</button>
                     </div>
                 </article>
-                <div class="stats-section" aria-label="Statistiques MediTech">
+                <div class="stats-section" aria-label="Statistiques MediTech Guide">
                     <div class="stat-card">
                         <div class="stat-number" id="deviceCount">0</div>
                         <div class="stat-label">Dispositifs</div>
@@ -1241,9 +1241,9 @@
 
             <section id="chatbot-page" class="content-section hidden" aria-labelledby="chatbot-title">
                 <button class="back-btn" id="chatbotBackBtn" aria-label="Retour à la page précédente"><i class="fas fa-arrow-left"></i> Retour</button>
-                <h1 class="page-title" id="chatbot-title">MediTech Assistant</h1>
+                <h1 class="page-title" id="chatbot-title">MediTech Guide Assistant</h1>
                 <div class="chatbot-header">
-                    <span>MediTech Assistant</span>
+                    <span>MediTech Guide Assistant</span>
                 </div>
                 <div class="chatbot-body" id="chatbotBody" aria-live="polite">
                     <div class="chatbot-typing" id="chatbotTyping">
@@ -1283,7 +1283,7 @@
         </main>
 
         <footer class="footer" role="contentinfo">
-            <p>© 2025 MediTech. Tous droits réservés.</p>
+            <p>© 2025 MediTech Guide. Tous droits réservés.</p>
             <p>
                 <a href="wine:mailto:info@meditech.com" aria-label="Contacter MediTech par e-mail">info@meditech.com</a>
                 <a href="tel:+33123456789" aria-label="Contacter MediTech par téléphone">+33 1 23 45 67 89</a>
@@ -1744,7 +1744,7 @@
             page.classList.remove('hidden');
             page.style.display = 'block';
             state.currentPage = pageId;
-            document.title = `MediTech - ${title}`;
+            document.title = `MediTech Guide - ${title}`;
             
             // Clear history for top-level pages
             if (['home-page', 'chatbot-page', 'quiz-page'].includes(pageId)) {
@@ -1891,13 +1891,13 @@
         };
 
         const showChatbotPage = () => {
-            showPage('chatbot-page', 'MediTech Assistant', [
+            showPage('chatbot-page', 'MediTech Guide Assistant', [
                 { text: 'Accueil', action: showHome },
-                { text: 'MediTech Assistant', action: showChatbotPage }
+                { text: 'MediTech Guide Assistant', action: showChatbotPage }
             ]);
             state.navigationHistory = [
                 { text: 'Accueil', action: showHome },
-                { text: 'MediTech Assistant', action: showChatbotPage }
+                { text: 'MediTech Guide Assistant', action: showChatbotPage }
             ];
             const chatbotInput = $('#chatbotInput');
             if (chatbotInput) {
