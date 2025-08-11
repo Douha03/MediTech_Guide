@@ -15,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
             --primary-color: #667eea;
@@ -253,7 +254,7 @@
             border: none;
             border-radius: 8px;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 550;
             cursor: pointer;
             transition: var(--transition);
             box-shadow: var(--shadow-sm);
@@ -271,7 +272,7 @@
             border: none;
             border-radius: 8px; /* Uniformiser avec les autres boutons */
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 550;
             cursor: pointer;
             transition: var(--transition);
             box-shadow: var(--shadow-sm);
@@ -289,7 +290,7 @@
             padding: 12px 25px;
             border: none;
             border-radius: 8px;
-            font-weight: 600;
+            font-weight: 550;
             font-size: 1rem;
             cursor: pointer;
             transition: var(--transition);
@@ -878,7 +879,7 @@
             color: var(--white);
             padding: 12px 25px; /* Same padding as other buttons */
             border: none;
-            font-weight: 600;
+            font-weight: 550;
             border-radius: 8px;
             font-size: 1rem;
             cursor: pointer;
@@ -1165,6 +1166,125 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
+
+        /* Certificate Modal */
+        .certificate-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .certificate-content {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .certificate-preview {
+            background: var(--white);
+            border: 5px solid var(--primary-color);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .certificate-preview h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .certificate-preview p {
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .certificate-preview .certificate-logo {
+            max-width: 100px;
+            margin: 10px auto;
+        }
+
+        .certificate-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+            margin: 5px;
+        }
+
+        .certificate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .certificate-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .certificate-close:hover {
+            color: var(--error-color);
+        }
+
+        /* User Info Form */
+        .user-info-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .user-info-form input {
+            padding: 10px;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .user-info-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .user-info-form button {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -1264,7 +1384,14 @@
             <section id="quiz-page" class="content-section hidden" aria-labelledby="quiz-title">
                 <button class="back-btn" id="quizBackBtn" aria-label="Retour à l'accueil"><i class="fas fa-arrow-left"></i> Retour</button>
                 <h1 class="page-title" id="quiz-title">Quiz sur les Technologies Médicales</h1>
-                <div class="quiz-container" id="quizContainer"></div>
+                <div class="quiz-container" id="quizContainer">
+                    <div id="userInfoForm" class="user-info-form">
+                        <h3>Entrez vos informations</h3>
+                        <input type="text" id="userName" placeholder="Votre nom complet" aria-label="Votre nom complet" required>
+                        <input type="email" id="userEmail" placeholder="Votre adresse e-mail" aria-label="Votre adresse e-mail" required>
+                        <button id="startQuizBtn" aria-label="Démarrer le quiz">Démarrer le Quiz</button>
+                    </div>
+                </div>
             </section>
 
             <section id="emergency-sim-page" class="content-section hidden" aria-labelledby="emergency-sim-title">
@@ -2453,6 +2580,7 @@ const initEventListeners = () => {
         console.error('emergencySimBtn non trouvé');
     }
 };
+
 // Quiz Generation
 const generateQuiz = () => {
     const devicesList = Object.values(devices).flat();
@@ -2546,14 +2674,14 @@ const generateQuiz = () => {
         }
     ];
 
-    // Generate 6 unique questions (4 device-related, 2 service-related)
+    // Generate 30 unique questions (20 device-related, 10 service-related)
     const selectedItems = [];
-    while (quizQuestions.length < 6) {
-        const isDeviceQuestion = quizQuestions.length < 4;
+    while (quizQuestions.length < 30) {
+        const isDeviceQuestion = quizQuestions.length < 20;
         const item = isDeviceQuestion
             ? devicesList[Math.floor(Math.random() * devicesList.length)]
             : servicesList[Math.floor(Math.random() * servicesList.length)];
-        if (!selectedItems.includes(item) && item.components?.length > 0 && item.brands?.length > 0 || item.description) {
+        if (!selectedItems.includes(item.name) && (item.components?.length > 0 && item.brands?.length > 0 || item.description)) {
             const availableTypes = isDeviceQuestion
                 ? questionTypes.filter(qt => !qt.type.includes('service'))
                 : questionTypes.filter(qt => qt.type.includes('service'));
@@ -2568,14 +2696,110 @@ const generateQuiz = () => {
                     correctAnswer,
                     answers: [correctAnswer, ...incorrectAnswers.slice(0, 3)].sort(() => Math.random() - 0.5)
                 });
-                selectedItems.push(item);
+                selectedItems.push(item.name);
             }
         }
     }
 
     let currentQuestionIndex = 0;
     let score = 0;
+    let userName = '';
+    let userEmail = '';
+    let cpdPoints = 0;
 
+    // Progress Tracking with localStorage
+    const saveProgress = () => {
+        const progress = {
+            completedQuizzes: JSON.parse(localStorage.getItem('completedQuizzes') || '[]'),
+            totalCPDPoints: parseInt(localStorage.getItem('totalCPDPoints') || '0')
+        };
+        progress.completedQuizzes.push({
+            date: new Date().toISOString(),
+            score,
+            totalQuestions: quizQuestions.length,
+            userName,
+            userEmail,
+            cpdPoints
+        });
+        progress.totalCPDPoints += cpdPoints;
+        localStorage.setItem('completedQuizzes', JSON.stringify(progress.completedQuizzes));
+        localStorage.setItem('totalCPDPoints', progress.totalCPDPoints);
+    };
+
+    // Generate Certificate PDF
+    const generateCertificatePDF = () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const margin = 20;
+        const lineHeight = 10;
+
+        // Set font and styles
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(24);
+        doc.setTextColor(102, 126, 234); // Primary color
+        doc.text('Certificat de Réussite', pageWidth / 2, 40, { align: 'center' });
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(16);
+        doc.setTextColor(45, 55, 72); // Text-dark color
+        doc.text('MediTech Guide', pageWidth / 2, 60, { align: 'center' });
+        doc.text('Quiz sur les Technologies Médicales', pageWidth / 2, 70, { align: 'center' });
+
+        doc.setFontSize(14);
+        doc.text(`Délivré à : ${userName}`, pageWidth / 2, 100, { align: 'center' });
+        doc.text(`Email : ${userEmail}`, pageWidth / 2, 110, { align: 'center' });
+        doc.text(`Score : ${score} sur ${quizQuestions.length} (${((score / quizQuestions.length) * 100).toFixed(2)}%)`, pageWidth / 2, 120, { align: 'center' });
+        doc.text(`Date : ${new Date().toLocaleDateString('fr-FR')}`, pageWidth / 2, 130, { align: 'center' });
+        doc.text(`Points CPD : ${cpdPoints}`, pageWidth / 2, 140, { align: 'center' });
+
+        // Add decorative border
+        doc.setDrawColor(102, 126, 234);
+        doc.setLineWidth(1);
+        doc.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
+
+        // Add logo (optional, if you have a base64 version or URL)
+        doc.addImage('https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo1.png', 'PNG', pageWidth / 2 - 50, 150, 100, 50);
+
+        // Save the PDF
+        doc.save(`MediTech_Certificate_${userName.replace(/\s/g, '_')}.pdf`);
+    };
+
+    // Show Certificate Modal
+    const showCertificateModal = () => {
+        showPage('certificate-page', 'Certificat de Réussite', [
+            { text: 'Accueil', action: showHome },
+            { text: 'Certificat', action: showCertificateModal }
+        ]);
+        const certificateModal = $('#certificateModal');
+        const certificatePreview = $('#certificatePreview');
+        if (certificateModal && certificatePreview) {
+            certificateModal.style.display = 'flex';
+            certificatePreview.innerHTML = `
+                <h2>Certificat de Réussite</h2>
+                <p>Délivré à : ${userName}</p>
+                <p>Email : ${userEmail}</p>
+                <p>Score : ${score} sur ${quizQuestions.length} (${((score / quizQuestions.length) * 100).toFixed(2)}%)</p>
+                <p>Date : ${new Date().toLocaleDateString('fr-FR')}</p>
+                <p>Points CPD : ${cpdPoints}</p>
+                <img src="https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo1.png" alt="MediTech Logo" class="certificate-logo">
+            `;
+            const downloadBtn = $('#downloadCertificateBtn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', generateCertificatePDF);
+            }
+            const closeBtn = $('#certificateCloseBtn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    certificateModal.style.display = 'none';
+                    showHome();
+                });
+            }
+        }
+    };
+
+    // Show Quiz Page with User Info Form
     const showQuizPage = () => {
         console.debug('showQuizPage appelée');
         showPage('quiz-page', 'Quiz sur les Technologies Médicales', [
@@ -2586,11 +2810,34 @@ const generateQuiz = () => {
             { text: 'Accueil', action: showHome },
             { text: 'Quiz', action: showQuizPage }
         ];
-        renderQuizQuestion();
+        const userInfoForm = $('#userInfoForm');
+        const quizContainer = $('#quizContainer');
+        if (userInfoForm && quizContainer) {
+            userInfoForm.style.display = 'block';
+            quizContainer.innerHTML = userInfoForm.outerHTML;
+            const startQuizBtn = $('#startQuizBtn');
+            if (startQuizBtn) {
+                startQuizBtn.addEventListener('click', () => {
+                    userName = $('#userName').value.trim();
+                    userEmail = $('#userEmail').value.trim();
+                    if (!userName || !userEmail) {
+                        showNotification('Veuillez remplir tous les champs.', 'error');
+                        return;
+                    }
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
+                        showNotification('Veuillez entrer une adresse e-mail valide.', 'error');
+                        return;
+                    }
+                    userInfoForm.style.display = 'none';
+                    renderQuizQuestion();
+                });
+            }
+        }
     };
 
+    // Render Quiz Question
     const renderQuizQuestion = () => {
-        console.debug('renderQuizQuestion appelée, index:', currentQuestionIndex, 'questions:', quizQuestions); // Log pour débogage
+        console.debug('renderQuizQuestion appelée, index:', currentQuestionIndex);
         const quizContainer = $('#quizContainer');
         if (!quizContainer) {
             console.error('quizContainer element not found');
@@ -2665,11 +2912,13 @@ const generateQuiz = () => {
         });
     };
 
+    // Render Quiz Results
     const renderQuizResults = () => {
         const quizContainer = $('#quizContainer');
         if (!quizContainer) return;
 
         const percentage = (score / quizQuestions.length) * 100;
+        cpdPoints = score >= 25 ? 5 : 0; // Award 5 CPD points if score is 25 or higher
         let message, suggestion;
         if (percentage >= 80) {
             message = 'Excellent ! Vous êtes un expert en technologies médicales !';
@@ -2690,14 +2939,18 @@ const generateQuiz = () => {
             suggestion = 'Consultez nos pages de spécialités ou recommencez le quiz pour améliorer votre score.';
         }
 
+        saveProgress();
+
         quizContainer.innerHTML = `
             <div class="quiz-results">
                 <h3>Résultats du Quiz</h3>
-                <p>Votre score : ${score} sur ${quizQuestions.length} (${percentage}%)</p>
+                <p>Votre score : ${score} sur ${quizQuestions.length} (${percentage.toFixed(2)}%)</p>
                 <p>${message}</p>
                 <p>${suggestion}</p>
+                ${score >= 25 ? '<p>Félicitations ! Vous avez obtenu un certificat et 5 points CPD.</p>' : '<p>Un score de 25/30 ou plus est requis pour obtenir un certificat.</p>'}
                 <button class="btn-restart" aria-label="Recommencer le quiz">Recommencer le Quiz</button>
                 <button class="btn-primary" id="exploreServicesQuizBtn" aria-label="Retourner aux spécialités">Explorer les Spécialités</button>
+                ${score >= 25 ? '<button class="certificate-btn" id="viewCertificateBtn" aria-label="Voir le certificat">Voir le Certificat</button>' : ''}
             </div>
         `;
 
@@ -2706,6 +2959,8 @@ const generateQuiz = () => {
             restartBtn.addEventListener('click', () => {
                 currentQuestionIndex = 0;
                 score = 0;
+                userName = '';
+                userEmail = '';
                 quizQuestions.length = 0;
                 generateQuiz();
             });
@@ -2714,6 +2969,13 @@ const generateQuiz = () => {
         const exploreServicesQuizBtn = quizContainer.querySelector('#exploreServicesQuizBtn');
         if (exploreServicesQuizBtn) {
             exploreServicesQuizBtn.addEventListener('click', () => showServices());
+        }
+
+        if (score >= 25) {
+            const viewCertificateBtn = quizContainer.querySelector('#viewCertificateBtn');
+            if (viewCertificateBtn) {
+                viewCertificateBtn.addEventListener('click', showCertificateModal);
+            }
         }
     };
 
