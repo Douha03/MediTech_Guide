@@ -2726,46 +2726,59 @@ const generateQuiz = () => {
         localStorage.setItem('totalCPDPoints', progress.totalCPDPoints);
     };
 
-    // Generate Certificate PDF
+// Generate Certificate PDF
     const generateCertificatePDF = () => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({
-            orientation: 'portrait',
+            orientation: 'landscape',
             unit: 'mm',
             format: 'a4'
         });
 
         // Define colors
-        const meditechBlue = [0, 51, 102];
-        const meditechGold = [204, 153, 0];
+        const meditechPurple = [118, 75, 162]; // #764ba2 from --secondary-color
+        const meditechGold = [204, 153, 0]; // #cc9900
+        const meditechBlue = [0, 51, 102]; // #003366 for text contrast
 
-        // Add elegant border
+        // Sanitize userName for file name
+        const sanitizedUserName = userName.trim().replace(/[^a-zA-Z0-9\s]/g, '_').replace(/\s+/g, '_');
+
+        // Add elegant double border
         doc.setLineWidth(1.5);
-        doc.setDrawColor(...meditechBlue);
-        doc.roundedRect(10, 10, 190, 277, 5, 5, 'S');
+        doc.setDrawColor(...meditechPurple);
+        doc.roundedRect(10, 10, 277, 190, 5, 5, 'S'); // Outer purple border
+        doc.setLineWidth(0.5);
+        doc.setDrawColor(...meditechGold);
+        doc.roundedRect(12, 12, 273, 186, 4, 4, 'S'); // Inner gold border
 
-        // Add logo
+        // Add logo on the left
         const logoUrl = 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo1.png';
         const img = new Image();
         img.crossOrigin = 'Anonymous';
         img.src = logoUrl;
         img.onload = () => {
-            doc.addImage(img, 'PNG', 80, 20, 50, 50); // Centered at the top
+            doc.addImage(img, 'PNG', 20, 20, 50, 50); // Logo on left, top-aligned
 
-            // Add title
+            // Add "MediTechGuide" next to logo
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(20);
-            doc.setTextColor(...meditechBlue);
-            doc.text('Initiation sur l’ingénierie biomédicale', 105, 90, { align: 'center' });
+            doc.setFontSize(28);
+            doc.setTextColor(...meditechPurple);
+            doc.text('MediTechGuide', 80, 40);
 
-            // Add decorative line
+            // Add certificate title
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(24);
+            doc.setTextColor(...meditechBlue);
+            doc.text('Certificat de Réussite', 148.5, 80, { align: 'center' });
+
+            // Add decorative line below title
             doc.setLineWidth(1);
             doc.setDrawColor(...meditechGold);
-            doc.line(50, 95, 160, 95);
+            doc.line(50, 85, 247, 85);
 
-            // Add main text
+            // Add main text with user name and date
             doc.setFont('helvetica', 'normal');
-            doc.setFontSize(16);
+            doc.setFontSize(18);
             const date = new Date().toLocaleDateString('fr-FR', {
                 year: 'numeric',
                 month: 'long',
@@ -2773,47 +2786,94 @@ const generateQuiz = () => {
             });
             const textLines = doc.splitTextToSize(
                 `${userName} a réussi avec succès la formation Initiation sur l’ingénierie biomédicale le ${date}.`,
-                140
+                200
             );
-            doc.text(textLines, 105, 120, { align: 'center' });
+            doc.text(textLines, 148.5, 100, { align: 'center' });
 
             // Add another decorative line
-            doc.line(50, 160, 160, 160);
+            doc.line(50, 140, 247, 140);
+
+            // Add signature section
+            doc.setFontSize(14);
+            doc.setTextColor(...meditechBlue);
+            doc.text('Signature :', 20, 160);
+            doc.line(50, 160, 150, 160); // Signature line
+
+            // Add certificate number and footer
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100); // Gray for footer
+            const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
+            doc.text(`Certificat N°: ${certNumber}`, 20, 180);
+            doc.text('Délivré par MediTech Guide', 148.5, 180, { align: 'center' });
 
             // Add date at bottom right
-            doc.setFontSize(12);
-            doc.text(`Date d’obtention : ${date}`, 190, 270, { align: 'right' });
+            doc.setTextColor(...meditechBlue);
+            doc.text(`Date d’obtention : ${date}`, 277, 180, { align: 'right' });
+
+            // Add decorative elements (small circles at corners)
+            doc.setFillColor(...meditechPurple);
+            doc.circle(15, 15, 3, 'F'); // Top-left
+            doc.circle(282, 15, 3, 'F'); // Top-right
+            doc.circle(15, 195, 3, 'F'); // Bottom-left
+            doc.circle(282, 195, 3, 'F'); // Bottom-right
 
             // Save the PDF
-            doc.save(`Certificat_${userName.replace(/\s/g, '_')}.pdf`);
+            doc.save(`Certificat_${sanitizedUserName}.pdf`);
         };
         img.onerror = () => {
             console.error('Erreur de chargement du logo');
             showNotification('Impossible de charger le logo du certificat. Le PDF sera généré sans logo.', 'warning');
+
             // Continue without logo
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(20);
+            doc.setFontSize(28);
+            doc.setTextColor(...meditechPurple);
+            doc.text('MediTechGuide', 20, 40); // Text fallback for logo
+
+            doc.setFontSize(24);
             doc.setTextColor(...meditechBlue);
-            doc.text('Initiation sur l’ingénierie biomédicale', 105, 90, { align: 'center' });
+            doc.text('Certificat de Réussite', 148.5, 80, { align: 'center' });
+
             doc.setLineWidth(1);
             doc.setDrawColor(...meditechGold);
-            doc.line(50, 95, 160, 95);
+            doc.line(50, 85, 247, 85);
+
             doc.setFont('helvetica', 'normal');
-            doc.setFontSize(16);
+            doc.setFontSize(18);
             const date = new Date().toLocaleDateString('fr-FR', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             });
             const textLines = doc.splitTextToSize(
-                `${userName} a réussi avec succès la formation Initiation sur l’ingénierie biomédicale le ${date}.`,
-                140
+                `${userName} a obtenu avec succès le certificat "Fondamentaux de l’Ingénierie Biomédicale" le ${date}.`,
+                200
             );
-            doc.text(textLines, 105, 120, { align: 'center' });
-            doc.line(50, 160, 160, 160);
+            doc.text(textLines, 148.5, 100, { align: 'center' });
+
+            doc.line(50, 140, 247, 140);
+
+            doc.setFontSize(14);
+            doc.setTextColor(...meditechBlue);
+            doc.text('Signature :', 20, 160);
+            doc.line(50, 160, 150, 160);
+
             doc.setFontSize(12);
-            doc.text(`Date d’obtention : ${date}`, 190, 270, { align: 'right' });
-            doc.save(`Certificat_${userName.replace(/\s/g, '_')}.pdf`);
+            doc.setTextColor(100, 100, 100);
+            const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
+            doc.text(`Certificat N°: ${certNumber}`, 20, 180);
+            doc.text('Délivré par MediTech Guide', 148.5, 180, { align: 'center' });
+
+            doc.setTextColor(...meditechBlue);
+            doc.text(`Date d’obtention : ${date}`, 277, 180, { align: 'right' });
+
+            doc.setFillColor(...meditechPurple);
+            doc.circle(15, 15, 3, 'F');
+            doc.circle(282, 15, 3, 'F');
+            doc.circle(15, 195, 3, 'F');
+            doc.circle(282, 195, 3, 'F');
+
+            doc.save(`Certificat_${sanitizedUserName}.pdf`);
         };
     };
 
