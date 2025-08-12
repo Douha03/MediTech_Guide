@@ -2729,74 +2729,92 @@ const generateQuiz = () => {
     // Generate Certificate PDF
     const generateCertificatePDF = () => {
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const pageHeight = doc.internal.pageSize.getHeight();
-        const margin = 20;
-        const lineHeight = 10;
+        const doc = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
 
-        // Set font and styles
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(24);
-        doc.setTextColor(102, 126, 234); // Primary color
-        doc.text('Certificat de Réussite', pageWidth / 2, 40, { align: 'center' });
+        // Define colors
+        const meditechBlue = [0, 51, 102];
+        const meditechGold = [204, 153, 0];
 
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(16);
-        doc.setTextColor(45, 55, 72); // Text-dark color
-        doc.text('MediTech Guide', pageWidth / 2, 60, { align: 'center' });
-        doc.text('Quiz sur les Technologies Médicales', pageWidth / 2, 70, { align: 'center' });
+        // Add elegant border
+        doc.setLineWidth(1.5);
+        doc.setDrawColor(...meditechBlue);
+        doc.roundedRect(10, 10, 190, 277, 5, 5, 'S');
 
-        doc.setFontSize(14);
-        doc.text(`Délivré à : ${userName}`, pageWidth / 2, 100, { align: 'center' });
-        doc.text(`Email : ${userEmail}`, pageWidth / 2, 110, { align: 'center' });
-        doc.text(`Score : ${score} sur ${quizQuestions.length} (${((score / quizQuestions.length) * 100).toFixed(2)}%)`, pageWidth / 2, 120, { align: 'center' });
-        doc.text(`Date : ${new Date().toLocaleDateString('fr-FR')}`, pageWidth / 2, 130, { align: 'center' });
-        doc.text(`Points CPD : ${cpdPoints}`, pageWidth / 2, 140, { align: 'center' });
+        // Add logo
+        const logoUrl = 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo1.png';
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.src = logoUrl;
+        img.onload = () => {
+            doc.addImage(img, 'PNG', 80, 20, 50, 50); // Centered at the top
 
-        // Add decorative border
-        doc.setDrawColor(102, 126, 234);
-        doc.setLineWidth(1);
-        doc.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
+            // Add title
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(20);
+            doc.setTextColor(...meditechBlue);
+            doc.text('Initiation sur l’ingénierie biomédicale', 105, 90, { align: 'center' });
 
-        // Add logo (optional, if you have a base64 version or URL)
-        doc.addImage('https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo1.png', 'PNG', pageWidth / 2 - 50, 150, 100, 50);
+            // Add decorative line
+            doc.setLineWidth(1);
+            doc.setDrawColor(...meditechGold);
+            doc.line(50, 95, 160, 95);
 
-        // Save the PDF
-        doc.save(`MediTech_Certificate_${userName.replace(/\s/g, '_')}.pdf`);
-    };
+            // Add main text
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(16);
+            const date = new Date().toLocaleDateString('fr-FR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            const textLines = doc.splitTextToSize(
+                `${userName} a réussi avec succès la formation Initiation sur l’ingénierie biomédicale le ${date}.`,
+                140
+            );
+            doc.text(textLines, 105, 120, { align: 'center' });
 
-    // Show Certificate Modal
-    const showCertificateModal = () => {
-        showPage('certificate-page', 'Certificat de Réussite', [
-            { text: 'Accueil', action: showHome },
-            { text: 'Certificat', action: showCertificateModal }
-        ]);
-        const certificateModal = $('#certificateModal');
-        const certificatePreview = $('#certificatePreview');
-        if (certificateModal && certificatePreview) {
-            certificateModal.style.display = 'flex';
-            certificatePreview.innerHTML = `
-                <h2>Certificat de Réussite</h2>
-                <p>Délivré à : ${userName}</p>
-                <p>Email : ${userEmail}</p>
-                <p>Score : ${score} sur ${quizQuestions.length} (${((score / quizQuestions.length) * 100).toFixed(2)}%)</p>
-                <p>Date : ${new Date().toLocaleDateString('fr-FR')}</p>
-                <p>Points CPD : ${cpdPoints}</p>
-                <img src="https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo1.png" alt="MediTech Logo" class="certificate-logo">
-            `;
-            const downloadBtn = $('#downloadCertificateBtn');
-            if (downloadBtn) {
-                downloadBtn.addEventListener('click', generateCertificatePDF);
-            }
-            const closeBtn = $('#certificateCloseBtn');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    certificateModal.style.display = 'none';
-                    showHome();
-                });
-            }
-        }
+            // Add another decorative line
+            doc.line(50, 160, 160, 160);
+
+            // Add date at bottom right
+            doc.setFontSize(12);
+            doc.text(`Date d’obtention : ${date}`, 190, 270, { align: 'right' });
+
+            // Save the PDF
+            doc.save(`Certificat_${userName.replace(/\s/g, '_')}.pdf`);
+        };
+        img.onerror = () => {
+            console.error('Erreur de chargement du logo');
+            showNotification('Impossible de charger le logo du certificat. Le PDF sera généré sans logo.', 'warning');
+            // Continue without logo
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(20);
+            doc.setTextColor(...meditechBlue);
+            doc.text('Initiation sur l’ingénierie biomédicale', 105, 90, { align: 'center' });
+            doc.setLineWidth(1);
+            doc.setDrawColor(...meditechGold);
+            doc.line(50, 95, 160, 95);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(16);
+            const date = new Date().toLocaleDateString('fr-FR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            const textLines = doc.splitTextToSize(
+                `${userName} a réussi avec succès la formation Initiation sur l’ingénierie biomédicale le ${date}.`,
+                140
+            );
+            doc.text(textLines, 105, 120, { align: 'center' });
+            doc.line(50, 160, 160, 160);
+            doc.setFontSize(12);
+            doc.text(`Date d’obtention : ${date}`, 190, 270, { align: 'right' });
+            doc.save(`Certificat_${userName.replace(/\s/g, '_')}.pdf`);
+        };
     };
 
     // Show Quiz Page with User Info Form
@@ -2832,6 +2850,10 @@ const generateQuiz = () => {
                     renderQuizQuestion();
                 });
             }
+        } else {
+            console.error('userInfoForm ou quizContainer non trouvé');
+            showNotification('Erreur : Impossible d’afficher le quiz.', 'error');
+            showHome();
         }
     };
 
@@ -2842,6 +2864,7 @@ const generateQuiz = () => {
         if (!quizContainer) {
             console.error('quizContainer element not found');
             showNotification('Erreur : Conteneur du quiz non trouvé.', 'error');
+            showHome();
             return;
         }
 
@@ -2915,10 +2938,15 @@ const generateQuiz = () => {
     // Render Quiz Results
     const renderQuizResults = () => {
         const quizContainer = $('#quizContainer');
-        if (!quizContainer) return;
+        if (!quizContainer) {
+            console.error('quizContainer element not found');
+            showNotification('Erreur : Conteneur du quiz non trouvé.', 'error');
+            showHome();
+            return;
+        }
 
         const percentage = (score / quizQuestions.length) * 100;
-        cpdPoints = score >= 1 ? 5 : 0; // Award 5 CPD points if score is 25 or higher
+        cpdPoints = score >= 25 ? 5 : 0; // Award 5 CPD points if score is 25 or higher
         let message, suggestion;
         if (percentage >= 80) {
             message = 'Excellent ! Vous êtes un expert en technologies médicales !';
@@ -2932,7 +2960,7 @@ const generateQuiz = () => {
                 });
             }, 500);
         } else if (percentage >= 50) {
-            message = 'Bien joué ! Vous avez une bonne maîtrise des technologies médicales.';
+            message = 'Bien joué ! Vous avez une bonne maîtrise destechnologies médicales.';
             suggestion = 'Essayez notre ChatGuide IA pour en savoir plus sur des dispositifs spécifiques.';
         } else {
             message = 'Pas mal, mais il y a encore à découvrir !';
@@ -2941,16 +2969,20 @@ const generateQuiz = () => {
 
         saveProgress();
 
+        // Automatically generate and download certificate if score >= 25
+        if (score >= 25) {
+            generateCertificatePDF();
+        }
+
         quizContainer.innerHTML = `
             <div class="quiz-results">
                 <h3>Résultats du Quiz</h3>
                 <p>Votre score : ${score} sur ${quizQuestions.length} (${percentage.toFixed(2)}%)</p>
                 <p>${message}</p>
                 <p>${suggestion}</p>
-                ${score >= 1 ? '<p>Félicitations ! Vous avez obtenu un certificat et 5 points CPD.</p>' : '<p>Un score de 25/30 ou plus est requis pour obtenir un certificat.</p>'}
+                ${score >= 25 ? '<p>Félicitations ! Votre certificat a été téléchargé automatiquement (vérifiez vos téléchargements). Vous avez obtenu 5 points CPD.</p>' : '<p>Un score de 25/30 ou plus est requis pour obtenir un certificat.</p>'}
                 <button class="btn-restart" aria-label="Recommencer le quiz">Recommencer le Quiz</button>
                 <button class="btn-primary" id="exploreServicesQuizBtn" aria-label="Retourner aux spécialités">Explorer les Spécialités</button>
-                ${score >= 1 ? '<button class="certificate-btn" id="viewCertificateBtn" aria-label="Voir le certificat">Voir le Certificat</button>' : ''}
             </div>
         `;
 
@@ -2969,13 +3001,6 @@ const generateQuiz = () => {
         const exploreServicesQuizBtn = quizContainer.querySelector('#exploreServicesQuizBtn');
         if (exploreServicesQuizBtn) {
             exploreServicesQuizBtn.addEventListener('click', () => showServices());
-        }
-
-        if (score >= 1) {
-            const viewCertificateBtn = quizContainer.querySelector('#viewCertificateBtn');
-            if (viewCertificateBtn) {
-                viewCertificateBtn.addEventListener('click', showCertificateModal);
-            }
         }
     };
 
