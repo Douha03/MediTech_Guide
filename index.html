@@ -2726,8 +2726,6 @@ const generateQuiz = () => {
         localStorage.setItem('totalCPDPoints', progress.totalCPDPoints);
     };
 
-// Generate Certificate PDF
-    // Génération d'un certificat ultra-professionnel
     const generateCertificatePDF = () => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({
@@ -2736,391 +2734,174 @@ const generateQuiz = () => {
             format: 'a4'
         });
 
-        // 🎨 Palette de couleurs premium
-        const meditechPrimary = [0, 86, 184]; // Bleu royal professionnel
-        const meditechSecondary = [28, 40, 79]; // Bleu marine élégant
-        const meditechGold = [184, 134, 11]; // Or raffiné
-        const meditechSilver = [149, 165, 166]; // Argent subtil
-        const textDark = [33, 37, 41];
-        const lightGray = [248, 249, 250];
+        // Define colors
+        const primaryPurple = [80, 45, 110]; // Deep, elegant purple
+        const goldAccent = [180, 140, 60]; // Simulated gold for borders and accents
+        const darkBlue = [10, 30, 60]; // Rich blue for text
+        const offWhite = [245, 245, 240]; // Subtle off-white background
 
+        // Sanitize userName for file name
         const sanitizedUserName = userName.trim().replace(/[^a-zA-Z0-9\s]/g, '_').replace(/\s+/g, '_');
 
-        // 📝 Arrière-plan premium avec dégradé subtil
-        doc.setFillColor(...lightGray);
+        // Add subtle background
+        doc.setFillColor(...offWhite);
         doc.rect(0, 0, 297, 210, 'F');
 
-        // Motif géométrique discret
-        for (let i = 0; i < 297; i += 20) {
-            for (let j = 0; j < 210; j += 20) {
-                doc.setFillColor(244, 246, 247);
-                doc.circle(i, j, 0.5, 'F');
-            }
-        }
+        // Add refined double border with gold effect
+        doc.setLineWidth(2);
+        doc.setDrawColor(...primaryPurple);
+        doc.roundedRect(8, 8, 281, 194, 6, 6, 'S'); // Outer purple border
+        doc.setLineWidth(0.8);
+        doc.setDrawColor(...goldAccent);
+        doc.roundedRect(10, 10, 277, 190, 5, 5, 'S'); // Inner gold border
 
-        // Bande décorative supérieure avec dégradé
-        const gradientSteps = 8;
-        for (let i = 0; i < gradientSteps; i++) {
-            const alpha = 1 - (i / gradientSteps);
-            const r = meditechPrimary[0] + (255 - meditechPrimary[0]) * (1 - alpha);
-            const g = meditechPrimary[1] + (255 - meditechPrimary[1]) * (1 - alpha);
-            const b = meditechPrimary[2] + (255 - meditechPrimary[2]) * (1 - alpha);
-            
-            doc.setFillColor(r, g, b);
-            doc.rect(0, i * 6, 297, 6, 'F');
-        }
+        // Add decorative corner elements (subtle flourishes)
+        doc.setFillColor(...goldAccent);
+        doc.circle(12, 12, 2, 'F'); // Top-left
+        doc.circle(285, 12, 2, 'F'); // Top-right
+        doc.circle(12, 198, 2, 'F'); // Bottom-left
+        doc.circle(285, 198, 2, 'F'); // Bottom-right
 
-        // Filigrane élégant en arrière-plan
-        doc.setFont('times', 'bolditalic');
-        doc.setFontSize(120);
-        doc.setTextColor(245, 245, 245);
-        doc.text('EXCELLENCE', 148.5, 130, { align: 'center', angle: -15 });
-
-        // Bordures multiples ultra-élégantes
-        const borders = [
-            { offset: 6, width: 4, color: meditechGold },
-            { offset: 8, width: 2, color: meditechPrimary },
-            { offset: 10, width: 1, color: meditechSilver },
-            { offset: 12, width: 0.5, color: meditechSecondary }
-        ];
-        
-        borders.forEach(border => {
-            doc.setLineWidth(border.width);
-            doc.setDrawColor(...border.color);
-            doc.roundedRect(border.offset, border.offset, 297 - (border.offset * 2), 210 - (border.offset * 2), 12, 12, 'S');
-        });
-
-        // Éléments décoratifs aux coins
-        const addPremiumCorner = (x, y, rotation = 0) => {
-            doc.setFillColor(...meditechGold);
-            
-            // Sauvegarde de l'état
-            const currentTransform = doc.internal.getCurrentTransformationMatrix();
-            
-            // Translation et rotation
-            doc.setCurrentTransformationMatrix(
-                Math.cos(rotation), Math.sin(rotation),
-                -Math.sin(rotation), Math.cos(rotation),
-                x, y
-            );
-            
-            // Motif décoratif
-            doc.polygon([
-                [0, 0], [12, 0], [12, 3], [3, 3], [3, 12], [0, 12]
-            ], 'F');
-            
-            doc.setFillColor(...meditechPrimary);
-            doc.polygon([
-                [1, 1], [11, 1], [11, 2], [2, 2], [2, 11], [1, 11]
-            ], 'F');
-            
-            // Restauration de l'état
-            doc.setCurrentTransformationMatrix(...currentTransform);
-        };
-        
-        addPremiumCorner(15, 15, 0);
-        addPremiumCorner(285, 15, Math.PI/2);
-        addPremiumCorner(285, 195, Math.PI);
-        addPremiumCorner(15, 195, -Math.PI/2);
-
-        // Logo et en-tête
+        // Add logo
         const logoUrl = 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo.png';
         const img = new Image();
         img.crossOrigin = 'Anonymous';
         img.src = logoUrl;
-
         img.onload = () => {
-            // Logo avec ombre portée
-            doc.setFillColor(0, 0, 0, 0.1);
-            doc.ellipse(47, 37, 22, 22, 'F'); // Ombre
-            doc.addImage(img, 'PNG', 25, 15, 44, 44);
+            doc.addImage(img, 'PNG', 20, 15, 60, 60); // Larger logo, top-left aligned
 
-            // Nom de l'institution avec style premium
+            // Add organization name with elegant typography
             doc.setFont('times', 'bold');
-            doc.setFontSize(32);
-            doc.setTextColor(255, 255, 255);
-            doc.text('MediTechGuide', 85, 32);
-            
-            // Ombre pour le titre
-            doc.setTextColor(0, 0, 0, 0.3);
-            doc.text('MediTechGuide', 86, 33);
-            doc.setTextColor(255, 255, 255);
-            doc.text('MediTechGuide', 85, 32);
-            
-            // Sous-titre élégant
-            doc.setFont('helvetica', 'italic');
-            doc.setFontSize(14);
-            doc.setTextColor(240, 240, 240);
-            doc.text('Plateforme de Formation Biomédicale en Ligne', 85, 45);
+            doc.setFontSize(30);
+            doc.setTextColor(...primaryPurple);
+            doc.text('MediTech Guide', 90, 35);
 
-            // Badge premium avec effet 3D
-            const badgeX = 200, badgeY = 20;
-            
-            // Ombre du badge
-            doc.setFillColor(0, 0, 0, 0.2);
-            doc.roundedRect(badgeX + 2, badgeY + 2, 85, 20, 4, 4, 'F');
-            
-            // Badge principal
-            doc.setFillColor(...meditechGold);
-            doc.roundedRect(badgeX, badgeY, 85, 20, 4, 4, 'F');
-            
-            // Bordure du badge
-            doc.setLineWidth(1);
-            doc.setDrawColor(...meditechSecondary);
-            doc.roundedRect(badgeX, badgeY, 85, 20, 4, 4, 'S');
-            
-            // Texte du badge
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(11);
-            doc.setTextColor(...meditechSecondary);
-            doc.text('CERTIFICAT OFFICIEL', badgeX + 42.5, badgeY + 13, { align: 'center' });
-
-            // Titre principal avec effet spectaculaire
-            doc.setFont('times', 'bold');
-            doc.setFontSize(42);
-            
-            // Ombre du titre principal
-            doc.setTextColor(0, 0, 0, 0.15);
-            doc.text('CERTIFICAT D\'EXCELLENCE', 148.5, 82, { align: 'center' });
-            
-            // Titre principal
-            doc.setTextColor(...meditechSecondary);
-            doc.text('CERTIFICAT D\'EXCELLENCE', 148.5, 80, { align: 'center' });
-
-            // Lignes décoratives sophistiquées
-            const centerX = 148.5;
-            const lineY = 90;
-            
-            // Ligne principale dorée
-            doc.setLineWidth(4);
-            doc.setDrawColor(...meditechGold);
-            doc.line(50, lineY, 247, lineY);
-            
-            // Lignes d'accompagnement
-            doc.setLineWidth(2);
-            doc.setDrawColor(...meditechPrimary);
-            doc.line(50, lineY + 3, 247, lineY + 3);
-            
-            doc.setLineWidth(1);
-            doc.setDrawColor(...meditechSilver);
-            doc.line(70, lineY - 3, 227, lineY - 3);
-
-            // Section de reconnaissance avec espacement parfait
-            doc.setFont('times', 'italic');
-            doc.setFontSize(18);
-            doc.setTextColor(...textDark);
-            doc.text('Il est solennellement certifié que', 148.5, 110, { align: 'center' });
-
-            // Nom du bénéficiaire avec style royal
-            const nameY = 128;
-            
-            // Cadre décoratif pour le nom
-            doc.setFillColor(255, 255, 255, 0.8);
-            doc.roundedRect(60, nameY - 12, 177, 20, 6, 6, 'F');
-            
-            doc.setLineWidth(2);
-            doc.setDrawColor(...meditechGold);
-            doc.roundedRect(60, nameY - 12, 177, 20, 6, 6, 'S');
-            
-            // Nom en lettres d'or
+            // Add certificate title with prestigious typography
             doc.setFont('times', 'bold');
             doc.setFontSize(28);
-            doc.setTextColor(...meditechGold);
-            doc.text(userName.toUpperCase(), 148.5, nameY, { align: 'center' });
+            doc.setTextColor(...darkBlue);
+            doc.text('Certificat de Réussite', 148.5, 70, { align: 'center' });
 
-            // Accomplissement
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(17);
-            doc.setTextColor(...textDark);
-            doc.text('a accompli avec distinction le programme de formation', 148.5, 148, { align: 'center' });
+            // Add decorative line below title
+            doc.setLineWidth(1.2);
+            doc.setDrawColor(...goldAccent);
+            doc.line(60, 75, 237, 75);
 
-            // Titre de la formation avec mise en valeur
-            doc.setFont('times', 'bolditalic');
-            doc.setFontSize(20);
-            doc.setTextColor(...meditechPrimary);
-            doc.text('« Initiation à l\'Ingénierie Biomédicale »', 148.5, 165, { align: 'center' });
+            // Add recipient name in large, elegant font
+            doc.setFont('times', 'bold');
+            doc.setFontSize(32);
+            doc.setTextColor(...darkBlue);
+            doc.text(userName, 148.5, 100, { align: 'center' });
 
-            // Date avec style élégant
+            // Add main text with course details and date
+            doc.setFont('times', 'normal');
+            doc.setFontSize(18);
             const date = new Date().toLocaleDateString('fr-FR', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             });
-            
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(15);
-            doc.setTextColor(...meditechSecondary);
-            doc.text(`Certificat délivré le ${date}`, 148.5, 180, { align: 'center' });
+            const textLines = doc.splitTextToSize(
+                `est décerné à ${userName} pour avoir complété avec succès la formation "Fondamentaux de l’Ingénierie Biomédicale" le ${date}.`,
+                220
+            );
+            doc.text(textLines, 148.5, 120, { align: 'center' });
 
-            // Section de validation ultra-professionnelle
-            doc.setLineWidth(2);
-            doc.setDrawColor(...meditechSilver);
-            doc.line(25, 190, 272, 190);
+            // Add decorative line below main text
+            doc.setLineWidth(1.2);
+            doc.setDrawColor(...goldAccent);
+            doc.line(60, 145, 237, 145);
 
-            // Informations de certification
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(11);
-            doc.setTextColor(...meditechSecondary);
-            const certNumber = `MTG-CERT-${Date.now().toString().slice(-8)}`;
-            doc.text(`Certificat N°: ${certNumber}`, 30, 200);
-
-            // Sceau officiel premium avec effet 3D
-            const sealX = 220, sealY = 195;
-            
-            // Ombre du sceau
-            doc.setFillColor(0, 0, 0, 0.2);
-            doc.circle(sealX + 2, sealY + 2, 18, 'F');
-            
-            // Cercles concentriques du sceau
-            doc.setFillColor(...meditechGold);
-            doc.circle(sealX, sealY, 18, 'F');
-            
-            doc.setFillColor(...meditechPrimary);
-            doc.circle(sealX, sealY, 15, 'F');
-            
-            doc.setFillColor(...meditechGold);
-            doc.circle(sealX, sealY, 12, 'F');
-            
-            // Bordure du sceau
-            doc.setLineWidth(2);
-            doc.setDrawColor(...meditechSecondary);
-            doc.circle(sealX, sealY, 18, 'S');
-            
-            // Texte du sceau
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(9);
-            doc.setTextColor(255, 255, 255);
-            doc.text('OFFICIEL', sealX, sealY - 2, { align: 'center' });
-            doc.text('MTG', sealX, sealY + 4, { align: 'center' });
-
-            // Signature institutionnelle
+            // Add official seal (simulated with concentric circles and text)
+            doc.setFillColor(...primaryPurple);
+            doc.circle(240, 165, 15, 'F'); // Outer circle
+            doc.setFillColor(...offWhite);
+            doc.circle(240, 165, 12, 'F'); // Inner circle
             doc.setFont('times', 'italic');
-            doc.setFontSize(13);
-            doc.setTextColor(...meditechSecondary);
-            doc.text('MediTech Guide - Plateforme Certifiante', 148.5, 202, { align: 'center' });
+            doc.setFontSize(10);
+            doc.setTextColor(...goldAccent);
+            doc.text('Sceau Officiel', 240, 165, { align: 'center' });
+            doc.setFontSize(8);
+            doc.text('MediTech Guide', 240, 170, { align: 'center' });
 
-            // Enregistrement du PDF avec nom premium
-            doc.save(`Certificat_Excellence_${sanitizedUserName}.pdf`);
+            // Add certificate number and issuer
+            doc.setFont('times', 'normal');
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100); // Gray for footer
+            const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
+            doc.text(`Certificat N°: ${certNumber}`, 20, 190);
+            doc.text('Délivré par MediTech Guide', 148.5, 190, { align: 'center' });
+
+            // Add date at bottom right
+            doc.setTextColor(...darkBlue);
+            doc.text(`Date : ${date}`, 277, 190, { align: 'right' });
+
+            // Save the PDF
+            doc.save(`Certificat_${sanitizedUserName}.pdf`);
         };
-
         img.onerror = () => {
             console.error('Erreur de chargement du logo');
-            showNotification('Le logo ne peut pas être chargé. Génération du certificat sans logo.', 'warning');
+            showNotification('Impossible de charger le logo du certificat. Le PDF sera généré sans logo.', 'warning');
 
-            // Version de secours sans logo mais conservant tout le style
+            // Continue without logo
             doc.setFont('times', 'bold');
-            doc.setFontSize(32);
-            doc.setTextColor(255, 255, 255);
-            doc.text('MediTechGuide', 30, 32);
-            
-            doc.setFont('helvetica', 'italic');
-            doc.setFontSize(14);
-            doc.setTextColor(240, 240, 240);
-            doc.text('Plateforme de Formation Biomédicale en Ligne', 30, 45);
+            doc.setFontSize(30);
+            doc.setTextColor(...primaryPurple);
+            doc.text('MediTech Guide', 20, 35);
 
-            // Continuer avec le reste du design...
-            const badgeX = 200, badgeY = 20;
-            doc.setFillColor(0, 0, 0, 0.2);
-            doc.roundedRect(badgeX + 2, badgeY + 2, 85, 20, 4, 4, 'F');
-            doc.setFillColor(...meditechGold);
-            doc.roundedRect(badgeX, badgeY, 85, 20, 4, 4, 'F');
-            doc.setLineWidth(1);
-            doc.setDrawColor(...meditechSecondary);
-            doc.roundedRect(badgeX, badgeY, 85, 20, 4, 4, 'S');
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(11);
-            doc.setTextColor(...meditechSecondary);
-            doc.text('CERTIFICAT OFFICIEL', badgeX + 42.5, badgeY + 13, { align: 'center' });
-
-            doc.setFont('times', 'bold');
-            doc.setFontSize(42);
-            doc.setTextColor(0, 0, 0, 0.15);
-            doc.text('CERTIFICAT D\'EXCELLENCE', 148.5, 82, { align: 'center' });
-            doc.setTextColor(...meditechSecondary);
-            doc.text('CERTIFICAT D\'EXCELLENCE', 148.5, 80, { align: 'center' });
-
-            const lineY = 90;
-            doc.setLineWidth(4);
-            doc.setDrawColor(...meditechGold);
-            doc.line(50, lineY, 247, lineY);
-            doc.setLineWidth(2);
-            doc.setDrawColor(...meditechPrimary);
-            doc.line(50, lineY + 3, 247, lineY + 3);
-            doc.setLineWidth(1);
-            doc.setDrawColor(...meditechSilver);
-            doc.line(70, lineY - 3, 227, lineY - 3);
-
-            doc.setFont('times', 'italic');
-            doc.setFontSize(18);
-            doc.setTextColor(...textDark);
-            doc.text('Il est solennellement certifié que', 148.5, 110, { align: 'center' });
-
-            const nameY = 128;
-            doc.setFillColor(255, 255, 255, 0.8);
-            doc.roundedRect(60, nameY - 12, 177, 20, 6, 6, 'F');
-            doc.setLineWidth(2);
-            doc.setDrawColor(...meditechGold);
-            doc.roundedRect(60, nameY - 12, 177, 20, 6, 6, 'S');
             doc.setFont('times', 'bold');
             doc.setFontSize(28);
-            doc.setTextColor(...meditechGold);
-            doc.text(userName.toUpperCase(), 148.5, nameY, { align: 'center' });
+            doc.setTextColor(...darkBlue);
+            doc.text('Certificat de Réussite', 148.5, 70, { align: 'center' });
 
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(17);
-            doc.setTextColor(...textDark);
-            doc.text('a accompli avec distinction le programme de formation', 148.5, 148, { align: 'center' });
+            doc.setLineWidth(1.2);
+            doc.setDrawColor(...goldAccent);
+            doc.line(60, 75, 237, 75);
 
-            doc.setFont('times', 'bolditalic');
-            doc.setFontSize(20);
-            doc.setTextColor(...meditechPrimary);
-            doc.text('« Initiation à l\'Ingénierie Biomédicale »', 148.5, 165, { align: 'center' });
+            doc.setFont('times', 'bold');
+            doc.setFontSize(32);
+            doc.setTextColor(...darkBlue);
+            doc.text(userName, 148.5, 100, { align: 'center' });
 
+            doc.setFont('times', 'normal');
+            doc.setFontSize(18);
             const date = new Date().toLocaleDateString('fr-FR', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             });
-            
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(15);
-            doc.setTextColor(...meditechSecondary);
-            doc.text(`Certificat délivré le ${date}`, 148.5, 180, { align: 'center' });
+            const textLines = doc.splitTextToSize(
+                `est décerné à ${userName} pour avoir complété avec succès la formation "Fondamentaux de l’Ingénierie Biomédicale" le ${date}.`,
+                220
+            );
+            doc.text(textLines, 148.5, 120, { align: 'center' });
 
-            doc.setLineWidth(2);
-            doc.setDrawColor(...meditechSilver);
-            doc.line(25, 190, 272, 190);
+            doc.setLineWidth(1.2);
+            doc.setDrawColor(...goldAccent);
+            doc.line(60, 145, 237, 145);
 
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(11);
-            doc.setTextColor(...meditechSecondary);
-            const certNumber = `MTG-CERT-${Date.now().toString().slice(-8)}`;
-            doc.text(`Certificat N°: ${certNumber}`, 30, 200);
-
-            const sealX = 220, sealY = 195;
-            doc.setFillColor(0, 0, 0, 0.2);
-            doc.circle(sealX + 2, sealY + 2, 18, 'F');
-            doc.setFillColor(...meditechGold);
-            doc.circle(sealX, sealY, 18, 'F');
-            doc.setFillColor(...meditechPrimary);
-            doc.circle(sealX, sealY, 15, 'F');
-            doc.setFillColor(...meditechGold);
-            doc.circle(sealX, sealY, 12, 'F');
-            doc.setLineWidth(2);
-            doc.setDrawColor(...meditechSecondary);
-            doc.circle(sealX, sealY, 18, 'S');
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(9);
-            doc.setTextColor(255, 255, 255);
-            doc.text('OFFICIEL', sealX, sealY - 2, { align: 'center' });
-            doc.text('MTG', sealX, sealY + 4, { align: 'center' });
-
+            doc.setFillColor(...primaryPurple);
+            doc.circle(240, 165, 15, 'F');
+            doc.setFillColor(...offWhite);
+            doc.circle(240, 165, 12, 'F');
             doc.setFont('times', 'italic');
-            doc.setFontSize(13);
-            doc.setTextColor(...meditechSecondary);
-            doc.text('MediTech Guide - Plateforme Certifiante', 148.5, 202, { align: 'center' });
+            doc.setFontSize(10);
+            doc.setTextColor(...goldAccent);
+            doc.text('Sceau Officiel', 240, 165, { align: 'center' });
+            doc.setFontSize(8);
+            doc.text('MediTech Guide', 240, 170, { align: 'center' });
 
-            doc.save(`Certificat_Excellence_${sanitizedUserName}.pdf`);
+            doc.setFont('times', 'normal');
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
+            doc.text(`Certificat N°: ${certNumber}`, 20, 190);
+            doc.text('Délivré par MediTech Guide', 148.5, 190, { align: 'center' });
+
+            doc.setTextColor(...darkBlue);
+            doc.text(`Date : ${date}`, 277, 190, { align: 'right' });
+
+            doc.save(`Certificat_${sanitizedUserName}.pdf`);
         };
     };
 
