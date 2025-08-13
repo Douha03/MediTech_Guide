@@ -2770,7 +2770,7 @@ const generateQuiz = () => {
 
             // Add certificate title (Titre principal en haut)
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(28);
+            doc.setFontSize(25);
             doc.setTextColor(...darkBlue);
             doc.text('CERTIFICAT DE RÉUSSITE', 148.5, 90, { align: 'center' });
 
@@ -2801,12 +2801,12 @@ const generateQuiz = () => {
                 day: 'numeric'
             });
             
-            doc.text('a terminé avec succès le cours', 148.5, 145, { align: 'center' });
+            doc.text('a complété avec succès le quiz portant sur  ', 148.5, 145, { align: 'center' });
             
             // Course name in bold (Nom du cours en gras)
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(18); // Légèrement plus grand
-            doc.text('"Fondamentaux de l\'Ingénierie Biomédicale"', 148.5, 155, { align: 'center' });
+            doc.setFontSize(25); // Légèrement plus grand
+            doc.text('"Les Fondamentaux de l\'Ingénierie Biomédicale"', 148.5, 155, { align: 'center' });
 
             // Add decorative line above footer
             doc.setLineWidth(1);
@@ -2820,7 +2820,7 @@ const generateQuiz = () => {
             
             const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
             doc.text(`Certificate No: ${certNumber}`, 25, 185);
-            doc.text('Issued by TechnoMedici', 148.5, 185, { align: 'center' });
+            doc.text('Délivré par Meditchguide', 148.5, 185, { align: 'center' });
             doc.text(`Date: ${date}`, 272, 185, { align: 'right' });
 
             // Save the PDF
