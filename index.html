@@ -2734,13 +2734,12 @@ const generateQuiz = () => {
             format: 'a4'
         });
 
-        // Define professional colors
-        const elegantGray = [100, 100, 100]; // Gris professionnel pour l'encadrement
-        const darkBlue = [25, 50, 95]; // Bleu marine élégant
-        const black = [0, 0, 0]; // Noir pur
-        const lightGray = [180, 180, 180]; // Gris clair pour les lignes
-        const white = [255, 255, 255]; // Blanc pur
-        const gold = [218, 165, 32]; // Or pour les accents
+        // Define colors
+        const elegantGray = [128, 128, 128]; // Gris élégant pour l'encadrement
+        const darkBlue = [10, 30, 60]; // Bleu foncé pour le texte principal
+        const black = [0, 0, 0]; // Noir pour les informations importantes
+        const lightGray = [200, 200, 200]; // Gris clair pour les lignes décoratives
+        const white = [255, 255, 255]; // Blanc pour l'arrière-plan
 
         // Sanitize userName for file name
         const sanitizedUserName = userName.trim().replace(/[^a-zA-Z0-9\s]/g, '_').replace(/\s+/g, '_');
@@ -2749,85 +2748,80 @@ const generateQuiz = () => {
         doc.setFillColor(...white);
         doc.rect(0, 0, 297, 210, 'F');
 
-        // Add professional double border
-        doc.setLineWidth(4);
+        // Add elegant gray border
+        doc.setLineWidth(3);
         doc.setDrawColor(...elegantGray);
-        doc.roundedRect(12, 12, 273, 186, 10, 10, 'S'); // Encadrement principal
+        doc.roundedRect(15, 15, 267, 180, 8, 8, 'S'); // Encadrement principal en gris
 
-        doc.setLineWidth(1.5);
-        doc.setDrawColor(...gold);
-        doc.roundedRect(18, 18, 261, 174, 8, 8, 'S'); // Encadrement doré intérieur
+        // Add inner decorative border
+        doc.setLineWidth(1);
+        doc.setDrawColor(...lightGray);
+        doc.roundedRect(20, 20, 257, 170, 5, 5, 'S'); // Encadrement intérieur
 
-        // Add logo
+        // Add logo (agrandi et mieux positionné)
         const logoUrl = 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo.png';
         const img = new Image();
         img.crossOrigin = 'Anonymous';
         img.src = logoUrl;
         
         img.onload = () => {
-            // Logo parfaitement centré et valorisé
-            doc.addImage(img, 'PNG', 118.5, 30, 60, 60, undefined, undefined, 0, { align: 'center' });
+            // Logo plus grand (50x50 mm) et centré
+            doc.addImage(img, 'PNG', 123.5, 25, 50, 50, undefined, undefined, 0, { align: 'center' });
 
-            // Titre principal - CERTIFICAT DE RÉUSSITE
+            // Add certificate title (Titre principal en haut)
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(36);
+            doc.setFontSize(28);
             doc.setTextColor(...darkBlue);
-            doc.text('CERTIFICAT DE RÉUSSITE', 148.5, 105, { align: 'center' });
+            doc.text('CERTIFICAT DE RÉUSSITE', 148.5, 90, { align: 'center' });
 
-            // Ligne décorative sous le titre
-            doc.setLineWidth(3);
-            doc.setDrawColor(...gold);
-            doc.line(80, 115, 217, 115);
-
-            // Texte "Ceci certifie que"
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(18);
-            doc.setTextColor(...black);
-            doc.text('Ceci certifie que', 148.5, 130, { align: 'center' });
-
-            // Nom du bénéficiaire - bien mis en valeur
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(38);
-            doc.setTextColor(...darkBlue);
-            doc.text(userName, 148.5, 145, { align: 'center' });
-
-            // Ligne sous le nom
-            doc.setLineWidth(1);
+            // Add decorative line below title
+            doc.setLineWidth(2);
             doc.setDrawColor(...lightGray);
-            doc.line(70, 150, 227, 150);
+            doc.line(60, 100, 237, 100);
 
-            // Texte de réussite
+            // Add "This certifies that" text
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(16);
             doc.setTextColor(...black);
-            doc.text('a terminé avec succès le cours', 148.5, 162, { align: 'center' });
-            
-            // Nom du cours - grande taille et bien visible
+            doc.text('Ceci certifie que', 148.5, 115, { align: 'center' });
+
+            // Add recipient name (Nom en plus grand et bien mis en valeur)
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(24);
+            doc.setFontSize(32);
             doc.setTextColor(...darkBlue);
-            doc.text('"Fondamentaux de l\'Ingénierie Biomédicale"', 148.5, 175, { align: 'center' });
+            doc.text(userName, 148.5, 130, { align: 'center' });
 
-            // Ligne décorative avant le footer
-            doc.setLineWidth(2);
-            doc.setDrawColor(...gold);
-            doc.line(50, 185, 247, 185);
-
-            // Footer professionnel
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(11);
+            // Add main achievement text (Texte recentré sans date)
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(14);
             doc.setTextColor(...black);
-            
             const date = new Date().toLocaleDateString('fr-FR', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             });
-            const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
             
-            doc.text(`Certificate No: ${certNumber}`, 25, 198);
-            doc.text('Issued by TechnoMedici', 148.5, 198, { align: 'center' });
-            doc.text(`Date: ${date}`, 272, 198, { align: 'right' });
+            doc.text('a terminé avec succès le cours', 148.5, 145, { align: 'center' });
+            
+            // Course name in bold (Nom du cours en gras)
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(18); // Légèrement plus grand
+            doc.text('"Fondamentaux de l\'Ingénierie Biomédicale"', 148.5, 155, { align: 'center' });
+
+            // Add decorative line above footer
+            doc.setLineWidth(1);
+            doc.setDrawColor(...lightGray);
+            doc.line(60, 170, 237, 170);
+
+            // Footer information (Date uniquement à droite)
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.setTextColor(...black);
+            
+            const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
+            doc.text(`Certificate No: ${certNumber}`, 25, 185);
+            doc.text('Issued by TechnoMedici', 148.5, 185, { align: 'center' });
+            doc.text(`Date: ${date}`, 272, 185, { align: 'right' });
 
             // Save the PDF
             doc.save(`Certificat_${sanitizedUserName}.pdf`);
@@ -2837,58 +2831,48 @@ const generateQuiz = () => {
             console.error('Erreur de chargement du logo');
             showNotification('Impossible de charger le logo du certificat. Le PDF sera généré sans logo.', 'warning');
 
-            // Version sans logo - ajustement du layout
+            // Continue sans logo (version simplifiée)
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(36);
+            doc.setFontSize(28);
             doc.setTextColor(...darkBlue);
             doc.text('CERTIFICAT DE RÉUSSITE', 148.5, 80, { align: 'center' });
 
-            doc.setLineWidth(3);
-            doc.setDrawColor(...gold);
-            doc.line(80, 90, 217, 90);
-
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(18);
-            doc.setTextColor(...black);
-            doc.text('Ceci certifie que', 148.5, 105, { align: 'center' });
-
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(38);
-            doc.setTextColor(...darkBlue);
-            doc.text(userName, 148.5, 125, { align: 'center' });
-
-            doc.setLineWidth(1);
+            doc.setLineWidth(2);
             doc.setDrawColor(...lightGray);
-            doc.line(70, 130, 227, 130);
+            doc.line(60, 90, 237, 90);
 
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(16);
             doc.setTextColor(...black);
-            doc.text('a terminé avec succès le cours', 148.5, 145, { align: 'center' });
-            
+            doc.text('Ceci certifie que', 148.5, 110, { align: 'center' });
+
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(24);
+            doc.setFontSize(32);
             doc.setTextColor(...darkBlue);
-            doc.text('"Fondamentaux de l\'Ingénierie Biomédicale"', 148.5, 160, { align: 'center' });
+            doc.text(userName, 148.5, 130, { align: 'center' });
 
-            doc.setLineWidth(2);
-            doc.setDrawColor(...gold);
-            doc.line(50, 175, 247, 175);
-
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(11);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(14);
             doc.setTextColor(...black);
             
-            const date = new Date().toLocaleDateString('fr-FR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-            const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
+            doc.text('a terminé avec succès le cours', 148.5, 150, { align: 'center' });
             
-            doc.text(`Certificate No: ${certNumber}`, 25, 188);
-            doc.text('Issued by TechnoMedici', 148.5, 188, { align: 'center' });
-            doc.text(`Date: ${date}`, 272, 188, { align: 'right' });
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(18);
+            doc.text('"Fondamentaux de l\'Ingénierie Biomédicale"', 148.5, 160, { align: 'center' });
+
+            doc.setLineWidth(1);
+            doc.setDrawColor(...lightGray);
+            doc.line(60, 170, 237, 170);
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.setTextColor(...black);
+            
+            const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
+            doc.text(`Certificate No: ${certNumber}`, 25, 185);
+            doc.text('Issued by TechnoMedici', 148.5, 185, { align: 'center' });
+            doc.text(`Date: ${date}`, 272, 185, { align: 'right' });
 
             doc.save(`Certificat_${sanitizedUserName}.pdf`);
         };
