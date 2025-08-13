@@ -2871,7 +2871,7 @@ const generateQuiz = () => {
             
             const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
             doc.text(`Certificate No: ${certNumber}`, 25, 185);
-            doc.text('Issued by TechnoMedici', 148.5, 185, { align: 'center' });
+            doc.text('Délivrée par Meditchguide', 148.5, 185, { align: 'center' });
             doc.text(`Date: ${date}`, 272, 185, { align: 'right' });
 
             doc.save(`Certificat_${sanitizedUserName}.pdf`);
