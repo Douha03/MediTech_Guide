@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MediTech Guide - Découvrez les technologies médicales avancées pour toutes les spécialités médicales.">
+    <meta name="description" content="TechnoMedicia- Découvrez les technologies médicales avancées pour toutes les spécialités médicales.">
     <meta name="keywords" content="technologies médicales, équipements médicaux, santé, diagnostic, thérapie">
-    <meta name="author" content="MediTech Guide">
-    <meta property="og:title" content="MediTech Guide - Votre Guide Biomédical">
+    <meta name="author" content="TechnoMedicia">
+    <meta property="og:title" content="TechnoMedicia - Votre Guide Biomédical">
     <meta property="og:description" content="Explorez notre écosystème de technologies médicales de pointe pour un diagnostic et un traitement précis.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://sl.bing.net/jSTsvEJzwG">
-    <meta property="og:url" content="https://www.meditech.com">
-    <title>MediTech Guide - Votre Guide Biomédical</title>
+    <meta property="og:url" content="https://www.TechnoMedicia.com">
+    <title>TechnoMedicia - Votre Guide Biomédical</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -1298,9 +1298,9 @@
         <header class="header" role="banner">
             <div class="header-content">
                 <div class="logo">
-                    <img src="https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo1.png" alt="MediTech Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img src="https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo1.png" alt="TechnoMedicia Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <span class="logo-img-error" aria-hidden="true">🏥</span>
-                    <span class="logo-text">MediTech Guide</span>
+                    <span class="logo-text">TechnoMedicia</span>
                 </div>
                 <div class="search-container">
                     <input type="text" class="search-box" id="searchBox" placeholder="Rechercher des dispositifs ou spécialités..." aria-label="Rechercher des dispositifs ou spécialités">
@@ -1324,7 +1324,7 @@
                         <button class="btn-emergency" id="emergencySimBtn" aria-label="Lancer le simulateur d'urgence médicale">Simulateur d'Urgence</button>
                     </div>
                 </article>
-                <div class="stats-section" aria-label="Statistiques MediTech Guide">
+                <div class="stats-section" aria-label="Statistiques TechnoMedicia">
                     <div class="stat-card">
                         <div class="stat-number" id="deviceCount">0</div>
                         <div class="stat-label">Dispositifs</div>
@@ -1366,9 +1366,9 @@
 
             <section id="chatbot-page" class="content-section hidden" aria-labelledby="chatbot-title">
                 <button class="back-btn" id="chatbotBackBtn" aria-label="Retour à la page précédente"><i class="fas fa-arrow-left"></i> Retour</button>
-                <h1 class="page-title" id="chatbot-title">MediTech Guide Assistant</h1>
+                <h1 class="page-title" id="chatbot-title">TechnoMedicia Assistant</h1>
                 <div class="chatbot-header">
-                    <span>MediTech Guide Assistant</span>
+                    <span>TechnoMedicia Assistant</span>
                 </div>
                 <div class="chatbot-body" id="chatbotBody" aria-live="polite">
                     <div class="chatbot-typing" id="chatbotTyping">
@@ -1415,10 +1415,10 @@
         </main>
 
         <footer class="footer" role="contentinfo">
-            <p>© 2025 MediTech Guide. Tous droits réservés.</p>
+            <p>© 2025 TechnoMedicia. Tous droits réservés.</p>
             <p>
-                <a href="wine:mailto:info@meditech.com" aria-label="Contacter MediTech par e-mail">info@meditech.com</a>
-                <a href="tel:+33123456789" aria-label="Contacter MediTech par téléphone">+33 1 23 45 67 89</a>
+                <a href="wine:mailto:info@TechnoMedicia.com" aria-label="Contacter TechnoMedicia par e-mail">info@TechnoMedicia.com</a>
+                <a href="tel:+33123456789" aria-label="Contacter TechnoMedicia par téléphone">+33 1 23 45 67 89</a>
             </p>
         </footer>
     </div>
@@ -1876,7 +1876,7 @@
             page.classList.remove('hidden');
             page.style.display = 'block';
             state.currentPage = pageId;
-            document.title = `MediTech Guide - ${title}`;
+            document.title = `TechnoMedicia - ${title}`;
             
             // Clear history for top-level pages
             if (['home-page', 'chatbot-page', 'quiz-page'].includes(pageId)) {
@@ -2023,13 +2023,13 @@
         };
 
         const showChatbotPage = () => {
-            showPage('chatbot-page', 'MediTech Guide Assistant', [
+            showPage('chatbot-page', 'TechnoMedicia Assistant', [
                 { text: 'Accueil', action: showHome },
-                { text: 'MediTech Guide Assistant', action: showChatbotPage }
+                { text: 'TechnoMedicia Assistant', action: showChatbotPage }
             ]);
             state.navigationHistory = [
                 { text: 'Accueil', action: showHome },
-                { text: 'MediTech Guide Assistant', action: showChatbotPage }
+                { text: 'TechnoMedicia Assistant', action: showChatbotPage }
             ];
             const chatbotInput = $('#chatbotInput');
             if (chatbotInput) {
@@ -2774,7 +2774,7 @@ const generateQuiz = () => {
             doc.setFont('times', 'bold');
             doc.setFontSize(30);
             doc.setTextColor(...primaryPurple);
-            doc.text('MediTech Guide', 90, 35);
+            doc.text('TechnoMedicia', 90, 35);
 
             // Add certificate title with prestigious typography
             doc.setFont('times', 'bold');
@@ -2822,7 +2822,7 @@ const generateQuiz = () => {
             doc.setTextColor(...goldAccent);
             doc.text('Sceau Officiel', 240, 165, { align: 'center' });
             doc.setFontSize(8);
-            doc.text('MediTech Guide', 240, 170, { align: 'center' });
+            doc.text('TechnoMedicia', 240, 170, { align: 'center' });
 
             // Add certificate number and issuer
             doc.setFont('times', 'normal');
@@ -2830,7 +2830,7 @@ const generateQuiz = () => {
             doc.setTextColor(100, 100, 100); // Gray for footer
             const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
             doc.text(`Certificat N°: ${certNumber}`, 20, 190);
-            doc.text('Délivré par MediTech Guide', 148.5, 190, { align: 'center' });
+            doc.text('Délivré par TechnoMedicia', 148.5, 190, { align: 'center' });
 
             // Add date at bottom right
             doc.setTextColor(...darkBlue);
@@ -2847,7 +2847,7 @@ const generateQuiz = () => {
             doc.setFont('times', 'bold');
             doc.setFontSize(30);
             doc.setTextColor(...primaryPurple);
-            doc.text('MediTech Guide', 20, 35);
+            doc.text('TechnoMedicia', 20, 35);
 
             doc.setFont('times', 'bold');
             doc.setFontSize(28);
@@ -2889,14 +2889,14 @@ const generateQuiz = () => {
             doc.setTextColor(...goldAccent);
             doc.text('Sceau Officiel', 240, 165, { align: 'center' });
             doc.setFontSize(8);
-            doc.text('MediTech Guide', 240, 170, { align: 'center' });
+            doc.text('TechnoMedicia', 240, 170, { align: 'center' });
 
             doc.setFont('times', 'normal');
             doc.setFontSize(12);
             doc.setTextColor(100, 100, 100);
             const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
             doc.text(`Certificat N°: ${certNumber}`, 20, 190);
-            doc.text('Délivré par MediTech Guide', 148.5, 190, { align: 'center' });
+            doc.text('Délivré par TechnoMedicia', 148.5, 190, { align: 'center' });
 
             doc.setTextColor(...darkBlue);
             doc.text(`Date : ${date}`, 277, 190, { align: 'right' });
