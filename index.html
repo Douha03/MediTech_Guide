@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="TechnoMedicia- Découvrez les technologies médicales avancées pour toutes les spécialités médicales.">
+    <meta name="description" content="Meditchguide- Découvrez les technologies médicales avancées pour toutes les spécialités médicales.">
     <meta name="keywords" content="technologies médicales, équipements médicaux, santé, diagnostic, thérapie">
-    <meta name="author" content="TechnoMedicia">
-    <meta property="og:title" content="TechnoMedicia - Votre Guide Biomédical">
+    <meta name="author" content="Meditchguide">
+    <meta property="og:title" content="Meditchguide - Votre Guide Biomédical">
     <meta property="og:description" content="Explorez notre écosystème de technologies médicales de pointe pour un diagnostic et un traitement précis.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://sl.bing.net/jSTsvEJzwG">
-    <meta property="og:url" content="https://www.TechnoMedicia.com">
-    <title>TechnoMedicia - Votre Guide Biomédical</title>
+    <meta property="og:url" content="https://www.Meditchguide.com">
+    <title>Meditchguide - Votre Guide Biomédical</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -1298,9 +1298,9 @@
         <header class="header" role="banner">
             <div class="header-content">
                 <div class="logo">
-                    <img src="https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo1.png" alt="TechnoMedicia Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img src="https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo1.png" alt="Meditchguide Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <span class="logo-img-error" aria-hidden="true">🏥</span>
-                    <span class="logo-text">TechnoMedicia</span>
+                    <span class="logo-text">Meditchguide</span>
                 </div>
                 <div class="search-container">
                     <input type="text" class="search-box" id="searchBox" placeholder="Rechercher des dispositifs ou spécialités..." aria-label="Rechercher des dispositifs ou spécialités">
@@ -1324,7 +1324,7 @@
                         <button class="btn-emergency" id="emergencySimBtn" aria-label="Lancer le simulateur d'urgence médicale">Simulateur d'Urgence</button>
                     </div>
                 </article>
-                <div class="stats-section" aria-label="Statistiques TechnoMedicia">
+                <div class="stats-section" aria-label="Statistiques Meditchguide">
                     <div class="stat-card">
                         <div class="stat-number" id="deviceCount">0</div>
                         <div class="stat-label">Dispositifs</div>
@@ -1366,9 +1366,9 @@
 
             <section id="chatbot-page" class="content-section hidden" aria-labelledby="chatbot-title">
                 <button class="back-btn" id="chatbotBackBtn" aria-label="Retour à la page précédente"><i class="fas fa-arrow-left"></i> Retour</button>
-                <h1 class="page-title" id="chatbot-title">TechnoMedicia Assistant</h1>
+                <h1 class="page-title" id="chatbot-title">Meditchguide Assistant</h1>
                 <div class="chatbot-header">
-                    <span>TechnoMedicia Assistant</span>
+                    <span>Meditchguide Assistant</span>
                 </div>
                 <div class="chatbot-body" id="chatbotBody" aria-live="polite">
                     <div class="chatbot-typing" id="chatbotTyping">
@@ -1415,10 +1415,10 @@
         </main>
 
         <footer class="footer" role="contentinfo">
-            <p>© 2025 TechnoMedicia. Tous droits réservés.</p>
+            <p>© 2025 Meditchguide. Tous droits réservés.</p>
             <p>
-                <a href="wine:mailto:info@TechnoMedicia.com" aria-label="Contacter TechnoMedicia par e-mail">info@TechnoMedicia.com</a>
-                <a href="tel:+33123456789" aria-label="Contacter TechnoMedicia par téléphone">+33 1 23 45 67 89</a>
+                <a href="wine:mailto:info@Meditchguide.com" aria-label="Contacter Meditchguide par e-mail">info@Meditchguide.com</a>
+                <a href="tel:+33123456789" aria-label="Contacter Meditchguide par téléphone">+33 1 23 45 67 89</a>
             </p>
         </footer>
     </div>
@@ -1876,7 +1876,7 @@
             page.classList.remove('hidden');
             page.style.display = 'block';
             state.currentPage = pageId;
-            document.title = `TechnoMedicia - ${title}`;
+            document.title = `Meditchguide - ${title}`;
             
             // Clear history for top-level pages
             if (['home-page', 'chatbot-page', 'quiz-page'].includes(pageId)) {
@@ -2023,13 +2023,13 @@
         };
 
         const showChatbotPage = () => {
-            showPage('chatbot-page', 'TechnoMedicia Assistant', [
+            showPage('chatbot-page', 'Meditchguide Assistant', [
                 { text: 'Accueil', action: showHome },
-                { text: 'TechnoMedicia Assistant', action: showChatbotPage }
+                { text: 'Meditchguide Assistant', action: showChatbotPage }
             ]);
             state.navigationHistory = [
                 { text: 'Accueil', action: showHome },
-                { text: 'TechnoMedicia Assistant', action: showChatbotPage }
+                { text: 'Meditchguide Assistant', action: showChatbotPage }
             ];
             const chatbotInput = $('#chatbotInput');
             if (chatbotInput) {
@@ -2735,10 +2735,11 @@ const generateQuiz = () => {
         });
 
         // Define colors
-        const primaryPurple = [80, 45, 110]; // Deep, elegant purple
-        const silverGray = [120, 120, 120]; // Professional silver-gray for borders and lines
-        const darkBlue = [10, 30, 60]; // Rich blue for text
-        const white = [255, 255, 255]; // Pure white background
+        const elegantGray = [128, 128, 128]; // Gris élégant pour l'encadrement
+        const darkBlue = [10, 30, 60]; // Bleu foncé pour le texte principal
+        const black = [0, 0, 0]; // Noir pour les informations importantes
+        const lightGray = [200, 200, 200]; // Gris clair pour les lignes décoratives
+        const white = [255, 255, 255]; // Blanc pour l'arrière-plan
 
         // Sanitize userName for file name
         const sanitizedUserName = userName.trim().replace(/[^a-zA-Z0-9\s]/g, '_').replace(/\s+/g, '_');
@@ -2747,129 +2748,145 @@ const generateQuiz = () => {
         doc.setFillColor(...white);
         doc.rect(0, 0, 297, 210, 'F');
 
-        // Add refined double border
-        doc.setLineWidth(2);
-        doc.setDrawColor(...primaryPurple);
-        doc.roundedRect(8, 8, 281, 194, 6, 6, 'S'); // Outer purple border
-        doc.setLineWidth(0.8);
-        doc.setDrawColor(...silverGray);
-        doc.roundedRect(10, 10, 277, 190, 5, 5, 'S'); // Inner silver-gray border
+        // Add elegant gray border
+        doc.setLineWidth(3);
+        doc.setDrawColor(...elegantGray);
+        doc.roundedRect(15, 15, 267, 180, 8, 8, 'S'); // Encadrement principal en gris
 
-        // Add logo
+        // Add inner decorative border
+        doc.setLineWidth(1);
+        doc.setDrawColor(...lightGray);
+        doc.roundedRect(20, 20, 257, 170, 5, 5, 'S'); // Encadrement intérieur
+
+        // Add logo (positioned higher to avoid overlap)
         const logoUrl = 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo.png';
         const img = new Image();
         img.crossOrigin = 'Anonymous';
         img.src = logoUrl;
+        
         img.onload = () => {
-            doc.addImage(img, 'PNG', 118.5, 20, 70, 70, undefined, undefined, 0, { align: 'center' }); // Centered logo
+            // Logo positionné plus haut
+            doc.addImage(img, 'PNG', 128.5, 30, 40, 40, undefined, undefined, 0, { align: 'center' });
 
-            // Add organization name
+            // Add certificate title (sans nom de l'organisation au-dessus)
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(34);
-            doc.setTextColor(...primaryPurple);
-            doc.text('TechnoMedicia', 148.5, 40, { align: 'center' });
-
-            // Add certificate title
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(30);
+            doc.setFontSize(28);
             doc.setTextColor(...darkBlue);
-            doc.text('Certificate of Achievement', 148.5, 70, { align: 'center' });
+            doc.text('CERTIFICAT DE RÉUSSITE', 148.5, 85, { align: 'center' });
 
             // Add decorative line below title
-            doc.setLineWidth(1.5);
-            doc.setDrawColor(...silverGray);
-            doc.line(50, 75, 247, 75);
+            doc.setLineWidth(2);
+            doc.setDrawColor(...lightGray);
+            doc.line(60, 95, 237, 95);
 
-            // Add recipient name
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(36);
-            doc.setTextColor(...darkBlue);
-            doc.text(userName, 148.5, 100, { align: 'center' });
-
-            // Add main text with course details and date
+            // Add "This certifies that" text
             doc.setFont('helvetica', 'normal');
-            doc.setFontSize(20);
+            doc.setFontSize(16);
+            doc.setTextColor(...black);
+            doc.text('Ceci certifie que', 148.5, 110, { align: 'center' });
+
+            // Add recipient name with emphasis
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(32);
+            doc.setTextColor(...darkBlue);
+            doc.text(userName, 148.5, 125, { align: 'center' });
+
+            // Add main achievement text
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(14);
+            doc.setTextColor(...black);
             const date = new Date().toLocaleDateString('fr-FR', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             });
-            const textLines = doc.splitTextToSize(
-                `Awarded to ${userName} for successfully completing the course "Fondamentaux de l’Ingénierie Biomédicale" on ${date}.`,
-                240
-            );
-            doc.text(textLines, 148.5, 120, { align: 'center' });
-
-            // Add decorative line below main text
-            doc.setLineWidth(1.5);
-            doc.setDrawColor(...silverGray);
-            doc.line(50, 145, 247, 145);
-
-            // Add certificate number and issuer
+            
+            doc.text('a terminé avec succès le cours', 148.5, 140, { align: 'center' });
+            
+            // Course name in bold
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(16);
+            doc.text('"Fondamentaux de l\'Ingénierie Biomédicale"', 148.5, 150, { align: 'center' });
+            
+            // Date of completion
             doc.setFont('helvetica', 'normal');
-            doc.setFontSize(12);
-            doc.setTextColor(100, 100, 100); // Gray for footer
-            const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
-            doc.text(`Certificate No: ${certNumber}`, 20, 190);
-            doc.text('Issued by TechnoMedicia', 148.5, 190, { align: 'center' });
+            doc.setFontSize(14);
+            doc.text(`le ${date}`, 148.5, 160, { align: 'center' });
 
-            // Add date at bottom right
-            doc.setTextColor(...darkBlue);
-            doc.text(`Date: ${date}`, 277, 190, { align: 'right' });
+            // Add decorative line above footer
+            doc.setLineWidth(1);
+            doc.setDrawColor(...lightGray);
+            doc.line(60, 170, 237, 170);
+
+            // Footer information - tout en noir comme demandé
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.setTextColor(...black); // Noir pour toutes les informations
+            
+            const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
+            doc.text(`Certificate No: ${certNumber}`, 25, 185);
+            doc.text('Issued by TechnoMedici', 148.5, 185, { align: 'center' });
+            doc.text(`Date: ${date}`, 272, 185, { align: 'right' });
 
             // Save the PDF
             doc.save(`Certificate_${sanitizedUserName}.pdf`);
         };
+        
         img.onerror = () => {
             console.error('Erreur de chargement du logo');
             showNotification('Impossible de charger le logo du certificat. Le PDF sera généré sans logo.', 'warning');
 
-            // Continue without logo
+            // Continue without logo - same layout but without image
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(34);
-            doc.setTextColor(...primaryPurple);
-            doc.text('TechnoMedicia', 148.5, 40, { align: 'center' });
-
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(30);
+            doc.setFontSize(28);
             doc.setTextColor(...darkBlue);
-            doc.text('Certificate of Achievement', 148.5, 70, { align: 'center' });
+            doc.text('CERTIFICAT DE RÉUSSITE', 148.5, 85, { align: 'center' });
 
-            doc.setLineWidth(1.5);
-            doc.setDrawColor(...silverGray);
-            doc.line(50, 75, 247, 75);
-
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(36);
-            doc.setTextColor(...darkBlue);
-            doc.text(userName, 148.5, 100, { align: 'center' });
+            doc.setLineWidth(2);
+            doc.setDrawColor(...lightGray);
+            doc.line(60, 95, 237, 95);
 
             doc.setFont('helvetica', 'normal');
-            doc.setFontSize(20);
+            doc.setFontSize(16);
+            doc.setTextColor(...black);
+            doc.text('Ceci certifie que', 148.5, 110, { align: 'center' });
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(32);
+            doc.setTextColor(...darkBlue);
+            doc.text(userName, 148.5, 125, { align: 'center' });
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(14);
+            doc.setTextColor(...black);
             const date = new Date().toLocaleDateString('fr-FR', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             });
-            const textLines = doc.splitTextToSize(
-                `Awarded to ${userName} for successfully completing the course "Fondamentaux de l’Ingénierie Biomédicale" on ${date}.`,
-                240
-            );
-            doc.text(textLines, 148.5, 120, { align: 'center' });
+            
+            doc.text('a terminé avec succès le cours', 148.5, 140, { align: 'center' });
+            
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(16);
+            doc.text('"Fondamentaux de l\'Ingénierie Biomédicale"', 148.5, 150, { align: 'center' });
+            
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(14);
+            doc.text(`le ${date}`, 148.5, 160, { align: 'center' });
 
-            doc.setLineWidth(1.5);
-            doc.setDrawColor(...silverGray);
-            doc.line(50, 145, 247, 145);
+            doc.setLineWidth(1);
+            doc.setDrawColor(...lightGray);
+            doc.line(60, 170, 237, 170);
 
             doc.setFont('helvetica', 'normal');
-            doc.setFontSize(12);
-            doc.setTextColor(100, 100, 100);
+            doc.setFontSize(10);
+            doc.setTextColor(...black);
+            
             const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
-            doc.text(`Certificate No: ${certNumber}`, 20, 190);
-            doc.text('Issued by TechnoMedicia', 148.5, 190, { align: 'center' });
-
-            doc.setTextColor(...darkBlue);
-            doc.text(`Date: ${date}`, 277, 190, { align: 'right' });
+            doc.text(`Certificate No: ${certNumber}`, 25, 185);
+            doc.text('Issued by TechnoMedici', 148.5, 185, { align: 'center' });
+            doc.text(`Date: ${date}`, 272, 185, { align: 'right' });
 
             doc.save(`Certificate_${sanitizedUserName}.pdf`);
         };
