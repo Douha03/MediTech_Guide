@@ -2736,31 +2736,24 @@ const generateQuiz = () => {
 
         // Define colors
         const primaryPurple = [80, 45, 110]; // Deep, elegant purple
-        const goldAccent = [180, 140, 60]; // Simulated gold for borders and accents
+        const silverGray = [120, 120, 120]; // Professional silver-gray for borders and lines
         const darkBlue = [10, 30, 60]; // Rich blue for text
-        const offWhite = [245, 245, 240]; // Subtle off-white background
+        const white = [255, 255, 255]; // Pure white background
 
         // Sanitize userName for file name
         const sanitizedUserName = userName.trim().replace(/[^a-zA-Z0-9\s]/g, '_').replace(/\s+/g, '_');
 
-        // Add subtle background
-        doc.setFillColor(...offWhite);
+        // Add white background
+        doc.setFillColor(...white);
         doc.rect(0, 0, 297, 210, 'F');
 
-        // Add refined double border with gold effect
+        // Add refined double border
         doc.setLineWidth(2);
         doc.setDrawColor(...primaryPurple);
         doc.roundedRect(8, 8, 281, 194, 6, 6, 'S'); // Outer purple border
         doc.setLineWidth(0.8);
-        doc.setDrawColor(...goldAccent);
-        doc.roundedRect(10, 10, 277, 190, 5, 5, 'S'); // Inner gold border
-
-        // Add decorative corner elements (subtle flourishes)
-        doc.setFillColor(...goldAccent);
-        doc.circle(12, 12, 2, 'F'); // Top-left
-        doc.circle(285, 12, 2, 'F'); // Top-right
-        doc.circle(12, 198, 2, 'F'); // Bottom-left
-        doc.circle(285, 198, 2, 'F'); // Bottom-right
+        doc.setDrawColor(...silverGray);
+        doc.roundedRect(10, 10, 277, 190, 5, 5, 'S'); // Inner silver-gray border
 
         // Add logo
         const logoUrl = 'https://raw.githubusercontent.com/Douha03/MediTech_Guide/main/assets/images/logo.png';
@@ -2768,140 +2761,117 @@ const generateQuiz = () => {
         img.crossOrigin = 'Anonymous';
         img.src = logoUrl;
         img.onload = () => {
-            doc.addImage(img, 'PNG', 20, 15, 60, 60); // Larger logo, top-left aligned
+            doc.addImage(img, 'PNG', 118.5, 20, 70, 70, undefined, undefined, 0, { align: 'center' }); // Centered logo
 
-            // Add organization name with elegant typography
-            doc.setFont('times', 'bold');
-            doc.setFontSize(30);
+            // Add organization name
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(34);
             doc.setTextColor(...primaryPurple);
-            doc.text('TechnoMedicia', 90, 35);
+            doc.text('TechnoMedicia', 148.5, 40, { align: 'center' });
 
-            // Add certificate title with prestigious typography
-            doc.setFont('times', 'bold');
-            doc.setFontSize(28);
+            // Add certificate title
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(30);
             doc.setTextColor(...darkBlue);
-            doc.text('Certificat de Réussite', 148.5, 70, { align: 'center' });
+            doc.text('Certificate of Achievement', 148.5, 70, { align: 'center' });
 
             // Add decorative line below title
-            doc.setLineWidth(1.2);
-            doc.setDrawColor(...goldAccent);
-            doc.line(60, 75, 237, 75);
+            doc.setLineWidth(1.5);
+            doc.setDrawColor(...silverGray);
+            doc.line(50, 75, 247, 75);
 
-            // Add recipient name in large, elegant font
-            doc.setFont('times', 'bold');
-            doc.setFontSize(32);
+            // Add recipient name
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(36);
             doc.setTextColor(...darkBlue);
             doc.text(userName, 148.5, 100, { align: 'center' });
 
             // Add main text with course details and date
-            doc.setFont('times', 'normal');
-            doc.setFontSize(18);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(20);
             const date = new Date().toLocaleDateString('fr-FR', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             });
             const textLines = doc.splitTextToSize(
-                `est décerné à ${userName} pour avoir complété avec succès la formation "Fondamentaux de l’Ingénierie Biomédicale" le ${date}.`,
-                220
+                `Awarded to ${userName} for successfully completing the course "Fondamentaux de l’Ingénierie Biomédicale" on ${date}.`,
+                240
             );
             doc.text(textLines, 148.5, 120, { align: 'center' });
 
             // Add decorative line below main text
-            doc.setLineWidth(1.2);
-            doc.setDrawColor(...goldAccent);
-            doc.line(60, 145, 237, 145);
-
-            // Add official seal (simulated with concentric circles and text)
-            doc.setFillColor(...primaryPurple);
-            doc.circle(240, 165, 15, 'F'); // Outer circle
-            doc.setFillColor(...offWhite);
-            doc.circle(240, 165, 12, 'F'); // Inner circle
-            doc.setFont('times', 'italic');
-            doc.setFontSize(10);
-            doc.setTextColor(...goldAccent);
-            doc.text('Sceau Officiel', 240, 165, { align: 'center' });
-            doc.setFontSize(8);
-            doc.text('TechnoMedicia', 240, 170, { align: 'center' });
+            doc.setLineWidth(1.5);
+            doc.setDrawColor(...silverGray);
+            doc.line(50, 145, 247, 145);
 
             // Add certificate number and issuer
-            doc.setFont('times', 'normal');
+            doc.setFont('helvetica', 'normal');
             doc.setFontSize(12);
             doc.setTextColor(100, 100, 100); // Gray for footer
             const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
-            doc.text(`Certificat N°: ${certNumber}`, 20, 190);
-            doc.text('Délivré par TechnoMedicia', 148.5, 190, { align: 'center' });
+            doc.text(`Certificate No: ${certNumber}`, 20, 190);
+            doc.text('Issued by TechnoMedicia', 148.5, 190, { align: 'center' });
 
             // Add date at bottom right
             doc.setTextColor(...darkBlue);
-            doc.text(`Date : ${date}`, 277, 190, { align: 'right' });
+            doc.text(`Date: ${date}`, 277, 190, { align: 'right' });
 
             // Save the PDF
-            doc.save(`Certificat_${sanitizedUserName}.pdf`);
+            doc.save(`Certificate_${sanitizedUserName}.pdf`);
         };
         img.onerror = () => {
             console.error('Erreur de chargement du logo');
             showNotification('Impossible de charger le logo du certificat. Le PDF sera généré sans logo.', 'warning');
 
             // Continue without logo
-            doc.setFont('times', 'bold');
-            doc.setFontSize(30);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(34);
             doc.setTextColor(...primaryPurple);
-            doc.text('TechnoMedicia', 20, 35);
+            doc.text('TechnoMedicia', 148.5, 40, { align: 'center' });
 
-            doc.setFont('times', 'bold');
-            doc.setFontSize(28);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(30);
             doc.setTextColor(...darkBlue);
-            doc.text('Certificat de Réussite', 148.5, 70, { align: 'center' });
+            doc.text('Certificate of Achievement', 148.5, 70, { align: 'center' });
 
-            doc.setLineWidth(1.2);
-            doc.setDrawColor(...goldAccent);
-            doc.line(60, 75, 237, 75);
+            doc.setLineWidth(1.5);
+            doc.setDrawColor(...silverGray);
+            doc.line(50, 75, 247, 75);
 
-            doc.setFont('times', 'bold');
-            doc.setFontSize(32);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(36);
             doc.setTextColor(...darkBlue);
             doc.text(userName, 148.5, 100, { align: 'center' });
 
-            doc.setFont('times', 'normal');
-            doc.setFontSize(18);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(20);
             const date = new Date().toLocaleDateString('fr-FR', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             });
             const textLines = doc.splitTextToSize(
-                `est décerné à ${userName} pour avoir complété avec succès la formation "Fondamentaux de l’Ingénierie Biomédicale" le ${date}.`,
-                220
+                `Awarded to ${userName} for successfully completing the course "Fondamentaux de l’Ingénierie Biomédicale" on ${date}.`,
+                240
             );
             doc.text(textLines, 148.5, 120, { align: 'center' });
 
-            doc.setLineWidth(1.2);
-            doc.setDrawColor(...goldAccent);
-            doc.line(60, 145, 237, 145);
+            doc.setLineWidth(1.5);
+            doc.setDrawColor(...silverGray);
+            doc.line(50, 145, 247, 145);
 
-            doc.setFillColor(...primaryPurple);
-            doc.circle(240, 165, 15, 'F');
-            doc.setFillColor(...offWhite);
-            doc.circle(240, 165, 12, 'F');
-            doc.setFont('times', 'italic');
-            doc.setFontSize(10);
-            doc.setTextColor(...goldAccent);
-            doc.text('Sceau Officiel', 240, 165, { align: 'center' });
-            doc.setFontSize(8);
-            doc.text('TechnoMedicia', 240, 170, { align: 'center' });
-
-            doc.setFont('times', 'normal');
+            doc.setFont('helvetica', 'normal');
             doc.setFontSize(12);
             doc.setTextColor(100, 100, 100);
             const certNumber = `MTG-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}`;
-            doc.text(`Certificat N°: ${certNumber}`, 20, 190);
-            doc.text('Délivré par TechnoMedicia', 148.5, 190, { align: 'center' });
+            doc.text(`Certificate No: ${certNumber}`, 20, 190);
+            doc.text('Issued by TechnoMedicia', 148.5, 190, { align: 'center' });
 
             doc.setTextColor(...darkBlue);
-            doc.text(`Date : ${date}`, 277, 190, { align: 'right' });
+            doc.text(`Date: ${date}`, 277, 190, { align: 'right' });
 
-            doc.save(`Certificat_${sanitizedUserName}.pdf`);
+            doc.save(`Certificate_${sanitizedUserName}.pdf`);
         };
     };
 
@@ -3068,7 +3038,7 @@ const generateQuiz = () => {
                 <p>Votre score : ${score} sur ${quizQuestions.length} (${percentage.toFixed(2)}%)</p>
                 <p>${message}</p>
                 <p>${suggestion}</p>
-                ${score >= 1 ? '<p>Félicitations ! Votre certificat a été téléchargé automatiquement. Vous avez obtenu 5 points CPD.</p>' : '<p>Un score de 25/30 ou plus est requis pour obtenir un certificat.</p>'}
+                ${score >= 1 ? '<p>Félicitations ! Votre certificat a été téléchargé automatiquement.</p>' : '<p>Un score de 25/30 ou plus est requis pour obtenir un certificat.</p>'}
                 <button class="btn-restart" aria-label="Recommencer le quiz">Recommencer le Quiz</button>
                 <button class="btn-primary" id="exploreServicesQuizBtn" aria-label="Retourner aux spécialités">Explorer les Spécialités</button>
             </div>
