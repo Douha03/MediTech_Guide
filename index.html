@@ -3081,77 +3081,77 @@ const toggleTheme = () => {
     localStorage.setItem('theme', newTheme);
 };
 
-const emergencyCases = [
+const emergencyCases= [
         {
-            description: "Patient de 42 ans, douleurs thoraciques, tension 180/100, respiration irrégulière.",
+            description: "Une pompe de circulation extracorporelle (CEC) tombe en panne pendant une chirurgie cardiaque, alarme de débit faible détectée.",
             options: [
-                { name: "Électrocardiographe", correct: true, feedback: "Correct ! L'ECG est essentiel pour diagnostiquer une anomalie cardiaque." },
-                { name: "Défibrillateur Automatique", correct: false, feedback: "Incorrect. Un défibrillateur est utilisé pour les arrêts cardiaques, pas pour le diagnostic initial." },
-                { name: "Moniteur Néonatal", correct: false, feedback: "Incorrect. Ce dispositif est destiné aux nouveau-nés." },
-                { name: "Échographe Pédiatrique", correct: false, feedback: "Incorrect. Cet équipement n'est pas adapté à ce cas." }
+                { name: "Vérifier l'intégrité des tubulures et connexions", correct: true, feedback: "Correct ! Les fuites ou obstructions dans les tubulures peuvent causer une alarme de débit faible." },
+                { name: "Redémarrer immédiatement la pompe", correct: false, feedback: "Incorrect. Redémarrer sans diagnostic peut aggraver la situation." },
+                { name: "Remplacer la batterie de secours", correct: false, feedback: "Incorrect. Une batterie faible déclenche une alarme différente, pas celle de débit faible." },
+                { name: "Calibrer le moniteur de pression", correct: false, feedback: "Incorrect. Le moniteur de pression n'est pas directement lié à l'alarme de débit." }
             ]
         },
         {
-            description: "Patient de 65 ans, inconscience soudaine, pouls faible, suspicion d'arrêt cardiaque.",
+            description: "Un ventilateur intensif affiche une erreur de capteur de pression lors de la ventilation d'un patient en réanimation.",
             options: [
-                { name: "Défibrillateur Automatique", correct: true, feedback: "Correct ! Un défibrillateur est crucial pour rétablir le rythme cardiaque." },
-                { name: "Électrocardiographe", correct: false, feedback: "Incorrect. L'ECG est utilisé pour le diagnostic, pas pour une intervention immédiate." },
-                { name: "IRM", correct: false, feedback: "Incorrect. L'IRM n'est pas adaptée pour une urgence immédiate." },
-                { name: "Ventilateur Intensif", correct: false, feedback: "Incorrect. Le ventilateur est utilisé pour la respiration assistée, pas pour un arrêt cardiaque." }
+                { name: "Vérifier et nettoyer le capteur de pression", correct: true, feedback: "Correct ! Un capteur encrassé ou défectueux peut provoquer cette erreur." },
+                { name: "Remplacer le circuit patient", correct: false, feedback: "Incorrect. Le circuit patient n'est pas directement lié au capteur de pression." },
+                { name: "Redémarrer le ventilateur", correct: false, feedback: "Incorrect. Un redémarrage sans diagnostic peut compromettre la ventilation." },
+                { name: "Remplacer l'écran d'affichage", correct: false, feedback: "Incorrect. L'écran n'est pas lié à l'erreur du capteur." }
             ]
         },
         {
-            description: "Nouveau-né de 3 jours, hypothermie, fréquence respiratoire lente, saturation en oxygène à 88%.",
+            description: "Un moniteur multiparamètres affiche des données erratiques pour la fréquence cardiaque, oscillant entre 40 et 200 bpm.",
             options: [
-                { name: "Incubateur Néonatal", correct: true, feedback: "Correct ! L'incubateur maintient la température corporelle et stabilise le nouveau-né." },
-                { name: "Échographe Pédiatrique", correct: false, feedback: "Incorrect. L'échographe est utilisé pour l'imagerie, pas pour gérer l'hypothermie." },
-                { name: "Moniteur Néonatal", correct: false, feedback: "Incorrect. Bien que utile pour surveiller, il ne traite pas directement l'hypothermie." },
-                { name: "Défibrillateur Automatique", correct: false, feedback: "Incorrect. Un défibrillateur n'est pas adapté pour les nouveau-nés en hypothermie." }
+                { name: "Vérifier les électrodes et leur connexion au patient", correct: true, feedback: "Correct ! Des électrodes mal placées ou défectueuses peuvent causer des lectures erratiques." },
+                { name: "Remplacer le câble d'alimentation", correct: false, feedback: "Incorrect. Le câble d'alimentation n'affecte pas directement les données de fréquence cardiaque." },
+                { name: "Mettre à jour le logiciel du moniteur", correct: false, feedback: "Incorrect. Une mise à jour logicielle n'est pas la première étape pour ce problème." },
+                { name: "Calibrer l'écran tactile", correct: false, feedback: "Incorrect. L'écran tactile n'est pas lié aux données erratiques." }
             ]
         },
         {
-            description: "Patient de 50 ans, suspicion de crise d'épilepsie, convulsions continues depuis 2 minutes.",
+            description: "Un défibrillateur automatique externe (DAE) ne se met pas en charge malgré une batterie pleine.",
             options: [
-                { name: "Électroencéphalographe", correct: true, feedback: "Correct ! L'EEG est utilisé pour analyser l'activité cérébrale et confirmer une crise épileptique." },
-                { name: "Doppler Transcrânien", correct: false, feedback: "Incorrect. Le Doppler est utilisé pour évaluer le flux sanguin, pas pour les convulsions." },
-                { name: "Ventilateur Intensif", correct: false, feedback: "Incorrect. Le ventilateur n'est pas nécessaire pour une crise épileptique sans détresse respiratoire." },
-                { name: "Scanner", correct: false, feedback: "Incorrect. Un scanner peut être utilisé plus tard, mais pas en urgence pour une crise active." }
+                { name: "Vérifier les électrodes et leur connexion", correct: true, feedback: "Correct ! Des électrodes mal connectées ou endommagées empêchent la charge." },
+                { name: "Remplacer la batterie", correct: false, feedback: "Incorrect. Si la batterie est pleine, le problème vient probablement d'ailleurs." },
+                { name: "Redémarrer l'appareil", correct: false, feedback: "Incorrect. Redémarrer sans vérifier les connexions peut ne pas résoudre le problème." },
+                { name: "Mettre à jour le micrologiciel", correct: false, feedback: "Incorrect. Une mise à jour n'est pas pertinente pour un problème de charge immédiat." }
             ]
         },
         {
-            description: "Femme de 45 ans, douleur mammaire suspecte, antécédents familiaux de cancer du sein.",
+            description: "Une machine d'échographie affiche un écran noir après le démarrage, mais l'alimentation fonctionne.",
             options: [
-                { name: "Mammographe", correct: true, feedback: "Correct ! La mammographie est l'outil principal pour le dépistage du cancer du sein." },
-                { name: "IRM", correct: false, feedback: "Incorrect. Une IRM peut être utilisée en complément, mais la mammographie est prioritaire." },
-                { name: "Échographe Pédiatrique", correct: false, feedback: "Incorrect. Cet équipement est spécifique aux enfants." },
-                { name: "PET Scanner", correct: false, feedback: "Incorrect. Le PET Scanner est utilisé pour des diagnostics avancés, pas pour le dépistage initial." }
+                { name: "Vérifier les connexions du moniteur et le câble vidéo", correct: true, feedback: "Correct ! Un problème de connexion vidéo peut causer un écran noir." },
+                { name: "Remplacer la sonde d'échographie", correct: false, feedback: "Incorrect. La sonde n'affecte pas directement l'affichage de l'écran." },
+                { name: "Redémarrer la machine", correct: false, feedback: "Incorrect. Redémarrer sans diagnostic peut ne pas résoudre le problème." },
+                { name: "Vérifier la batterie de secours", correct: false, feedback: "Incorrect. La batterie n'est pas en cause si l'alimentation fonctionne." }
             ]
         },
         {
-            description: "Patient de 30 ans, douleur abdominale aiguë, suspicion d'appendicite.",
+            description: "Un autoclave ne atteint pas la pression nécessaire pour la stérilisation, alarme de pression basse activée.",
             options: [
-                { name: "Scanner", correct: true, feedback: "Correct ! Le scanner est idéal pour confirmer une appendicite par imagerie." },
-                { name: "Coloscope", correct: false, feedback: "Incorrect. Le coloscope est utilisé pour explorer le côlon, pas pour l'appendicite." },
-                { name: "Endoscope Digestif", correct: false, feedback: "Incorrect. L'endoscopie n'est pas adaptée pour diagnostiquer une appendicite." },
-                { name: "Densitomètre Osseux", correct: false, feedback: "Incorrect. Cet équipement est utilisé pour la densité osseuse, pas pour les douleurs abdominales." }
+                { name: "Vérifier l'étanchéité des joints et de la porte", correct: true, feedback: "Correct ! Une fuite au niveau des joints peut empêcher l'atteinte de la pression nécessaire." },
+                { name: "Remplacer la résistance chauffante", correct: false, feedback: "Incorrect. Une résistance défectueuse affecterait la température, pas directement la pression." },
+                { name: "Redémarrer l'autoclave", correct: false, feedback: "Incorrect. Redémarrer sans vérifier les joints peut ne pas résoudre le problème." },
+                { name: "Calibrer le panneau de commande", correct: false, feedback: "Incorrect. Le panneau de commande n'est pas lié à la pression basse." }
             ]
         },
         {
-            description: "Patient de 55 ans, fracture ouverte de la jambe suite à un accident, douleur intense.",
+            description: "Une pompe à perfusion affiche une alarme d'occlusion en amont, stoppant l'administration du médicament.",
             options: [
-                { name: "Arthroscope", correct: true, feedback: "Correct ! L'arthroscope peut être utilisé pour évaluer et traiter les lésions articulaires associées à la fracture." },
-                { name: "Densitomètre Osseux", correct: false, feedback: "Incorrect. Le densitomètre est utilisé pour mesurer la densité osseuse, pas pour les fractures aiguës." },
-                { name: "Électrocardiographe", correct: false, feedback: "Incorrect. L'ECG est utilisé pour les problèmes cardiaques, pas pour les fractures." },
-                { name: "IRM", correct: false, feedback: "Incorrect. Une IRM peut être utilisée plus tard, mais pas en urgence pour une fracture ouverte." }
+                { name: "Vérifier le tubing pour des plis ou obstructions", correct: true, feedback: "Correct ! Un tubing plié ou obstrué peut déclencher une alarme d'occlusion." },
+                { name: "Remplacer la batterie", correct: false, feedback: "Incorrect. La batterie n'est pas liée à une alarme d'occlusion." },
+                { name: "Redémarrer la pompe", correct: false, feedback: "Incorrect. Redémarrer sans vérifier le tubing ne résout pas l'occlusion." },
+                { name: "Mettre à jour le logiciel", correct: false, feedback: "Incorrect. Une mise à jour logicielle n'est pas pertinente pour ce problème." }
             ]
         },
         {
-            description: "Patient de 70 ans, détresse respiratoire aiguë, saturation en oxygène à 85%.",
+            description: "Un électrocardiographe (ECG) n'imprime pas les tracés, bien que l'écran affiche les données correctement.",
             options: [
-                { name: "Ventilateur Intensif", correct: true, feedback: "Correct ! Le ventilateur est essentiel pour assister la respiration en cas de détresse." },
-                { name: "Moniteur Multiparamètres", correct: false, feedback: "Incorrect. Le moniteur surveille les paramètres vitaux, mais ne traite pas la détresse respiratoire." },
-                { name: "Électroencéphalographe", correct: false, feedback: "Incorrect. L'EEG est utilisé pour l'activité cérébrale, pas pour la respiration." },
-                { name: "Table Chirurgicale", correct: false, feedback: "Incorrect. Une table chirurgicale n'est pas adaptée à une détresse respiratoire." }
+                { name: "Vérifier le niveau de papier et l'imprimante", correct: true, feedback: "Correct ! Un manque de papier ou un problème d'imprimante peut empêcher l'impression." },
+                { name: "Remplacer les électrodes", correct: false, feedback: "Incorrect. Les électrodes n'affectent pas l'impression des tracés." },
+                { name: "Redémarrer l'appareil", correct: false, feedback: "Incorrect. Redémarrer sans vérifier l'imprimante peut ne pas résoudre le problème." },
+                { name: "Vérifier les connexions des capteurs", correct: false, feedback: "Incorrect. Les capteurs n'ont pas d'impact sur l'impression." }
             ]
         }
     ];
